@@ -45,4 +45,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public static array $role = ['Admin', 'Portofolio Manager', 'Lease Admin', 'Director', 'User'];
 }
