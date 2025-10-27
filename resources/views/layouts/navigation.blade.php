@@ -4,7 +4,7 @@
             <div class="flex">
                 <img src="{{ asset('images/Logo.png') }}" alt="logo" width="462" height="90">
             </div>
-            <div class="flex gap-[12px] items-center">
+            <div class="flex gap-[12px] items-center" x-data="{ open: false }">
                 <div class="bg-yellow p-[8px] flex gap-[16px] text-white items-center">
                     <div class="w-[32px] h-[32px] flex justify-end">
                         <div class="w-[8px] h-[8px] bg-green-500 rounded-full"></div>
@@ -14,7 +14,16 @@
                         <span>{{ Auth::user()->phone }}</span>
                     </div>
                 </div>
-                <div class="bg-red-500 w-[60px] h-[60px] rounded-full mr-[26px]"></div>
+                <div class="bg-red-500 w-[60px] h-[60px] rounded-full mr-[26px] relative" x-on:click="open = !open">
+                    <div class="absolute bg-white w-max p-5 top-[4rem] left-[-15px]" x-show="open">
+                        <div>Profile</div>
+                        <form action="{{ route('auth.destroy') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button>Logout</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
