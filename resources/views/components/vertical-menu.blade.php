@@ -5,7 +5,9 @@
             <span class="text-[14px] leading-[19px] text-white">Dashboard</span>
         </div>
         <div class="flex flex-col items-center gap-[5px] h-[60px] mt-1">
-            <img src="{{ asset('images/invoices.png') }}" alt="invoices" width="32" height="32">
+            <a href="{{ route('invoice.index') }}">
+                <img src="{{ asset('images/invoices.png') }}" alt="invoices" width="32" height="32">
+            </a>
         </div>
         <div class="flex flex-col items-center gap-[5px]">
             <img src="{{ asset('images/money.png') }}" alt="dashboard" width="24" height="24">

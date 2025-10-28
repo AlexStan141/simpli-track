@@ -20,36 +20,36 @@
                     <x-input-label for="first_name" :value="__('First Name')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="first_name"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text"
-                        name="first_name" />
+                        name="first_name" value="{{ $user['first_name'] }}"/>
                     <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="last_name" :value="__('Last Name')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="last_name"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text"
-                        name="last_name" value=""  />
+                        name="last_name" value="{{ $user['last_name'] }}"  />
                     <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="email" :value="__('Email')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="email"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="email"
-                        name="email" value=""  />
+                        name="email" value="{{ $user['email'] }}"  />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="phone" :value="__('Phone')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="phone"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="tel"
-                        name="phone" value="" ></x-text-input>
+                        name="phone" value="{{ $user['phone'] }}" ></x-text-input>
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="old_password" :value="__('Old Password')" class="text-editprofilelabel leading-[14px] h-[12px]" />
-                    <x-text-input id="old_password"
+                    <x-input-label for="password" :value="__('Current Password')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-text-input id="password"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="password"
-                        name="old_password" value="" ></x-text-input>
-                    <x-input-error :messages="$errors->get('old_password')" class="mt-2" />
+                        name="password" value="" ></x-text-input>
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="new_password" :value="__('New Password')" class="text-editprofilelabel leading-[14px] h-[12px]" />

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\InvoiceTemplateController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -15,6 +16,10 @@ Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name(
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/invoice', function () {
+    return view('invoice_template.index');
+})->middleware(['auth', 'verified'])->name('invoice.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
