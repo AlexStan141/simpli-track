@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -23,6 +24,7 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
+        'company_id'
     ];
 
     /**
@@ -49,4 +51,8 @@ class User extends Authenticatable
     }
 
     public static array $role = ['Admin', 'Portofolio Manager', 'Lease Admin', 'Director', 'User'];
+
+    public function company():BelongsTo{
+        return $this->belongsTo(Company::class);
+    }
 }
