@@ -16,7 +16,9 @@
                 </div>
                 <div class="bg-red-500 w-[60px] h-[60px] rounded-full mr-[26px] relative" x-on:click="open = !open">
                     <div class="absolute bg-white w-max p-5 top-[4rem] left-[-15px]" x-show="open">
-                        <div>Profile</div>
+                        <div>
+                            <a href="{{ route('profile.edit') }}">Profile</a>
+                        </div>
                         <form action="{{ route('auth.destroy') }}" method="POST">
                             @csrf
                             @method('DELETE')

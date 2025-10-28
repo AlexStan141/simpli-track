@@ -16,7 +16,12 @@ export default {
                 nunito: ['Nunito', ...defaultTheme.fontFamily.sans]
             },
             colors: {
-                loginblue: '#334461'
+                loginblue: '#334461',
+                formgray: '#EDEDED',
+                formtitle: '#1E1E1E',
+                editprofilelabel: '#949494',
+                editprofileinput: '#F6F6F6',
+                bodycolor: '#FAFAFA',
             }
         },
     },
