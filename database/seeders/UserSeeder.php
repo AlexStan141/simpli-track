@@ -15,38 +15,35 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $companies = Company::all();
-        $simpli_track_company = Company::where('name',  'SimpliTrack')->first();
-
-        User::factory()->create([
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@example.com',
-            'role' => 'Admin',
-            'phone' => '+40729626513',
-            'company_id' => $simpli_track_company->id
-        ]);
 
         for ($i = 0; $i < 4; $i++) {
+
+            $company = $companies->pop();
+
             User::factory(10)->create([
                 'role' => 'User',
-                'company_id' => $companies->last()->id
+                'company_id' => $company->id
             ]);
 
             User::factory(2)->create([
                 'role' => 'Lease Admin',
-                'company_id' => $companies->last()->id
+                'company_id' => $company->id
             ]);
 
             User::factory(2)->create([
                 'role' => 'Portofolio Manager',
-                'company_id' => $companies->last()->id
+                'company_id' => $company->id
             ]);
 
             User::factory(2)->create([
                 'role' => 'Director',
-                'company_id' => $companies->last()->id
+                'company_id' => $company->id
             ]);
-            $companies->pop();
+
+            User::factory()->create([
+                'role' => 'Admin',
+                'company_id' => $company->id
+            ]);
         }
     }
 }
