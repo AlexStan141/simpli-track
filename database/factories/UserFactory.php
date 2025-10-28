@@ -6,6 +6,11 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberType;
+
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -24,6 +29,22 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+
+        $phoneUtil = PhoneNumberUtil::getInstance();
+
+        // Lista de regiuni ISO (poți extinde)
+        $regions = ['US', 'GB', 'FR', 'DE', 'JP', 'RO', 'CN', 'IN', 'BR', 'AU'];
+        $region = $this->faker->randomElement($regions);
+
+        // Generează un număr valid pentru regiune
+        try {
+            // Creează un număr fictiv valid pentru regiune
+            $exampleNumber = $phoneUtil->getExampleNumberForType($region, PhoneNumberType::MOBILE);
+            $international = $phoneUtil->format($exampleNumber, PhoneNumberFormat::E164);
+        } catch (\libphonenumber\NumberParseException $e) {
+            $international = '+40729626513'; // fallback
+        }
+
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -32,6 +53,7 @@ class UserFactory extends Factory
             'role' => fake()->randomElement(User::$role),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'phone' => $international
         ];
     }
 
