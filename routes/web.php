@@ -17,9 +17,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/invoice', function () {
-    return view('invoice_template.index');
-})->middleware(['auth', 'verified'])->name('invoice.index');
+Route::get('/invoice', [InvoiceTemplateController::class, 'index'])
+->middleware(['auth', 'verified'])->name('invoice.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

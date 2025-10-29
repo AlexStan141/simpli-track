@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InvoiceTemplate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class InvoiceTemplateController extends Controller
@@ -11,7 +13,10 @@ class InvoiceTemplateController extends Controller
      */
     public function index()
     {
-        return view("invoice_template.index");
+        $user_invoices = InvoiceTemplate::where('user_id', Auth::user()->id)->latest()->paginate(5)->onEachSide(1);
+        return view("invoice_template.index", [
+            'user_invoices' => $user_invoices
+        ]);
     }
 
     /**

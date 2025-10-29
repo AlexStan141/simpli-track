@@ -22,6 +22,7 @@ export default {
                 editprofilelabel: '#949494',
                 editprofileinput: '#F6F6F6',
                 bodycolor: '#FAFAFA',
+                pagelink: '#0C5489'
             }
         },
     },

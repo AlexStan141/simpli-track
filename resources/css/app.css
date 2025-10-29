@@ -16,3 +16,31 @@
 #phone{
     padding-left: 86px;
 }
+
+.invoice-templates{
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.invoice-templates th{
+    font-size: 16px;
+    line-height: 24px
+}
+
+.invoice-templates th,
+.invoice-templates td{
+    padding-left: 16px;
+    padding-top: 16px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.pagination .hidden{
+    justify-content: center;
+}
+
+.pagination .hidden div:first-child{
+    display: none;
+}
