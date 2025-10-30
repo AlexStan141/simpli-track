@@ -1,46 +1,60 @@
 @if ($paginator->hasPages())
     <nav class="flex justify-center">
         <ul class="pagination flex gap-[6px]">
+            {{-- First Page Link --}}
+
+            @if (!$paginator->onFirstPage())
+                <x-page-link page-link="{{ $paginator->url(1) }}" label-type="@lang('pagination.first')"
+                    img-place="images/first.png"></x-page-link>
+            @else
+                <x-page-link label-type="@lang('pagination.first')" img-place="images/first.png"></x-page-link>
+            @endif
+
+
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
-                <li class="page-item disabled bg-slate-500 w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border" aria-disabled="true" aria-label="@lang('pagination.previous')">
-                    <span class="page-link " aria-hidden="true">&lsaquo;</span>
-                </li>
+                <x-page-link label-type="@lang('pagination.previous')" img-place="images/prev.png"></x-page-link>
             @else
-                <li class="page-item w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
-                </li>
+                <x-page-link page-link="{{ $paginator->previousPageUrl() }}" label-type="@lang('pagination.previous')"
+                    img-place="images/prev.png"></x-page-link>
             @endif
 
             {{-- Pagination Elements --}}
             @foreach ($elements as $element)
                 {{-- "Three Dots" Separator --}}
                 @if (is_string($element))
-                    <li class="page-item disabled w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+                    <li class="page-item disabled w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border"
+                        aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
                 @endif
 
                 {{-- Array Of Links --}}
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <li class="text-white bg-pagelink page-item active w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                            <x-page-link page-link="{{ $url }}" current-page>{{ $page }}</x-page-link>
                         @elseif ($page == $paginator->currentPage() - 1 || $page == $paginator->currentPage() + 1)
-                            <li class="page-item w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                            <x-page-link page-link="{{ $url }}" >{{ $page }}</x-page-link>
                         @endif
                     @endforeach
                 @endif
             @endforeach
 
             {{-- Next Page Link --}}
-            @if ($paginator->hasMorePages())
-                <li class="page-item w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border">
-                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
-                </li>
+            @if (!$paginator->hasMorePages())
+                <x-page-link label-type="@lang('pagination.next')" img-place="images/next.png"></x-page-link>
             @else
-                <li class="page-item disabled bg-slate-500 w-[40px] h-[40px] flex justify-center items-center rounded-full border-formtitle border" aria-disabled="true" aria-label="@lang('pagination.next')">
-                    <span class="page-link" aria-hidden="true">&rsaquo;</span>
-                </li>
+                <x-page-link page-link="{{ $paginator->nextPageUrl() }}" label-type="@lang('pagination.next')"
+                    img-place="images/next.png"></x-page-link>
             @endif
+
+            {{-- Last Page Link --}}
+            @if (!$paginator->onLastPage())
+                <x-page-link page-link="{{ $paginator->url($paginator->lastPage()) }}" label-type="@lang('pagination.last')"
+                    img-place="images/last.png"></x-page-link>
+            @else
+                <x-page-link label-type="@lang('pagination.last')" img-place="images/last.png"></x-page-link>
+            @endif
+
         </ul>
     </nav>
 @endif
