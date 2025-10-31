@@ -40,4 +40,12 @@ class InvoiceTemplate extends Model
     public function landlord(): BelongsTo{
         return $this->belongsTo(Landlord::class);
     }
+
+    public function due_day(): BelongsTo{
+        return $this->belongsTo(DueDay::class);
+    }
+
+    public function invoices_for_attention(): BelongsTo{
+        return $this->belongsTo(InvoiceForAttention::class);
+    }
 }

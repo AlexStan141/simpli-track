@@ -20,6 +20,12 @@ Route::get('/dashboard', function () {
 Route::get('/invoice', [InvoiceTemplateController::class, 'index'])
 ->middleware(['auth', 'verified'])->name('invoice.index');
 
+Route::get('/invoice/create', [InvoiceTemplateController::class, 'create'])
+->middleware(['auth', 'verified'])->name('invoice.create');
+
+Route::post('/invoice', [InvoiceTemplateController::class, 'store'])
+->middleware(['auth', 'verified'])->name('invoice.store');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');

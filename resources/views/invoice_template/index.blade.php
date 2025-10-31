@@ -3,8 +3,13 @@
         <p class="text-xl leading-none h-[15px] font-semibold">Invoice Templates</p>
         <hr class="mt-[16px] w-[100%]">
         </hr>
-        <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
+        <a href="{{ route('invoice.create') }}">
+            <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
+        </a>
         <div class="after:content-[''] after:block after:clear-both"></div>
+        @if (session()->has('success'))
+            <div>{{ session('success') }}</div>
+        @endif
         @if (count($user_invoices) == 0)
             <p>No user invoices for this moment.</p>
         @else

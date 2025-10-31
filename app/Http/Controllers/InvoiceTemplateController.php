@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceRequest;
 use App\Models\InvoiceTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -30,9 +31,14 @@ class InvoiceTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(InvoiceRequest $request)
     {
-        //
+        $invoice = InvoiceTemplate::create($request->validated());
+        $invoice->lease_no = $invoice->lease_no ?? null;
+        $invoice->amount = $invoice->amount ?? null;
+        $invoice->currency = $invoice->currency ?? null;
+        $invoice->landlord_id = $invoice->landlord_id ?? null;
+        return redirect()->route('invoice.index')->with('success', 'Invoice added successfully.');
     }
 
     /**

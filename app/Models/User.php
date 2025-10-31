@@ -53,11 +53,18 @@ class User extends Authenticatable
 
     public static array $role = ['Admin', 'Portofolio Manager', 'Lease Admin', 'Director', 'User'];
 
-    public function company():BelongsTo{
+    public function company(): BelongsTo
+    {
         return $this->belongsTo(Company::class);
     }
 
-    public function invoice_templates(): HasMany{
+    public function invoice_templates(): HasMany
+    {
         return $this->hasMany(InvoiceTemplate::class);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }

@@ -13,7 +13,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Manrope', ...defaultTheme.fontFamily.sans],
-                nunito: ['Nunito', ...defaultTheme.fontFamily.sans]
+                nunito: ['Nunito', ...defaultTheme.fontFamily.sans],
+                inter: ['Inter', 'sans-serif'],
             },
             colors: {
                 loginblue: '#334461',
@@ -22,7 +23,9 @@ export default {
                 editprofilelabel: '#949494',
                 editprofileinput: '#F6F6F6',
                 bodycolor: '#FAFAFA',
-                pagelink: '#0C5489'
+                pagelink: '#0C5489',
+                invoiceadd: '#EFEFEF',
+                inputbordercolor: '#E3E8EF'
             }
         },
     },

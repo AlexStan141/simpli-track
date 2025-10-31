@@ -1,7 +1,10 @@
 import './bootstrap';
-import Alpine from 'alpinejs';
-window.Alpine = Alpine;
-Alpine.start();
+
+//a disparut eroarea dupa ce am eliminat astea
+
+// import Alpine from 'alpinejs';
+// window.Alpine = Alpine;
+// Alpine.start();
 
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.querySelector("#phone");
