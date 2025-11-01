@@ -33,7 +33,7 @@
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
                 <x-custom-input id="lease_no" label="Lease No. (optional)" width="270px"
-                    type="text"></x-custom-input>
+                    type="text" wire:model="lease_no"></x-custom-input>
                 @error('lease_no')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
@@ -67,14 +67,14 @@
             </div>
             <div>
                 <div class="flex gap-2">
-                    <x-custom-input id="amount" label="Amount" width="150px" type="number" />
-                    <x-custom-input id="currency" label="" width="96px" type="text" />
+                    <x-custom-input id="amount" label="Amount" width="150px" type="number" wire:model="amount" />
+                    <x-custom-input id="currency" label="" width="96px" type="text" wire:model="currency"/>
                 </div>
             </div>
             <div class="flex items-center gap-[43px]">
                 Due date
                 <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                    wire:model="selected_due_day"/>
+                    wire:model="selected_due_day" />
                 of each month
                 @error('selected_due_day')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -83,7 +83,7 @@
             <div class="flex items-center gap-[43px]">
                 Flag invoices for attention
                 <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label="" width="200px"
-                    wire:model="selected_invoice_for_attention"/>
+                    wire:model="selected_invoice_for_attention" />
                 before due date
                 @error('selected_invoice')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -92,8 +92,13 @@
             <div class="flex flex-col gap-4">
                 Frequency
                 <div class="flex gap-[6px]">
-                    <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px]">monthly</div>
-                    <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px]">quarterly</div>
+                    @if ($selected_frequency === 'monthly')
+                        <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px]" wire:click="updateFrequency(0)">monthly</div>
+                        <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px]" wire:click="updateFrequency(1)">quarterly</div>
+                    @else
+                        <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px]" wire:click="updateFrequency(0)">monthly</div>
+                        <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px]" wire:click="updateFrequency(1)">quarterly</div>
+                    @endif
                 </div>
             </div>
             <button type="submit"

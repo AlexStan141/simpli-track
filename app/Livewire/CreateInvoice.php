@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\DueDay;
 use App\Models\InvoiceForAttention;
+use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
@@ -14,6 +15,8 @@ use Livewire\Component;
 
 class CreateInvoice extends Component
 {
+    public $amount;
+    public $currency;
     public $categories;
     public $selected_category;
     public $users;
@@ -31,7 +34,11 @@ class CreateInvoice extends Component
     public $selected_due_day;
     public $invoices_for_attention;
     public $selected_invoice_for_attention;
-
+    public $frequency_options = ['monthly', 'quarterly'];
+    public $selected_frequency = 'monthly';
+    public function updateFrequency($index){
+        $this->selected_frequency = $this->frequency_options[$index];
+    }
     public function updatedSelectedRegion($value)
     {
         $this->updateCountryList();
@@ -46,13 +53,17 @@ class CreateInvoice extends Component
         $this->selected_country = $this->countries->keys()->first();
         $this->updateCityList();
     }
-
     public function updateCityList()
     {
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
     }
-
+    public function createInvoiceTemplate(){
+        InvoiceTemplate::create([
+            'frequency' => $this->selected_frequency,
+            'amount' => $this->amount
+        ]);
+    }
     public function mount()
     {
         // Categorii
@@ -78,7 +89,6 @@ class CreateInvoice extends Component
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
     }
-
     public function render()
     {
         return view('livewire.create-invoice');

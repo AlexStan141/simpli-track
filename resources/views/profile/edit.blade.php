@@ -11,6 +11,9 @@
                 <div class="font-nunito text-loginblue text-base leading-none">{{ auth()->user()->role }}</div>
             </div>
         </div>
+        @if(session()->has('success'))
+            <p class="bg-green-300 px-[10px] py-[20px] mb-[5px]">{{ session('success') }}</p>
+        @endif
         <form class="border-t-[1px] border-formgray py-12" action="{{ route('profile.update') }}" method="POST">
             @csrf
             @method('PUT')
@@ -20,28 +23,28 @@
                     <x-input-label for="first_name" :value="__('First Name')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="first_name"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text"
-                        name="first_name" value="{{ $user['first_name'] }}"/>
+                        name="first_name" value="{{ old('first_name') ?? $user['first_name'] }}"/>
                     <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="last_name" :value="__('Last Name')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="last_name"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text"
-                        name="last_name" value="{{ $user['last_name'] }}"  />
+                        name="last_name" value="{{ old('last_name') ?? $user['last_name'] }}"  />
                     <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="email" :value="__('Email')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="email"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="email"
-                        name="email" value="{{ $user['email'] }}"  />
+                        name="email" value="{{ old('email') ?? $user['email'] }}"  />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <x-input-label for="phone" :value="__('Phone')" class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="phone"
                         class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="tel"
-                        name="phone" value="{{ $user['phone'] }}" ></x-text-input>
+                        name="phone" value="{{ old('phone') ?? $user['phone'] }}" ></x-text-input>
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
