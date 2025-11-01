@@ -32,7 +32,6 @@
         @include('layouts.navigation')
         <!-- Page Content -->
         <main class="grow flex">
-            <x-vertical-menu></x-vertical-menu>
             {{ $slot }}
         </main>
     </div>
