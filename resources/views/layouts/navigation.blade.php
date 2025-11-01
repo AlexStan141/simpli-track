@@ -2,7 +2,9 @@
     <div class="max-w-auto">
         <div class="flex justify-between items-center">
             <div class="flex">
-                <img src="{{ asset('images/Logo.png') }}" alt="logo" width="462" height="90">
+                <a href="/dashboard">
+                    <img src="{{ asset('images/Logo.png') }}" alt="logo" width="462" height="90">
+                </a>
             </div>
             <div class="flex gap-[12px] items-center" x-data="{ open: false }">
                 <div class="bg-yellow p-[8px] flex gap-[16px] text-white items-center">
