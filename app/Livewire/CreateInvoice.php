@@ -12,6 +12,7 @@ use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
 use Livewire\Component;
+use Illuminate\Validation\Rule;
 
 class CreateInvoice extends Component
 {
@@ -31,6 +32,7 @@ class CreateInvoice extends Component
     public $selected_landlord;
     public $lease_no;
     public $due_days;
+    public $selected_status = 1;
     public $selected_due_day;
     public $invoices_for_attention;
     public $selected_invoice_for_attention;
@@ -86,6 +88,20 @@ class CreateInvoice extends Component
     }
 
     public function createInvoiceTemplate(){
+
+        $this->validate([
+            'selected_due_day' => 'required',
+            'selected_invoice_for_attention' => 'required',
+            'selected_category' => 'required',
+            'selected_user' => 'required',
+            'selected_status' => 'required',
+            'selected_region' => 'required',
+            'selected_country' => 'required',
+            'selected_city' => 'required',
+            'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
+            'lease_no' => ['nullable', 'regex:/^[A-Z]{3}\d{2}\s#\d{4}\/\d{2}\/\d{2}$/']
+        ]);
+
         InvoiceTemplate::create([
             'frequency' => $this->selected_frequency,
             'amount' => $this->amount,
@@ -94,7 +110,7 @@ class CreateInvoice extends Component
             'due_day_id' => $this->selected_due_day,
             'invoice_for_attention_id' => $this->selected_invoice_for_attention,
             'category_id' => $this -> selected_category,
-            "status_id" => 1,
+            "status_id" => $this->selected_status,
             "user_id" => $this->selected_user,
             "region_id" => $this->selected_region,
             "country_id" => $this->selected_country,

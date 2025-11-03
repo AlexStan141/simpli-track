@@ -27,7 +27,8 @@ export default {
                 bodycolor: '#FAFAFA',
                 pagelink: '#0C5489',
                 invoiceadd: '#EFEFEF',
-                inputbordercolor: '#E3E8EF'
+                inputbordercolor: '#E3E8EF',
+                buttontext: '#5F5F5F'
             }
         },
     },

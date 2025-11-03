@@ -33,13 +33,7 @@ class InvoiceTemplateController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        $invoice = InvoiceTemplate::create($request->validated());
-        $invoice->lease_no = $invoice->lease_no ?? null;
-        $invoice->amount = $invoice->amount ?? null;
-        $invoice->currency = $invoice->currency ?? null;
-        $invoice->landlord_id = $invoice->landlord_id ?? null;
-        return redirect()->route('invoice.index')->with('success', 'Invoice added successfully.');
+        //
     }
 
     /**

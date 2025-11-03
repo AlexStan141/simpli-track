@@ -31,7 +31,7 @@
                         <td class="w-[178px]">{{ $user_invoice->category->name }}</td>
                         <td class="w-[200px]">{{ $user_invoice->landlord->name }}</td>
                         <td class="w-[184px]">{{ $user_invoice->frequency }}</td>
-                        <td class="w-[225px]">{{ $user_invoice->due_day->day }}</td>
+                        <td class="w-[225px]">{{ $user_invoice->due_day->day }} of each month </td>
                         <td class="w-[152px]">{{ $user_invoice->amount }}</td>
                         <td class="w-[200px]">{{ $user_invoice->lease_no }}</td>
                     </tr>

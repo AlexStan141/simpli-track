@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InvoiceTemplateController;
+use App\Models\Country;
+use App\Models\Region;
+use App\Models\Status;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -14,7 +17,16 @@ Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name(
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $region_names = Region::pluck('name', 'id');
+    $status_names = Status::pluck('name', 'id');
+    $all_country_names = Country::pluck('name', 'id');
+
+    return view('dashboard', [
+        'region_names' => $region_names,
+        'status_names' => $status_names,
+        'all_country_names' => $all_country_names
+
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/invoice', [InvoiceTemplateController::class, 'index'])

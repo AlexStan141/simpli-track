@@ -1,3 +1,3 @@
 <x-app-layout>
-    <x-vertical-menu active-link="/dashboard"></x-vertical-menu>
+    @livewire('filter-list', ['regions' => $region_names])
 </x-app-layout>

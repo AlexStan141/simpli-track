@@ -29,7 +29,8 @@ class InvoiceRequest extends FormRequest
             'region_id' => 'required',
             'country_id' => 'required',
             'city_id' => 'required',
-            'frequency' => ['required', Rule::in(['monthly', 'quarterly'])]
+            'frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
+            'lease_no' => ['nullable', 'regex:/^[A-Z]{3}\d{2}#\d{4}\/\d{2}\/\d{2}$/']
         ];
     }
 }
