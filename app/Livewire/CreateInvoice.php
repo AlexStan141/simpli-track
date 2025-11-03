@@ -58,12 +58,6 @@ class CreateInvoice extends Component
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
     }
-    public function createInvoiceTemplate(){
-        InvoiceTemplate::create([
-            'frequency' => $this->selected_frequency,
-            'amount' => $this->amount
-        ]);
-    }
     public function mount()
     {
         // Categorii
@@ -88,7 +82,28 @@ class CreateInvoice extends Component
 
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
+
     }
+
+    public function createInvoiceTemplate(){
+        InvoiceTemplate::create([
+            'frequency' => $this->selected_frequency,
+            'amount' => $this->amount,
+            'currency' => $this->currency,
+            'lease_no' => $this->lease_no,
+            'due_day_id' => $this->selected_due_day,
+            'invoice_for_attention_id' => $this->selected_invoice_for_attention,
+            'category_id' => $this -> selected_category,
+            "status_id" => 1,
+            "user_id" => $this->selected_user,
+            "region_id" => $this->selected_region,
+            "country_id" => $this->selected_country,
+            "city_id" => $this->selected_city,
+            "landlord_id" => $this->selected_landlord
+        ]);
+        $this->dispatch('invoiceTemplateCreated');
+    }
+
     public function render()
     {
         return view('livewire.create-invoice');

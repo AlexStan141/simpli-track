@@ -24,8 +24,7 @@
         <span class="leading-[14px] h-[12px]">Import from CSV</span>
     </div>
     <div class="bg-white ml-[17px] mt-[14px] pt-[55px] pl-[72px] pr-[39px]">
-        <form method="POST" action="{{ route('invoice.store') }}" class="pt-7 flex flex-col gap-10">
-            @csrf
+        <form wire:submit.prevent="createInvoiceTemplate" class="pt-7 flex flex-col gap-10">
             <div class="flex justify-between">
                 <x-select-input :values=$categories width="200px" id="category_id" label="Category"
                     wire:model="selected_category"></x-select-input>
@@ -101,6 +100,7 @@
                     @endif
                 </div>
             </div>
+            <input type="hidden" name="frequency" value="{{ $selected_frequency }}">
             <button type="submit"
                 class="bg-loginblue text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Save
                 Templates</button>

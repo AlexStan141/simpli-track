@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class InvoiceRequest extends FormRequest
 {
     /**
@@ -29,6 +29,7 @@ class InvoiceRequest extends FormRequest
             'region_id' => 'required',
             'country_id' => 'required',
             'city_id' => 'required',
+            'frequency' => ['required', Rule::in(['monthly', 'quarterly'])]
         ];
     }
 }

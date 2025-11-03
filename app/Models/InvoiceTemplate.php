@@ -13,6 +13,8 @@ class InvoiceTemplate extends Model
 
     public static array $frequencies = ['Monthly', 'Quarterly'];
 
+    protected $guarded = [];
+
     public function category(): BelongsTo{
         return $this->belongsTo(Category::class);
     }

@@ -31,8 +31,9 @@ class InvoiceTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InvoiceRequest $request)
+    public function store(Request $request)
     {
+        dd($request);
         $invoice = InvoiceTemplate::create($request->validated());
         $invoice->lease_no = $invoice->lease_no ?? null;
         $invoice->amount = $invoice->amount ?? null;
