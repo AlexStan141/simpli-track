@@ -13,6 +13,9 @@ export default {
 
     theme: {
         extend: {
+            boxShadow: {
+                'text-outline': '-1px -1px 0 #E3E8EF, 1px -1px 0 #E3E8EF, -1px 1px 0 #E3E8EF, 1px 1px 0 #E3E8EF',
+            },
             fontFamily: {
                 sans: ['Manrope', ...defaultTheme.fontFamily.sans],
                 nunito: ['Nunito', ...defaultTheme.fontFamily.sans],

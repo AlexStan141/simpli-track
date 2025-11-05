@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InvoiceTemplateController;
+use App\Models\Category;
 use App\Models\Country;
 use App\Models\Region;
 use App\Models\Status;
@@ -18,13 +19,15 @@ Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name(
 
 Route::get('/dashboard', function () {
     $region_names = Region::pluck('name', 'id');
-    $status_names = Status::pluck('name', 'id');
-    $all_country_names = Country::pluck('name', 'id');
+    $status_names = Status::pluck('name', 'id')->toArray();
+    $all_country_names = Country::pluck('name', 'id')->toArray();
+    $categories_names = Category::pluck('name', 'id')->toArray();
 
     return view('dashboard', [
         'region_names' => $region_names,
         'status_names' => $status_names,
-        'all_country_names' => $all_country_names
+        'all_country_names' => $all_country_names,
+        'category_names' => $categories_names
 
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');

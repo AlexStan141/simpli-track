@@ -33,8 +33,8 @@
 .invoice-templates td{
     padding-left: 16px;
     padding-top: 16px;
+    padding-right: 16px;
     font-weight: 400;
-    text-align: left;
 }
 
 .pagination .hidden{
@@ -43,4 +43,14 @@
 
 .pagination .hidden div:first-child{
     display: none;
+}
+
+@layer utilities {
+  .text-shadow-outline {
+    text-shadow:
+      -1px -1px 0 #E3E8EF,
+       1px -1px 0 #E3E8EF,
+      -1px  1px 0 #E3E8EF,
+       1px  1px 0 #E3E8EF;
+  }
 }

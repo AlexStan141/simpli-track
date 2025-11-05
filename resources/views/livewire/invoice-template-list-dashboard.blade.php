@@ -1,14 +1,4 @@
-<div class="pl-[52px] pr-[28px] pt-[64px] grow">
-    <p class="text-xl leading-none h-[15px] font-semibold">Invoice Templates</p>
-    <hr class="mt-[16px] w-[100%]">
-    </hr>
-    <a href="{{ route('invoice.create') }}">
-        <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
-    </a>
-    <div class="after:content-[''] after:block after:clear-both"></div>
-    @if (session()->has('success'))
-        <div>{{ session('success') }}</div>
-    @endif
+<div>
     @if (count($user_invoices) == 0)
         <p>No user invoices for this moment.</p>
     @else
@@ -16,26 +6,18 @@
             <thead>
                 <tr class="bg-formgray w-full h-[56px] border">
                     <th class="w-[62px]"></th>
-                    <th class="w-[178px]">
+                    <th class="w-[196px]">
                         <div class="flex justify-between">
-                            Category
-                            <a href="#" wire:click.prevent="sort('categories.name')">
+                            Location
+                            <a href="#" wire:click.prevent="sort('location.name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
                     </th>
                     <th class="w-[200px]">
                         <div class="flex justify-between">
-                            Location
-                            <a href="#" wire:click.prevent="sort('landlords.name')">
-                                <img src="{{ asset('/images/sort.svg') }}" alt="sort">
-                            </a>
-                        </div>
-                    </th>
-                    <th class="w-[184px]">
-                        <div class="flex justify-between">
-                            Frequency
-                            <a href="#" wire:click.prevent="sort('frequency')">
+                            Status
+                            <a href="#" wire:click.prevent="sort('status.name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -43,23 +25,28 @@
                     <th class="w-[225px]">
                         <div class="flex justify-between">
                             Due Date
-                            <a href="#" wire:click.prevent="sort('due_days.day')">
+                            <a href="#" wire:click.prevent="sort('due_day.day')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
                     </th>
-                    <th class="w-[152px]">
+                    <th class="w-[171px]">
                         <div class="flex justify-between">
-                            Amount
-                            <a href="#" wire:click.prevent="sort('amount')">
+                            Notes
+                        </div>
+                    </th>
+                    <th class="w-[205px]">
+                        <div class="flex justify-between">
+                            Assignee
+                            <a href="#" wire:click.prevent="sort('user.name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
                     </th>
                     <th class="w-[200px]">
                         <div class="flex justify-between">
-                            LeaseNo#
-                            <a href="#" wire:click.prevent="sort('lease_no')">
+                            Last Updated
+                            <a href="#" wire:click.prevent="sort('updated_at')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -74,18 +61,16 @@
                                 <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
                             </div>
                         </td>
-                        <td class="w-[178px]">{{ $user_invoice->category->name }}</td>
-                        <td class="w-[200px]">{{ $user_invoice->landlord->name }}</td>
-                        <td class="w-[184px]">{{ $user_invoice->frequency }}</td>
-                        <td class="w-[225px]">{{ $user_invoice->due_day->day }} of each month </td>
-                        <td class="w-[152px]">{{ $user_invoice->amount }}</td>
-                        <td class="w-[200px]">{{ $user_invoice->lease_no }}</td>
+                        <td class="w-[196px]">{{ $user_invoice->landlord->name }}</td>
+                        <td class="w-[200px]">{{ $user_invoice->status->name }}</td>
+                        <td class="w-[225px]">{{ $user_invoice->due_day->day }}</td>
+                        <td class="w-[171px]"></td>
+                        <td class="w-[205px]">
+                            {{ $user_invoice->user->first_name . ' ' . $user_invoice->user->last_name }}</td>
+                        <td class="w-[200px]">{{ $user_invoice->updated_at }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        <nav class="pagination">
-            {{ $user_invoices->onEachSide(1)->links('vendor.pagination.bootstrap-4') }}
-        </nav>
     @endif
 </div>

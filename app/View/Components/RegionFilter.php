@@ -7,17 +7,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
-class Filter extends Component
+class RegionFilter extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
-        public string $type,
-        public $values,
+        public bool $selected
     )
     {
-        //
     }
 
     /**
@@ -25,6 +23,6 @@ class Filter extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.filter');
+        return view('components.region-filter');
     }
 }
