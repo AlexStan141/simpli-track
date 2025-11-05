@@ -10,7 +10,6 @@ class RegionFilter extends Component
     public $value;
 
     public function toggle(){
-        logger('Toggle called for: ' . $this->value);
         $this->selected = !$this->selected;
         $this->dispatch('toggleRegion', [
             'selected' => $this->selected,

@@ -64,7 +64,12 @@
                         <td class="w-[196px]">{{ $user_invoice->landlord->name }}</td>
                         <td class="w-[200px]">{{ $user_invoice->status->name }}</td>
                         <td class="w-[225px]">{{ $user_invoice->due_day->day }}</td>
-                        <td class="w-[171px]"></td>
+                        <td class="w-[171px]">
+                            <div class="flex gap-2">
+                                <img src="{{ asset('/images/social.png') }}" alt="notes">
+                                <span>call</span>
+                            </div>
+                        </td>
                         <td class="w-[205px]">
                             {{ $user_invoice->user->first_name . ' ' . $user_invoice->user->last_name }}</td>
                         <td class="w-[200px]">{{ $user_invoice->updated_at }}</td>
@@ -72,5 +77,8 @@
                 @endforeach
             </tbody>
         </table>
+        <nav class="pagination">
+            {{ $user_invoices->onEachSide(1)->links('vendor.pagination.bootstrap-4') }}
+        </nav>
     @endif
 </div>

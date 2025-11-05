@@ -26,7 +26,7 @@
 
 .invoice-templates th{
     font-size: 16px;
-    line-height: 24px
+    line-height: 24px;
 }
 
 .invoice-templates th,
@@ -43,14 +43,4 @@
 
 .pagination .hidden div:first-child{
     display: none;
-}
-
-@layer utilities {
-  .text-shadow-outline {
-    text-shadow:
-      -1px -1px 0 #E3E8EF,
-       1px -1px 0 #E3E8EF,
-      -1px  1px 0 #E3E8EF,
-       1px  1px 0 #E3E8EF;
-  }
 }

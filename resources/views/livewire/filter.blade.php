@@ -1,6 +1,7 @@
 <div class="relative">
     <select name="{{ $type }}" id="{{ $type }}"
-        class="pt-2 pl-7 pr-[21px] w-[250px] rounded-[32px] border-inputbordercolor appearance-none bg-none">
+        class="pt-2 pl-7 pr-[21px] w-[250px] rounded-[32px] border-inputbordercolor appearance-none bg-none"
+        wire:model="selectedValue" wire:change="triggerUpdatedSelectedValue">
         @foreach ($values as $value)
             <option value="{{ $value }}" class="text-manrope text-[15px] leading-[22px] h-[22px]">
                 {{ $type . '(' . $value . ')' }}</option>
