@@ -7,10 +7,10 @@
                     @livewire('region-filter', ['selected' => true, 'value' => $region])
                 @endforeach
             </div>
-            <div class="flex">
-                @livewire('filter', ['type' => 'status', 'values' => $status_names, 'selected_value' => $status_names[1]])
-                @livewire('filter', ['type' => 'country', 'values' => $all_country_names, 'selected_value' => $all_country_names[1]])
-                @livewire('filter', ['type' => 'category', 'values' => $category_names, 'selected_value' => $category_names[1]])
+            <div class="flex mr-8">
+                @livewire('filter', ['type' => 'Status', 'values' => $status_names, 'selected_value' => $status_names[1]])
+                @livewire('filter', ['type' => 'Location', 'values' => $city_names, 'selected_value' => $city_names[1]])
+                @livewire('filter', ['type' => 'Category', 'values' => $category_names, 'selected_value' => $category_names[1]])
             </div>
         </div>
             @livewire('invoice-template-list-dashboard')

@@ -3,23 +3,30 @@
 namespace App\Livewire;
 
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Country;
 use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class InvoiceTemplateListDashboard extends Component
 {
+    use WithPagination;
     public array $selectedRegions = [];
     public $selectedStatus;
-    public $selectedCountry;
+    public $selectedCity;
     public $selectedCategory;
+    public function gotoPage($page)
+    {
+        $this->setPage($page);
+    }
     protected $listeners = [
         'toggleRegion' => 'handleToggle',
         'statusChanged' => 'handleStatus',
-        'countryChanged' => 'handleCountry',
+        'cityChanged' => 'handleCity',
         'categoryChanged' => 'handleCategory'
     ];
     public function handleToggle($payload)
@@ -38,41 +45,48 @@ class InvoiceTemplateListDashboard extends Component
         $this->render();
     }
 
-    public function handleStatus($payload){
+    public function handleStatus($payload)
+    {
         $this->selectedStatus = $payload['statusValue'];
         $this->render();
     }
 
-    public function handleCountry($payload){
-        $this->selectedCountry = $payload['countryValue'];
+    public function handleCity($payload)
+    {
+        $this->selectedCity = $payload['cityValue'];
         $this->render();
     }
 
-    public function handleCategory($payload){
+    public function handleCategory($payload)
+    {
         $this->selectedCategory = $payload['categoryValue'];
         $this->render();
     }
 
     public function render()
     {
-        $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'landlords.name')
-            ->join('landlords', 'invoice_templates.landlord_id', '=', 'landlords.id')
-            ->join('statuses', 'invoice_templates.status_id', '=', 'statuses.id')
-            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-            ->join('countries', 'invoice_templates.country_id', '=', 'countries.id')
-            ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
-            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-            ->where('invoice_templates.user_id', '=', Auth::id())
+        $invoice_templates = InvoiceTemplate::with(['landlord', 'status', 'due_day', 'city', 'category', 'user'])
+            ->where('user_id', Auth::id())
             ->whereHas('region', function ($query) {
                 $query->whereIn('name', $this->selectedRegions);
-            })->whereHas('status', function($query){
+            });
+
+        if ($this->selectedStatus !== 'All') {
+            $invoice_templates->whereHas('status', function ($query) {
                 $query->where('name', '=', $this->selectedStatus);
-            })->whereHas('country', function($query){
-                $query->where('name', '=', $this->selectedCountry);
-            })->whereHas('category', function($query){
+            });
+        }
+        if ($this->selectedCity !== 'All') {
+            $invoice_templates->whereHas('city', function ($query) {
+                $query->where('name', '=', $this->selectedCity);
+            });
+        }
+        if ($this->selectedCategory !== 'All') {
+            $invoice_templates->whereHas('category', function ($query) {
                 $query->where('name', '=', $this->selectedCategory);
-            })
-            ->paginate(5);
+            });
+        }
+        $invoice_templates = $invoice_templates->paginate(5);
         return view('livewire.invoice-template-list-dashboard', [
             'user_invoices' => $invoice_templates,
         ]);
@@ -81,8 +95,8 @@ class InvoiceTemplateListDashboard extends Component
     public function mount()
     {
         $this->selectedRegions = Region::pluck('name')->toArray();
-        $this->selectedStatus = Status::pluck('name')->toArray()[0];
-        $this->selectedCountry = Country::pluck('name')->toArray()[0];
-        $this->selectedCategory = Category::pluck('name')->toArray()[0];
+        $this->selectedStatus = Status::pluck('name')->first();
+        $this->selectedCity = City::pluck('name')->first();
+        $this->selectedCategory = Category::pluck('name')->first();
     }
 }

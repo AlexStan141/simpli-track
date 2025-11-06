@@ -4,7 +4,7 @@
             {{-- First Page Link --}}
 
             @if (!$paginator->onFirstPage())
-                <x-page-link page-link="{{ $paginator->url(1) }}" label-type="@lang('pagination.first')"
+                <x-page-link wire:click="gotoPage(1)" label-type="@lang('pagination.first')"
                     img-place="images/first.png"></x-page-link>
             @else
                 <x-page-link label-type="@lang('pagination.first')" img-place="images/first.png"></x-page-link>
@@ -15,7 +15,7 @@
             @if ($paginator->onFirstPage())
                 <x-page-link label-type="@lang('pagination.previous')" img-place="images/prev.png"></x-page-link>
             @else
-                <x-page-link page-link="{{ $paginator->previousPageUrl() }}" label-type="@lang('pagination.previous')"
+                <x-page-link wire:click="previousPage" label-type="@lang('pagination.previous')"
                     img-place="images/prev.png"></x-page-link>
             @endif
 
@@ -31,9 +31,9 @@
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <x-page-link page-link="{{ $url }}" current-page>{{ $page }}</x-page-link>
+                            <x-page-link wire:click="gotoPage({{ $page }})" current-page>{{ $page }}</x-page-link>
                         @elseif ($page == $paginator->currentPage() - 1 || $page == $paginator->currentPage() + 1)
-                            <x-page-link page-link="{{ $url }}" >{{ $page }}</x-page-link>
+                            <x-page-link wire:click="gotoPage({{ $page }})" >{{ $page }}</x-page-link>
                         @endif
                     @endforeach
                 @endif
@@ -43,13 +43,13 @@
             @if (!$paginator->hasMorePages())
                 <x-page-link label-type="@lang('pagination.next')" img-place="images/next.png"></x-page-link>
             @else
-                <x-page-link page-link="{{ $paginator->nextPageUrl() }}" label-type="@lang('pagination.next')"
+                <x-page-link wire:click="nextPage" label-type="@lang('pagination.next')"
                     img-place="images/next.png"></x-page-link>
             @endif
 
             {{-- Last Page Link --}}
             @if (!$paginator->onLastPage())
-                <x-page-link page-link="{{ $paginator->url($paginator->lastPage()) }}" label-type="@lang('pagination.last')"
+                <x-page-link wire:click="gotoPage({{ $paginator->lastPage() }})" label-type="@lang('pagination.last')"
                     img-place="images/last.png"></x-page-link>
             @else
                 <x-page-link label-type="@lang('pagination.last')" img-place="images/last.png"></x-page-link>

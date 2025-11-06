@@ -14,6 +14,7 @@ use App\Models\InvoiceTemplate;
 use App\Models\Landlord;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceTemplateSeeder extends Seeder
 {
@@ -22,6 +23,7 @@ class InvoiceTemplateSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('invoice_templates')->truncate();
         $categories = Category::all();
         $statuses = Status::all();
         $users = User::all();
@@ -32,26 +34,28 @@ class InvoiceTemplateSeeder extends Seeder
         $dueDates = DueDay::all();
         $invoicesForAttention = InvoiceForAttention::all();
 
-        foreach($users as $user){
-            $category = $categories->random();
-            $status = $statuses->random();
-            $region = $regions->random();
-            $country = $countries->random();
-            $city = $cities->random();
-            $landlord = $landlords->random();
-            $dueDate = $dueDates->random();
-            $invoiceForAttention = $invoicesForAttention->random();
-            InvoiceTemplate::factory(20)->create([
-                'category_id' => $category->id,
-                'status_id' => $status->id,
-                'user_id' => $user->id,
-                'region_id' => $region->id,
-                'country_id' => $country->id,
-                'city_id' => $city->id,
-                'landlord_id' => $landlord->id,
-                'due_day_id' => $dueDate->id,
-                'invoice_for_attention_id' => $invoiceForAttention->id
-            ]);
+        foreach ($users as $user) {
+            for ($i = 1; $i <= 20; $i++) {
+                $category = $categories->random();
+                $status = $statuses->random();
+                $region = $regions->random();
+                $country = $countries->random();
+                $city = $cities->random();
+                $landlord = $landlords->random();
+                $dueDate = $dueDates->random();
+                $invoiceForAttention = $invoicesForAttention->random();
+                InvoiceTemplate::factory()->create([
+                    'category_id' => $category->id,
+                    'status_id' => $status->id,
+                    'user_id' => $user->id,
+                    'region_id' => $region->id,
+                    'country_id' => $country->id,
+                    'city_id' => $city->id,
+                    'landlord_id' => $landlord->id,
+                    'due_day_id' => $dueDate->id,
+                    'invoice_for_attention_id' => $invoiceForAttention->id
+                ]);
+            }
         }
     }
 }

@@ -5,12 +5,18 @@ namespace App\Livewire;
 use App\Models\InvoiceTemplate;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class InvoiceTemplateList extends Component
 {
-
+    use WithPagination;
     public $sortField = 'invoice_templates.created_at';
     public $sortType = "asc";
+
+    public function gotoPage($page)
+    {
+        $this->setPage($page);
+    }
 
     public function sort($field)
     {

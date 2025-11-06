@@ -12,10 +12,10 @@ class Filter extends Component
         $this->updatedSelectedValue();
     }
     public function updatedSelectedValue(){
-        if($this->type === 'status'){
+        if($this->type === 'Status'){
             $this->dispatch('statusChanged', ['statusValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
-        } else if ($this->type === 'country'){
-            $this->dispatch('countryChanged', ['countryValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
+        } else if ($this->type === 'Location'){
+            $this->dispatch('cityChanged', ['cityValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
         } else {
             $this->dispatch('categoryChanged', ['categoryValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
         }
