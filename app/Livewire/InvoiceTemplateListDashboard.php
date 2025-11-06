@@ -65,7 +65,7 @@ class InvoiceTemplateListDashboard extends Component
 
     public function render()
     {
-        $invoice_templates = InvoiceTemplate::with(['landlord', 'status', 'due_day', 'city', 'category', 'user'])
+        $invoice_templates = InvoiceTemplate::with(['landlord', 'status', 'due_day', 'invoices_for_attention', 'city', 'category', 'user'])
             ->where('user_id', Auth::id())
             ->whereHas('region', function ($query) {
                 $query->whereIn('name', $this->selectedRegions);

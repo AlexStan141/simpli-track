@@ -1,3 +1,7 @@
+@php
+    use App\Helpers\DateHelpers;
+@endphp
+
 <div>
     @if (count($user_invoices) == 0)
         <p>No user invoices for this moment.</p>
@@ -61,9 +65,11 @@
                                 <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
                             </div>
                         </td>
-                        <td class="w-[196px]">{{ $user_invoice->landlord->name }}</td>
+                        <td class="w-[196px]">{{ $user_invoice->city->name }}</td>
                         <td class="w-[200px]">{{ $user_invoice->status->name }}</td>
-                        <td class="w-[225px]">{{ $user_invoice->due_day->day }}</td>
+                        <td class="w-[225px]">
+                            {{ DateHelpers::getDueDayFieldValue($user_invoice->last_time_paid, $user_invoice->due_day->day, $user_invoice->invoice_for_attention_id) }}
+                        </td>
                         <td class="w-[171px]">
                             <div class="flex gap-2">
                                 <img src="{{ asset('/images/social.png') }}" alt="notes">

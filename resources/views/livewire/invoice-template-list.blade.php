@@ -27,7 +27,7 @@
                     <th class="w-[200px]">
                         <div class="flex justify-between">
                             Location
-                            <a href="#" wire:click.prevent="sort('landlords.name')">
+                            <a href="#" wire:click.prevent="sort('cities.name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -75,7 +75,7 @@
                             </div>
                         </td>
                         <td class="w-[178px]">{{ $user_invoice->category->name }}</td>
-                        <td class="w-[200px]">{{ $user_invoice->landlord->name }}</td>
+                        <td class="w-[200px]">{{ $user_invoice->city->name }}</td>
                         <td class="w-[184px]">{{ $user_invoice->frequency }}</td>
                         <td class="w-[225px]">{{ $user_invoice->due_day->day }} of each month </td>
                         <td class="w-[152px]">{{ $user_invoice->amount }}</td>

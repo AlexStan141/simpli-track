@@ -53,7 +53,7 @@ class InvoiceTemplateSeeder extends Seeder
                     'city_id' => $city->id,
                     'landlord_id' => $landlord->id,
                     'due_day_id' => $dueDate->id,
-                    'invoice_for_attention_id' => $invoiceForAttention->id
+                    'invoice_for_attention_id' => $invoiceForAttention->id,
                 ]);
             }
         }

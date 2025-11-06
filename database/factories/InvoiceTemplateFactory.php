@@ -16,6 +16,7 @@ class InvoiceTemplateFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
         return [
@@ -23,6 +24,7 @@ class InvoiceTemplateFactory extends Factory
             'amount' => fake()->numberBetween(100,3000),
             'currency' => fake() -> currencyCode(),
             'lease_no' => 'DHQ55 #' . Carbon::now()->addDays(rand(0, 365))->format('Y/m/d'),
+            'last_time_paid' => fake()->dateTimeBetween('-1 month -3 days', 'now')
         ];
     }
 }
