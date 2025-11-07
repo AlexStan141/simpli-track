@@ -12,12 +12,8 @@ class MenuLink extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public int $width,
-        public int $height,
-        public int $viewBoxX,
-        public int $viewBoxY,
         public bool $active,
-        public string $text,
+        public ?string $text,
         public string $link
     )
     {
