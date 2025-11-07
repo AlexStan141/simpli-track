@@ -63,19 +63,19 @@ class DateHelpers
         if (date_format($paid_for_date, 'Y-m-d') == date_format($invoice_date_one_month_ago, 'Y-m-d')) {
             $presentDay = date_format(new DateTime(), 'j');
             if ($presentDay > $invoice_day) {
-                return ($presentDay - $invoice_day) .  " days overdue";
+                return '🟠 ' . ($presentDay - $invoice_day) .  " days overdue";
             } else {
                 $diff = $invoice_day - $presentDay;
                 if ($diff <= $invoice_for_attention) {
-                    return '(' . $diff . ' days) ' . DateHelpers::format($invoice_date);
+                    return '🔴 (' . $diff . ' days) ' . DateHelpers::format($invoice_date);
                 } else {
-                    return DateHelpers::format($invoice_date);
+                    return '⚪ ' . DateHelpers::format($invoice_date);
                 }
             }
         } else {
             $next_date = clone $invoice_date;
             $next_date->modify('+1 month');
-            return DateHelpers::format($next_date);
+            return '⚪ ' . DateHelpers::format($next_date);
         }
     }
 }

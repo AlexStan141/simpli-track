@@ -78,16 +78,22 @@
                     @enderror
                 </div>
             </div>
-            <div>
+            <div class="flex justify-between">
                 <div class="flex gap-2">
                     <x-custom-input id="amount" label="Amount" width="150px" type="number" wire:model="amount" />
                     <x-custom-input id="currency" label="" width="96px" type="text" wire:model="currency" />
+                </div>
+                <div>
+                    <x-custom-input id="last_time_paid" label="Last Time Paid" width="150px" type="hidden" wire:model="last_time_paid"/>
+                    @error('last_time_paid')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             <div class="flex items-center gap-[43px]">
                 Due date
                 <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                    wire:model="selected_due_day" />
+                    wire:model="selected_due_day" wire:change="updateLastTimePaid"/>
                 of each month
                 @error('selected_due_day')
                     <span class="text-red-500 text-sm">{{ $message }}</span>

@@ -16,6 +16,8 @@ class InvoiceTemplateListDashboard extends Component
 {
     use WithPagination;
     public array $selectedRegions = [];
+    public $sortField = 'invoice_templates.created_at';
+    public $sortType = "asc";
     public $selectedStatus;
     public $selectedCity;
     public $selectedCategory;
@@ -23,6 +25,27 @@ class InvoiceTemplateListDashboard extends Component
     {
         $this->setPage($page);
     }
+
+    public function sort($field)
+    {
+        $fieldMap = [
+            'location' => 'cities.name',
+            'status' => 'statuses.name',
+            'due_date' => 'due_days.day',
+            'assignee' => "CONCAT(users.first_name, ' ', users.last_name)",
+            'last_updated' => 'updated_at'
+        ];
+
+        $field = $fieldMap[$field] ?? $field;
+
+        if ($this->sortField === $field) {
+            $this->sortType = $this->sortType === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortType = 'asc';
+        }
+    }
+
     protected $listeners = [
         'toggleRegion' => 'handleToggle',
         'statusChanged' => 'handleStatus',
@@ -65,7 +88,12 @@ class InvoiceTemplateListDashboard extends Component
 
     public function render()
     {
-        $invoice_templates = InvoiceTemplate::with(['landlord', 'status', 'due_day', 'invoices_for_attention', 'city', 'category', 'user'])
+        $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'cities.name', 'statuses.name', 'due_days.day', 'users.first_name')
+            ->with(['landlord', 'status', 'due_day', 'invoices_for_attention', 'city', 'category', 'user'])
+            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+            ->join('statuses', 'invoice_templates.status_id', '=', 'statuses.id')
+            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
+            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
             ->where('user_id', Auth::id())
             ->whereHas('region', function ($query) {
                 $query->whereIn('name', $this->selectedRegions);
@@ -86,7 +114,18 @@ class InvoiceTemplateListDashboard extends Component
                 $query->where('name', '=', $this->selectedCategory);
             });
         }
-        $invoice_templates = $invoice_templates->paginate(5);
+
+        if ($this->sortField == 'assignee') {
+            $invoice_templates = $invoice_templates
+                ->orderByRaw($this->sortField, $this->sortType)
+                ->paginate(5);
+        } else {
+            $invoice_templates = $invoice_templates
+                ->orderBy($this->sortField, $this->sortType)
+                ->paginate(5);
+        }
+
+
         return view('livewire.invoice-template-list-dashboard', [
             'user_invoices' => $invoice_templates,
         ]);

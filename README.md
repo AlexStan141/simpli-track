@@ -1,5 +1,7 @@
-Probleme in versiunea actuala:
+A mai ramas:
 
-- inca nu am apucat sa fac sortarea si pe Dashboard, ca pe Invoices
-- formularul de adaugare invoice merge partial. Nu face redirect dupa salvare, iar adaugarea se poate vedea doar pe Invoices. Pe
-Dashboard inca nu deoarece trebuie sa introduc si last_date_paid in formular
+- De facut redirect/De adaugat flash message la adaugarea unui invoice
+- Functionalitatea de Invoices Remove
+- Functionalitatea de Notes
+- Setarile
+- Setarea alertelor

@@ -11,6 +11,7 @@ use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
+use DateTime;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
@@ -34,6 +35,7 @@ class CreateInvoice extends Component
     public $due_days;
     public $selected_status = 1;
     public $selected_due_day;
+    public $last_time_paid;
     public $invoices_for_attention;
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
@@ -45,6 +47,22 @@ class CreateInvoice extends Component
     {
         $this->updateCountryList();
     }
+
+    public function updatedSelectedDueDay($value){
+        $this->updateLastTimePaid();
+    }
+
+    public function updateLastTimePaid()
+    {
+        $date = new DateTime();
+        $date->modify('-1 month');
+        $year = date_format($date, 'Y');
+        $month = date_format($date, 'n');
+        $day = (int) $this->selected_due_day;
+        $date->setDate($year, $month, $day);
+        $this->last_time_paid = $date;
+    }
+
     public function updatedSelectedCountry($value)
     {
         $this->updateCityList();
@@ -84,7 +102,6 @@ class CreateInvoice extends Component
 
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
-
     }
 
     public function createInvoiceTemplate(){
@@ -98,6 +115,7 @@ class CreateInvoice extends Component
             'selected_region' => 'required',
             'selected_country' => 'required',
             'selected_city' => 'required',
+            'last_time_paid' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
             'lease_no' => ['nullable', 'regex:/^[A-Z]{3}\d{2}\s#\d{4}\/\d{2}\/\d{2}$/']
         ]);
@@ -115,7 +133,8 @@ class CreateInvoice extends Component
             "region_id" => $this->selected_region,
             "country_id" => $this->selected_country,
             "city_id" => $this->selected_city,
-            "landlord_id" => $this->selected_landlord
+            "landlord_id" => $this->selected_landlord,
+            "last_time_paid" => $this->last_time_paid
         ]);
         $this->dispatch('invoiceTemplateCreated');
     }
