@@ -21,9 +21,9 @@
     <div class="mt-[208px] px-[27px] h-[609px]">
         <div class=" border-t-white border-t pt-[47px] items-center gap-[47px] h-[100%] flex flex-col">
             <img src="{{ asset('images/question.png') }}" alt="invoices" width="24" height="24">
-            <x-menu-link active="{{ $activeLink === '/settings' }}" link="/settings">
+            <x-menu-link active="{{ $activeLink === '/settings' }}" link="/settings/company">
                 @if (Auth::user()->role === 'Admin')
-                    <img src="{{ $activeLink === '/settings' ? asset('images/settings.png') : asset('images/settings.png') }}" alt="invoices">
+                    <img src="{{ $activeLink === '/settings' ? asset('images/selected_settings.png') : asset('images/settings.png') }}" alt="invoices">
                 @endif
             </x-menu-link>
         </div>

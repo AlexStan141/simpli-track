@@ -48,4 +48,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/settings/company', function () {
+        return view('settings', ['page' => 'Company', 'regions' => Region::pluck('name')]);
+    })->name('settings.company');
+    Route::get('/settings/users', function () {
+        return view('settings', ['page' => 'Users & Roles']);
+    })->name('settings.users');
+    Route::get('/settings/priority', function () {
+        return view('settings', ['page' => 'Priority']);
+    })->name('settings.priority');
+    Route::get('/settings/categories', function () {
+        return view('settings', ['page' => 'Categories']);
+    })->name('settings.categories');
+    Route::get('/settings/statuses', function () {
+        return view('settings', ['page' => 'Statuses']);
+    })->name('settings.statuses');
+    Route::get('/settings/locations', function () {
+        return view('settings', ['page' => 'Regions & Locations']);
+    })->name('settings.locations');
+});
+
+
+
 require __DIR__ . '/auth.php';

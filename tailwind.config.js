@@ -7,7 +7,8 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
-        './app/**/*.php'
+        './app/**/*.php',
+        './resources/css/**/*.css'
 
     ],
 
@@ -31,7 +32,9 @@ export default {
                 pagelink: '#0C5489',
                 invoiceadd: '#EFEFEF',
                 inputbordercolor: '#E3E8EF',
-                buttontext: '#5F5F5F'
+                buttontext: '#5F5F5F',
+                setting: '#E4E4E4',
+                selectedsetting: '#E86542'
             }
         },
     },

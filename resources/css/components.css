@@ -1,0 +1,9 @@
+@layer components {
+    .text-input {
+        @apply rounded-md shadow-sm;
+    }
+
+    .setting-text-input{
+        @apply text-input block mt-1 w-[590px] h-[42px] bg-editprofileinput border border-formgray font-nunito text-[14px] leading-[10px];
+    }
+}

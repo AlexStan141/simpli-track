@@ -15,8 +15,8 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user->role !== 'Admin'){
-            return redirect()->back();
+        if(!$request->user() && $request->user()->role !== 'Admin'){
+            abort(403, 'Access denied');
         }
         return $next($request);
     }
