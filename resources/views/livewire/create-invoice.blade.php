@@ -27,7 +27,7 @@
         <form wire:submit.prevent="createInvoiceTemplate" class="pt-7 flex flex-col gap-10">
             <div class="flex justify-between">
                 <div>
-                    <x-select-input :values=$categories width="200px" id="category_id" label="Category"
+                    <x-select-input :values="$categories" width="200px" id="category_id" label="Category"
                         wire:model="selected_category"></x-select-input>
                     @error('selected_category')
                         <span class="text-red-500 text-sm">{{ $message }}</span>

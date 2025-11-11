@@ -2,7 +2,7 @@
     <label for="{{ $id }}"
         class="leading-[14px] h-[12px] font-inter text-editprofilelabel">{{ $label }}</label>
 
-    <div class="relative mt-[16px]">
+    <div class="relative mt-[16px] flex justify-center">
         <select id="{{ $id }}" name="{{ $id }}"
             {{ $attributes->merge(['class' => "appearance-none bg-none w-[{$width}] rounded-[32px] border border-inputbordercolor pl-[28px] py-[13px]"]) }}>
             @forelse ($values as $key => $optionLabel)

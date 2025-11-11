@@ -14,7 +14,6 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('statuses')->truncate();
         Status::factory()->create([
             'name' => 'Pending'
         ]);

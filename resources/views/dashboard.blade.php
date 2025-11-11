@@ -3,9 +3,7 @@
     <div class="flex flex-col mt-[44px] ml-[25px] w-full">
         <div class="flex justify-between mb-[42px]">
             <div class="flex">
-                @foreach ($region_names as $region)
-                    @livewire('region-filter', ['selected' => true, 'value' => $region])
-                @endforeach
+                @livewire('region-filter-list')
             </div>
             <div class="flex mr-8">
                 @livewire('filter', ['type' => 'Status', 'values' => $status_names, 'selected_value' => $status_names[1]])

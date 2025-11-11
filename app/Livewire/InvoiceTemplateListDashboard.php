@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
+use App\Models\CompanyRegion;
 use App\Models\Country;
 use App\Models\InvoiceTemplate;
 use App\Models\Region;
@@ -133,7 +135,9 @@ class InvoiceTemplateListDashboard extends Component
 
     public function mount()
     {
-        $this->selectedRegions = Region::pluck('name')->toArray();
+        $regionIds = CompanyRegion::where('company_id', Auth::user()->company->id)->where('selected', 1)->pluck('region_id');
+        $regions = Region::whereIn('id', $regionIds)->get();
+        $this->selectedRegions = $regions->pluck('name')->toArray();
         $this->selectedStatus = Status::pluck('name')->first();
         $this->selectedCity = City::pluck('name')->first();
         $this->selectedCategory = Category::pluck('name')->first();

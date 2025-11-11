@@ -16,8 +16,8 @@ class Region extends Model
         return $this->hasMany(Country::class);
     }
 
-    public function companies(): BelongsToMany{
-        return $this->belongsToMany(Company::class);
+    public function companyRegions(): HasMany{
+        return $this->hasMany(CompanyRegion::class);
     }
 
     public function invoice_templates(): HasMany{

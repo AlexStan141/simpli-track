@@ -23,7 +23,9 @@ Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name(
 
 
 Route::get('/dashboard', function () {
-    $region_names = Region::pluck('name', 'id');
+    $region_ids = Auth::user()->company->companyRegions->pluck('region_id');
+    $regions = Region::whereIn('id', $region_ids);
+    $region_names = $regions->pluck('name');
     $status_names = Status::pluck('name', 'id')->toArray();
     $city_names = City::pluck('name', 'id')->toArray();
     $category_names = Category::pluck('name', 'id')->toArray();
@@ -53,12 +55,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/settings/{user}/company', function (User $user) {
-        $regions = $user->company->regions;
-        $allRegions = Region::all();
+    Route::get('/settings/company', function () {
+        $user = Auth::user();
         return view('settings', ['page' => 'Company',
-            'regions' => $regions->pluck('name'),
-            'deleted_regions' => $allRegions->diff($regions)->pluck('name'),
             'company_name' => $user->company->name,
             'company_address' => $user->company->address
         ]);

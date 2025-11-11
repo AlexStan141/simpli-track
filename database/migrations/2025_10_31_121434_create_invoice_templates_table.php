@@ -27,15 +27,16 @@ return new class extends Migration
             $table->unsignedInteger('amount')->nullable();
             $table->string('currency')->nullable();
             $table->string('lease_no')->nullable();
-            $table->foreignIdFor(DueDay::class);
-            $table->foreignIdFor(InvoiceForAttention::class);
-            $table->foreignIdFor(Category::class);
-            $table->foreignIdFor(Status::class);
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Region::class);
-            $table->foreignIdFor(Country::class);
-            $table->foreignIdFor(City::class);
-            $table->foreignIdFor(Landlord::class)->nullable();
+            $table->foreignId('due_day_id')->constrained()->onDelete('cascade');
+            $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('status_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('region_id')->constrained()->onDelete('cascade');
+            $table->foreignId('country_id')->constrained()->onDelete('cascade');
+            $table->foreignId('city_id')->constrained()->onDelete('cascade');
+            $table->foreignId('landlord_id')->constrained()->onDelete('cascade');
+            $table->date('last_time_paid')->nullable(); 
             $table->timestamps();
         });
     }

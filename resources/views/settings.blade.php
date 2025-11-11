@@ -14,7 +14,11 @@
             </ul>
             <div class="h-[643px]">
                 @if ($page === 'Company')
-                    <x-company-settings :regions="$regions" :deletedRegions="$deleted_regions" companyName="{{ $company_name }}" companyAddress="{{ $company_address }}"></x-company-settings>
+                    @livewire('company-settings', [
+                        'companyName' => Auth::user()->company->name,
+                        'companyAddress' => Auth::user()->company->address,
+                        'currencies' => collect([1 => 'USD', 2 => 'RON', 3 => 'ARS'])
+                    ])
                 @endif
             </div>
         </div>

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->string("message");
-            $table->foreignIdFor(InvoiceTemplate::class);
+            $table->foreignId('invoice_template_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

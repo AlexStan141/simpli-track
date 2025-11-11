@@ -23,7 +23,6 @@ class InvoiceTemplateSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('invoice_templates')->truncate();
         $categories = Category::all();
         $statuses = Status::all();
         $users = User::all();

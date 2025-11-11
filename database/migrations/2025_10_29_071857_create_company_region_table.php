@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_region', function (Blueprint $table) {
+        Schema::create('company_regions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
+            $table->boolean('selected');
+            $table->boolean('selectedBeforeSave');
             $table->timestamps(); // opțional, dar util
         });
     }

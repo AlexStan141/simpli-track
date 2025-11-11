@@ -12,11 +12,13 @@ class Company extends Model
     /** @use HasFactory<\Database\Factories\CompanyFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function users(): HasMany{
         return $this->hasMany(User::class);
     }
 
-    public function regions(): BelongsToMany{
-        return $this->belongsToMany(Region::class);
+    public function companyRegions(): HasMany{
+        return $this->hasMany(CompanyRegion::class);
     }
 }

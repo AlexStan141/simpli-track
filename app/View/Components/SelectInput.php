@@ -16,7 +16,8 @@ class SelectInput extends Component
         public Collection $values,
         public string $width,
         public string $id,
-        public string $label
+        public string $label,
+        public string $roundness = '32px'
     )
     {
         //

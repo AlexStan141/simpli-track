@@ -23,7 +23,7 @@
             <img src="{{ asset('images/question.png') }}" alt="invoices" width="24" height="24">
             @if (Auth::user()->role === 'Admin')
                 <x-menu-link active="{{ $activeLink === '/settings' }}"
-                    link="{{ '/settings/' . Auth::id() . '/company' }}">
+                    link="{{ '/settings/company' }}">
                     <img src="{{ $activeLink === '/settings' ? asset('images/selected_settings.png') : asset('images/settings.png') }}"
                         alt="invoices">
                 </x-menu-link>
