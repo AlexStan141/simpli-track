@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Company;
 use App\Models\Region;
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -13,21 +14,19 @@ class CompanySettings extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public $regions
+        public $regions,
+        public $deletedRegions,
+        public $companyName,
+        public $companyAddress
     )
-    {
-        //
-    }
+    {}
 
     /**
      * Get the view / contents that represent the component.
      */
     public function render(): View|Closure|string
     {
-        return view('components.company-settings');
-    }
 
-    public function mount(){
-        $regions = Region::pluck('name');
+        return view('components.company-settings');
     }
 }

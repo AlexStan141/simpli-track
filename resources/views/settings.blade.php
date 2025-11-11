@@ -12,9 +12,9 @@
                 <x-setting-link link="/settings/statuses" :active="$page === 'Statuses'">Statuses</x-setting-link>
                 <x-setting-link link="/settings/locations" :active="$page === 'Regions & Locations'">Regions & Locations</x-setting-link>
             </ul>
-            <div class="h-[603px]">
+            <div class="h-[643px]">
                 @if ($page === 'Company')
-                    <x-company-settings :regions="$regions"></x-company-settings>
+                    <x-company-settings :regions="$regions" :deletedRegions="$deleted_regions" companyName="{{ $company_name }}" companyAddress="{{ $company_address }}"></x-company-settings>
                 @endif
             </div>
         </div>

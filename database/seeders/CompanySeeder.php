@@ -15,19 +15,23 @@ class CompanySeeder extends Seeder
     {
         Company::factory()->create([
             'name' => 'Starbucks',
-            'logo' => 'company_logos/Starbucks.png'
+            'logo' => 'company_logos/Starbucks.png',
+            'address' => 'Address 1'
         ]);
         Company::factory()->create([
             'name' => 'Facebook',
-            'logo' => 'company_logos/Facebook.png'
+            'logo' => 'company_logos/Facebook.png',
+            'address' => 'Address 2'
         ]);
         Company::factory()->create([
             'name' => 'Sportano',
-            'logo' => 'company_logos/Sportano.png'
+            'logo' => 'company_logos/Sportano.png',
+            'address' => 'Address 3'
         ]);
         Company::factory()->create([
             'name' => 'SimpliTrack',
-            'logo' => 'company_logos/SimpliTrack.png'
+            'logo' => 'company_logos/SimpliTrack.png',
+            'address' => 'Address 4'
         ]);
     }
 }

@@ -4,11 +4,15 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InvoiceTemplateController;
+use App\Http\Requests\CompanyRequest;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Country;
 use App\Models\Region;
 use App\Models\Status;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -49,10 +53,17 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/settings/company', function () {
-        return view('settings', ['page' => 'Company', 'regions' => Region::pluck('name')]);
-    })->name('settings.company');
-    Route::get('/settings/users', function () {
+    Route::get('/settings/{user}/company', function (User $user) {
+        $regions = $user->company->regions;
+        $allRegions = Region::all();
+        return view('settings', ['page' => 'Company',
+            'regions' => $regions->pluck('name'),
+            'deleted_regions' => $allRegions->diff($regions)->pluck('name'),
+            'company_name' => $user->company->name,
+            'company_address' => $user->company->address
+        ]);
+    });
+    Route::get('/settings/users/{user}', function (User $user) {
         return view('settings', ['page' => 'Users & Roles']);
     })->name('settings.users');
     Route::get('/settings/priority', function () {

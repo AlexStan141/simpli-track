@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('company_region', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Company::class);
-            $table->foreignIdFor(Region::class);
-            $table->timestamps();
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->foreignId('region_id')->constrained()->onDelete('cascade');
+            $table->timestamps(); // opțional, dar util
         });
     }
 

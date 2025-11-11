@@ -17,6 +17,6 @@ class Company extends Model
     }
 
     public function regions(): BelongsToMany{
-        return $this->belongsToMany(Region::class)->withTimestamps();
+        return $this->belongsToMany(Region::class);
     }
 }

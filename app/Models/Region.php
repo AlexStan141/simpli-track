@@ -17,7 +17,7 @@ class Region extends Model
     }
 
     public function companies(): BelongsToMany{
-        return $this->belongsToMany(Company::class)->withTimestamps();
+        return $this->belongsToMany(Company::class);
     }
 
     public function invoice_templates(): HasMany{
