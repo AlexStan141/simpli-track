@@ -30,6 +30,10 @@ class RegionSetting extends Component
         $record->selected = $this->selectedBeforeSave;
         $this->selected = $this->selectedBeforeSave;
         $record->save();
+        $this->dispatch('setCompanyRegions', [
+            'selected' => $this->selected,
+            'value' => $this->value
+        ])->component('company-settings');
         $this->dispatch('setRegionFilters', [
             'selected' => $this->selected,
             'value' => $this->value,

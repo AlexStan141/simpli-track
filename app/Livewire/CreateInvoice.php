@@ -12,11 +12,13 @@ use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
 class CreateInvoice extends Component
 {
+    protected $listeners = ['setCurrencyInInvoiceForm' => 'setCurrency'];
     public $amount;
     public $currency;
     public $categories;
@@ -40,8 +42,9 @@ class CreateInvoice extends Component
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
     public $selected_frequency = 'monthly';
-    public function updateFrequency($index){
-        $this->selected_frequency = $this->frequency_options[$index];
+
+    public function setCurrency($payload){
+        $this->currency = $payload['currency'];
     }
     public function updatedSelectedRegion($value)
     {
@@ -102,6 +105,8 @@ class CreateInvoice extends Component
 
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
+
+        $this->currency = Auth::user()->company->default_currency;
     }
 
     public function createInvoiceTemplate(){

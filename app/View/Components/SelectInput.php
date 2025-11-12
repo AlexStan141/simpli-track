@@ -14,13 +14,12 @@ class SelectInput extends Component
      */
     public function __construct(
         public Collection $values,
+        public string $defaultValue,
         public string $width,
         public string $id,
         public string $label,
         public string $roundness = '32px'
-    )
-    {
-        //
+    ) {
     }
 
     /**

@@ -14,11 +14,7 @@
             </ul>
             <div class="h-[643px]">
                 @if ($page === 'Company')
-                    @livewire('company-settings', [
-                        'companyName' => Auth::user()->company->name,
-                        'companyAddress' => Auth::user()->company->address,
-                        'currencies' => collect([1 => 'USD', 2 => 'RON', 3 => 'ARS'])
-                    ])
+                    @livewire('company-settings')
                 @endif
             </div>
         </div>

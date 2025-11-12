@@ -6,7 +6,11 @@
         <select id="{{ $id }}" name="{{ $id }}"
             {{ $attributes->merge(['class' => "appearance-none bg-none w-[{$width}] rounded-[32px] border border-inputbordercolor pl-[28px] py-[13px]"]) }}>
             @forelse ($values as $key => $optionLabel)
-                <option value="{{ $key }}" class="text-[15px] leading-[22px] h-[22px]">{{ $optionLabel }}</option>
+                @if ($optionLabel === $defaultValue)
+                    <option value="{{ $key }}" class="text-[15px] leading-[22px] h-[22px]" :selected="true">{{ $optionLabel }}</option>
+                @else
+                    <option value="{{ $key }}" class="text-[15px] leading-[22px] h-[22px]">{{ $optionLabel }}</option>
+                @endif
             @empty
                 <option value="" class="text-[15px] leading-[22px] h-[22px]">Nicio opțiune disponibilă</option>
             @endforelse
