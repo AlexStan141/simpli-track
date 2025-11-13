@@ -39,11 +39,18 @@
                     @endif
                 @endforeach
             </div>
-            <div class="mt-[41px] ml-[43px] flex gap-[15px] items-end">
-                <x-select-input width="96px" class="rounded-[5px]" id="currency" label="Default currency"
-                    :values="$currencies" wire:model="defaultCurrency"
-                    defaultValue="{{ $defaultCurrency }}"></x-select-input>
-                @error('defaultCurrency')
+        </div>
+        <div class="mt-[41px] ml-[43px] flex gap-[15px] items-end">
+            <x-select-input width="96px" class="rounded-[5px]" id="currency" label="Default currency"
+                :values="$currencies" wire:model="defaultCurrency" defaultValue="{{ $defaultCurrency }}"></x-select-input>
+            @error('defaultCurrency')
+                <p>{{ $message }}</p>
+            @enderror
+            <div class="flex items-center gap-[22px]">
+                <input type="checkbox" id="display_invoice_amount" name="display_invoice_amount"
+                    wire:model="displayInvoiceAmount" :checked="{{ $displayInvoiceAmount }}"></input>
+                <x-input-label for="display_invoice_amount">Display Invoice Amount</x-input-label>
+                @error('displayInvoiceAmount')
                     <p>{{ $message }}</p>
                 @enderror
             </div>

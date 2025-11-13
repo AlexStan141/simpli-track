@@ -15,13 +15,8 @@ class Test extends Component
     public $companyName;
     public $companyAddress;
     public $defaultCurrency;
+    public $displayInvoiceAmount;
     public $currencies;
-
-    public function updatedDefaultCurrency()
-    {
-        $company = Auth::user()->company;
-        $company->default_currency = $this->currencies[$this->defaultCurrency];
-    }
 
     public function save()
     {
@@ -29,12 +24,14 @@ class Test extends Component
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
             'defaultCurrency' => 'required|string',
+            'displayInvoiceAmount' => 'required|boolean'
         ]);
 
         $company = Auth::user()->company;
         $company->name = $this->companyName;
         $company->default_currency = $this->defaultCurrency;
         $company->address = $this->companyAddress;
+        $company->display_invoice_amount = $this->displayInvoiceAmount;
         $company->save();
 
         $companyRegions = CompanyRegion::where('company_id', $company->id)->get();
@@ -76,8 +73,9 @@ class Test extends Component
         $this->companyAddress = $company->address;
         $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
             ->where('selected', true)->get();
-        $this->currencies = collect([1 => 'USD', 2 => 'RON', 3 => 'ARS']);
-        $this->defaultCurrency = $this->currencies[$company->default_currency];
+        $this->currencies = collect(['USD', 'RON', 'ARS']);
+        $this->defaultCurrency = $company->default_currency ?? 'USD';
+        $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
         $regionIds = $companyRegions->pluck('region_id');
         $regions = Region::whereIn('id', $regionIds)->get();
         $regionNames = $regions->pluck('name')->toArray();

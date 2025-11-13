@@ -10,6 +10,8 @@ use Livewire\WithPagination;
 class InvoiceTemplateList extends Component
 {
     use WithPagination;
+
+    protected $listeners = ['displayInvoiceAmount' => 'displayInvoiceAmount', 'hideInvoiceAmount' => 'hideInvoiceAmount'];
     public $sortField = 'invoice_templates.created_at';
     public $sortType = "asc";
 
@@ -18,6 +20,14 @@ class InvoiceTemplateList extends Component
     public function gotoPage($page)
     {
         $this->setPage($page);
+    }
+
+    public function displayInvoiceAmount(){
+        $this->showInvoiceAmount = true;
+    }
+
+    public function hideInvoiceAmount(){
+        $this->showInvoiceAmount = false;
     }
 
     public function sort($field)
@@ -52,5 +62,10 @@ class InvoiceTemplateList extends Component
             ->orderBy($this->sortField, $this->sortType)
             ->paginate(5);
         return view('livewire.invoice-template-list', ['user_invoices' => $invoice_templates]);
+    }
+
+    public function mount()
+    {
+        $this->showInvoiceAmount = Auth::user()->company->display_invoice_amount;
     }
 }

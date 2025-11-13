@@ -20,6 +20,7 @@ class CreateInvoice extends Component
 {
     protected $listeners = ['setCurrencyInInvoiceForm' => 'setCurrency'];
     public $amount;
+    public $currencies;
     public $currency;
     public $categories;
     public $selected_category;
@@ -106,8 +107,8 @@ class CreateInvoice extends Component
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
 
-        $currencies = [1 => 'USD', 2 => 'RON', 3 => 'ARS'];
-        $this->currency = $currencies[Auth::user()->company->default_currency];
+        $this->currencies = collect(['USD', 'RON', 'ARS']);
+        $this->currency = $this->currencies[Auth::user()->company->default_currency];
 
         $date = new DateTime();
         $date->modify('-1 month');

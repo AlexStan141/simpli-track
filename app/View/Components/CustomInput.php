@@ -15,7 +15,8 @@ class CustomInput extends Component
         public string $width,
         public string $id,
         public string $label,
-        public string $type
+        public string $type,
+        public string $value = "",
     )
     {
         //
