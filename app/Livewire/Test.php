@@ -5,10 +5,13 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\CompanyRegion;
 use App\Models\Region;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
 
 class Test extends Component
 {
+    use WithFileUploads;
     public $variable;
     public $existingRegions;
     public $allRegions;
@@ -18,16 +21,33 @@ class Test extends Component
     public $displayInvoiceAmount;
     public $currencies;
 
+    public $logo;
+
+    public function updatedPhoto()
+    {
+        $this->validate([
+            'logo' => 'image|max:204800',
+        ]);
+    }
+
     public function save()
     {
         $this->validate([
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
             'defaultCurrency' => 'required|string',
-            'displayInvoiceAmount' => 'required|boolean'
+            'displayInvoiceAmount' => 'required|boolean',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:204800'
         ]);
 
         $company = Auth::user()->company;
+
+        if ($this->logo instanceof UploadedFile) {
+            $path = $this->logo->store('company_logos', 'public');
+            $this->logo = $path;
+            $company->logo = $path;
+        }
+
         $company->name = $this->companyName;
         $company->default_currency = $this->defaultCurrency;
         $company->address = $this->companyAddress;
@@ -43,7 +63,8 @@ class Test extends Component
         }
     }
 
-    public function toggleRegion($region){
+    public function toggleRegion($region)
+    {
         $companyId = Auth::user()->company->id;
         $regionId = Region::where('name', $region)->value('id');
         $companyRegion = CompanyRegion::where('company_id', $companyId)->where('region_id', $regionId)->first();
@@ -76,6 +97,7 @@ class Test extends Component
         $this->currencies = collect(['USD', 'RON', 'ARS']);
         $this->defaultCurrency = $company->default_currency ?? 'USD';
         $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
+        $this->logo = $company->logo ?? null;
         $regionIds = $companyRegions->pluck('region_id');
         $regions = Region::whereIn('id', $regionIds)->get();
         $regionNames = $regions->pluck('name')->toArray();
@@ -83,5 +105,3 @@ class Test extends Component
         $this->allRegions = Region::all()->pluck('name')->toArray();
     }
 }
-
-

@@ -55,6 +55,38 @@
                 @enderror
             </div>
         </div>
+        <div>
+            <label for="logo" class="leading-[14px] h-[12px] text-editprofilelabel font-inter">Company
+                Logo</label>
+            <div
+                class="mt-[23px] w-[364px] h-[312px] bg-editprofileinput flex flex-col gap-[17px] justify-center items-center border border-dashed rounded-[15px]">
+                <img src="{{ asset('/images/upload.png') }}" alt="company logo">
+                <p class="leading-[28px] font-inter text-formtitle font-semibold">Drag & drop your files here</p>
+                <p class="text-[14px] leading-[22px] h-[32px] text-editprofilelabel">You can upload up to 1 file,
+                    with a maximum<br /> size of 200 MB</p>
+                <p class="text-[18px] leading-[28px] h-[13px] text-formtitle">Or</p>
+                <label for="logo"
+                    class="border border-uploadbuttonborder px-[32px] rounded-[130px] cursor-pointe transition">
+                    <p class="text-[17px] leading-[40px] text-uploadbuttontext">Upload file</p>
+                </label>
+                <input id="logo" type="file" style="display: none;" wire:model="logo" />
+                <img id="logo-preview" src="#" alt="Preview"
+                    style="display:none; max-width:200px; margin-top:10px;" />
+                @if ($logo)
+                    <div class="mb-4">
+                        Previzualizare:
+                        @if (is_object($logo) && method_exists($logo, 'temporaryUrl'))
+                            <img src="{{ $logo->temporaryUrl() }}" class="w-48 h-48 object-cover rounded">
+                        @elseif (is_string($logo))
+                            <img src="{{ Storage::url($logo) . '?' . time() }}" class="w-48 h-48 object-cover rounded">
+                        @endif
+                    </div>
+                @endif
+                @error('logo')
+                    <p>{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
         <div class="flex justify-center">
             <button type="submit" class="mt-[25px] px-[93px] py-[12px] mb-[19px] bg-loginblue rounded-[80px]">
                 <p class="font-nunito text-white text-[18px] h-[25px]">Save</p>

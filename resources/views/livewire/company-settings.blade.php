@@ -80,8 +80,7 @@
                         class="border border-uploadbuttonborder px-[32px] rounded-[130px] cursor-pointe transition">
                         <p class="text-[17px] leading-[40px] text-uploadbuttontext">Upload file</p>
                     </label>
-                    <input id="logo" type="file" style="display: none;" wire:model="logo"
-                        onchange="previewLogo()" />
+                    <input id="logo" type="file" style="display: none;" wire:model="logo" />
                     <img id="logo-preview" src="#" alt="Preview"
                         style="display:none; max-width:200px; margin-top:10px;" />
                     @error('logo')
