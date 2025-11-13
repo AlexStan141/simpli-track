@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InvoiceTemplateController;
-use App\Http\Controllers\CompanyController;
+use Illuminate\Support\Facades\Request;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Region;
@@ -12,9 +12,10 @@ use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UploadController;
+use App\Livewire\CompanySettings;
 
 
-
+Route::get('/company-settings', CompanySettings::class)->name('company.settings');
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -56,9 +57,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/settings/company', function () {
-        $user = Auth::user();
+    Route::match(['GET', 'POST'], '/settings/company', function () {
         return view('settings', ['page' => 'Company']);
+    });
+    Route::put('/settings/company', function(Request $request){
+
     });
     Route::get('/settings/users/{user}', function (User $user) {
         return view('settings', ['page' => 'Users & Roles']);
@@ -75,7 +78,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/settings/locations', function () {
         return view('settings', ['page' => 'Regions & Locations']);
     })->name('settings.locations');
-    Route::put('/settings/company', [CompanyController::class, 'update'])->name('upload.update');
 });
 
 

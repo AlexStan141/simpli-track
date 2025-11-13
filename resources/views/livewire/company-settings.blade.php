@@ -22,17 +22,16 @@
         <p class="bg-green-300 p-5 mt-5">Settings saved successfully</p>
     @endif
 
-    <form wire:submit.prevent="save()" enctype="multipart/form-data" method="POST">
+    <form wire:submit.prevent="save" enctype="multipart/form-data" method="POST">
         @csrf
-        @method('PUT')
         <div class="flex gap-[165px]">
             <div>
                 <div class="ml-9 mt-[43px] flex flex-col gap-2">
                     <x-input-label for="name" :value="__('Company Name')"
                         class="text-[16px] leading-[14px] h-[12px] !text-editprofilelabel" />
                     <x-text-input id="name" class="setting-text-input" type="text" name="name"
-                        value="{{ $companyName ?? '' }}" required wire:model="companyName" />
-                    @error('name')
+                        wire:model="companyName" :value="$companyName" required />
+                    @error('companyName')
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
@@ -41,8 +40,8 @@
                     <x-input-label for="address" :value="__('Address')"
                         class="text-[16px] leading-[14px] h-[12px] !text-editprofilelabel" />
                     <x-text-input id="address" class="setting-text-input" type="text" name="address"
-                        value="{{ $companyAddress ?? '' }}" required wire:model="companyAddress" />
-                    @error('address')
+                        wire:model="companyAddress" :value="$companyAddress" required />
+                    @error('companyAddress')
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
@@ -53,12 +52,12 @@
                     <div class="flex mt-5 gap-5">
                         @foreach ($allRegions as $region)
                             @if (in_array($region, $existingRegions))
-                                <button class="bg-loginblue text-white py-[9px] px-[30px] rounded-[15px]"
-                                    wire:click.prevent="toggleRegion('{{ $region }}')">{{ $region }}</button>
+                                <button type="button" class="bg-loginblue text-white py-[9px] px-[30px] rounded-[15px]"
+                                    wire:click="toggleRegion('test')">{{ $region }}</button>
                             @else
-                                <button
+                                <button type="button"
                                     class="border-inputbordercolor text-buttontext py-[9px] px-[30px] rounded-[15px]"
-                                    wire:click.prevent="toggleRegion('{{ $region }}')">{{ $region }}</button>
+                                    wire:click="toggleRegion('test')">{{ $region }}</button>
                             @endif
                         @endforeach
                     </div>
@@ -68,15 +67,18 @@
                     <x-select-input width="96px" class="rounded-[5px]" id="currency" label="Default currency"
                         :values="$currencies" wire:model="defaultCurrency"
                         defaultValue="{{ $defaultCurrency }}"></x-select-input>
+                    @error('defaultCurrency')
+                        <p>{{ $message }}</p>
+                    @enderror
                     <div class="flex items-center gap-[22px]">
                         <input type="checkbox" id="display_invoice_amount" name="display_invoice_amount"
                             wire:model="displayInvoiceAmount" :checked="{{ $displayInvoiceAmount }}"></input>
                         <x-input-label for="display_invoice_amount">Display Invoice Amount</x-input-label>
+                        @error('displayInvoiceAmount')
+                            <p>{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
-                @error('defaultCurrency')
-                    <p>{{ $message }}</p>
-                @enderror
             </div>
             <div>
                 <label for="logo" class="leading-[14px] h-[12px] text-editprofilelabel font-inter">Company
@@ -92,9 +94,13 @@
                         class="border border-uploadbuttonborder px-[32px] rounded-[130px] cursor-pointe transition">
                         <p class="text-[17px] leading-[40px] text-uploadbuttontext">Upload file</p>
                     </label>
-                    <input id="logo" type="file" style="display: none;" onchange="previewLogo()" />
+                    <input id="logo" type="file" style="display: none;" wire:model="logo"
+                        onchange="previewLogo()" />
                     <img id="logo-preview" src="#" alt="Preview"
                         style="display:none; max-width:200px; margin-top:10px;" />
+                    @error('logo')
+                        <p>{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
         </div>
