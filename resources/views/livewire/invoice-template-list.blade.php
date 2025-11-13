@@ -48,14 +48,16 @@
                             </a>
                         </div>
                     </th>
-                    <th class="w-[152px]">
-                        <div class="flex justify-between">
-                            Amount
-                            <a href="#" wire:click.prevent="sort('amount')">
-                                <img src="{{ asset('/images/sort.svg') }}" alt="sort">
-                            </a>
-                        </div>
-                    </th>
+                    @if ($showInvoiceAmount)
+                        <th class="w-[152px]">
+                            <div class="flex justify-between">
+                                Amount
+                                <a href="#" wire:click.prevent="sort('amount')">
+                                    <img src="{{ asset('/images/sort.svg') }}" alt="sort">
+                                </a>
+                            </div>
+                        </th>
+                    @endif
                     <th class="w-[200px]">
                         <div class="flex justify-between">
                             LeaseNo#
@@ -78,7 +80,9 @@
                         <td class="w-[200px]">{{ $user_invoice->city->name }}</td>
                         <td class="w-[184px]">{{ $user_invoice->frequency }}</td>
                         <td class="w-[225px]">{{ $user_invoice->due_day->day }} of each month </td>
-                        <td class="w-[152px]">{{ $user_invoice->amount }}</td>
+                        @if ($showInvoiceAmount)
+                            <td class="w-[152px]">{{ $user_invoice->amount }}</td>
+                        @endif
                         <td class="w-[200px]">{{ $user_invoice->lease_no }}</td>
                     </tr>
                 @endforeach

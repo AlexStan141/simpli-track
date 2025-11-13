@@ -1,4 +1,4 @@
-<div>
+<div class="flex flex-col items-start">
     <label for="{{ $id }}"
         class="leading-[14px] h-[12px] font-inter text-editprofilelabel">{{ $label }}</label>
 

@@ -107,6 +107,14 @@ class CreateInvoice extends Component
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
 
         $this->currency = Auth::user()->company->default_currency;
+
+        $date = new DateTime();
+        $date->modify('-1 month');
+        $year = date_format($date, 'Y');
+        $month = date_format($date, 'n');
+        $day = (int) $this->selected_due_day;
+        $date->setDate($year, $month, $day);
+        $this->last_time_paid = $date;
     }
 
     public function createInvoiceTemplate(){

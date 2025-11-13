@@ -34,7 +34,9 @@ export default {
                 inputbordercolor: '#E3E8EF',
                 buttontext: '#5F5F5F',
                 setting: '#E4E4E4',
-                selectedsetting: '#E86542'
+                selectedsetting: '#E86542',
+                uploadbuttonborder: '#909EAC',
+                uploadbuttontext: '#0C5489'
             }
         },
     },

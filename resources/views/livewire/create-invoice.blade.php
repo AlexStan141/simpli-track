@@ -81,7 +81,13 @@
             <div class="flex justify-between">
                 <div class="flex gap-2">
                     <x-custom-input id="amount" label="Amount" width="150px" type="number" wire:model="amount" />
+                    @error('amount')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                     <x-custom-input id="currency" label="" width="96px" type="text" wire:model="currency" />
+                    @error('currency')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div>
                     <x-custom-input id="last_time_paid" label="Last Time Paid" width="150px" type="hidden" wire:model="last_time_paid"/>

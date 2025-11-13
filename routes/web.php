@@ -4,15 +4,16 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InvoiceTemplateController;
-use App\Http\Requests\CompanyRequest;
+use App\Http\Controllers\CompanyController;
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Company;
-use App\Models\Country;
 use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\UploadController;
+
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -57,10 +58,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/settings/company', function () {
         $user = Auth::user();
-        return view('settings', ['page' => 'Company',
-            'company_name' => $user->company->name,
-            'company_address' => $user->company->address
-        ]);
+        return view('settings', ['page' => 'Company']);
     });
     Route::get('/settings/users/{user}', function (User $user) {
         return view('settings', ['page' => 'Users & Roles']);
@@ -77,6 +75,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/settings/locations', function () {
         return view('settings', ['page' => 'Regions & Locations']);
     })->name('settings.locations');
+    Route::put('/settings/company', [CompanyController::class, 'update'])->name('upload.update');
 });
 
 
