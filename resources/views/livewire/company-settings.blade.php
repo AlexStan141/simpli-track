@@ -1,20 +1,3 @@
-<script>
-    function previewLogo() {
-        const input = document.getElementById('logo');
-        const preview = document.getElementById('logo-preview');
-        const file = input.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
-
 <div>
     <h3 class="ml-[51px] mt-[49px] font-inter text-[20px] h-[15px]">Company</h3>
 
@@ -22,7 +5,7 @@
         <p class="bg-green-300 p-5 mt-5">Settings saved successfully</p>
     @endif
 
-    <form wire:submit.prevent="save" enctype="multipart/form-data" method="POST">
+    <form enctype="multipart/form-data" method="POST">
         @csrf
         <div class="flex gap-[165px]">
             <div>
@@ -52,12 +35,15 @@
                     <div class="flex mt-5 gap-5">
                         @foreach ($allRegions as $region)
                             @if (in_array($region, $existingRegions))
-                                <button type="button" class="bg-loginblue text-white py-[9px] px-[30px] rounded-[15px]"
-                                    wire:click="toggleRegion('test')">{{ $region }}</button>
+                                <button wire:click.prevent="toggleRegion('{{ $region }}')"
+                                    class="bg-loginblue text-white py-[9px] px-[30px] rounded-[15px]">
+                                    {{ $region }}
+                                </button>
                             @else
-                                <button type="button"
-                                    class="border-inputbordercolor text-buttontext py-[9px] px-[30px] rounded-[15px]"
-                                    wire:click="toggleRegion('test')">{{ $region }}</button>
+                                <button wire:click.prevent="toggleRegion('{{ $region }}')"
+                                    class="border-inputbordercolor text-buttontext py-[9px] px-[30px] rounded-[15px]">
+                                    {{ $region }}
+                                </button>
                             @endif
                         @endforeach
                     </div>

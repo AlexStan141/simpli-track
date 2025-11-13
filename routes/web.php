@@ -15,6 +15,7 @@ use App\Http\Controllers\UploadController;
 use App\Livewire\CompanySettings;
 
 
+
 Route::get('/company-settings', CompanySettings::class)->name('company.settings');
 Route::get('/', function () {
     return view('auth.login');
@@ -41,6 +42,10 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/test', function(){
+    return view('test');
+});
+
 Route::get('/invoice', [InvoiceTemplateController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('invoice.index');
 
@@ -59,9 +64,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::match(['GET', 'POST'], '/settings/company', function () {
         return view('settings', ['page' => 'Company']);
-    });
-    Route::put('/settings/company', function(Request $request){
-
     });
     Route::get('/settings/users/{user}', function (User $user) {
         return view('settings', ['page' => 'Users & Roles']);

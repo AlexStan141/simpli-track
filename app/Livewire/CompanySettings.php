@@ -27,7 +27,6 @@ class CompanySettings extends Component
     public $success;
     public function toggleRegion($region)
     {
-        dd("Enters here");
         $companyId = Auth::user()->company->id;
         $regionId = Region::where('name', $region)->value('id');
         $companyRegion = CompanyRegion::where('company_id', $companyId)->where('region_id', $regionId)->first();
@@ -63,7 +62,6 @@ class CompanySettings extends Component
 
     public function save()
     {
-        dd("Enters here");
         $this->validate([
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
