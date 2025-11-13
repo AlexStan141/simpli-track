@@ -39,6 +39,14 @@
                     @endif
                 @endforeach
             </div>
+            <div class="mt-[41px] ml-[43px] flex gap-[15px] items-end">
+                <x-select-input width="96px" class="rounded-[5px]" id="currency" label="Default currency"
+                    :values="$currencies" wire:model="defaultCurrency"
+                    defaultValue="{{ $defaultCurrency }}"></x-select-input>
+                @error('defaultCurrency')
+                    <p>{{ $message }}</p>
+                @enderror
+            </div>
         </div>
         <div class="flex justify-center">
             <button type="submit" class="mt-[25px] px-[93px] py-[12px] mb-[19px] bg-loginblue rounded-[80px]">

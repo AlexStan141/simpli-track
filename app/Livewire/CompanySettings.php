@@ -79,7 +79,7 @@ class CompanySettings extends Component
 
         $company->name = $this->companyName;
         $company->address = $this->companyAddress;
-        $company->default_currency = $this->defaultCurrency;
+        $company->default_currency = $this->currencies[$this->defaultCurrency];
         $company->display_invoice_amount = $this->displayInvoiceAmount;
         $company->save();
 
@@ -105,9 +105,8 @@ class CompanySettings extends Component
         $this->companyName = $company->name;
         $this->companyAddress = $company->address;
         $this->currencies = collect([1 => 'USD', 2 => 'RON', 3 => 'ARS']);
-        $this->defaultCurrency = $company->default_currency;
+        $this->defaultCurrency = $this->currencies[$company->default_currency];
         $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
-        $this->success = false;
         $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
             ->where('selected', true)->get();
         $regionIds = $companyRegions->pluck('region_id');
@@ -115,5 +114,6 @@ class CompanySettings extends Component
         $regionNames = $regions->pluck('name')->toArray();
         $this->existingRegions = $regionNames;
         $this->allRegions = Region::all()->pluck('name')->toArray();
+        $this->success = false;
     }
 }

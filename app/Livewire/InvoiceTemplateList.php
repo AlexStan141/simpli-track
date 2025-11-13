@@ -13,6 +13,8 @@ class InvoiceTemplateList extends Component
     public $sortField = 'invoice_templates.created_at';
     public $sortType = "asc";
 
+    public $showInvoiceAmount;
+
     public function gotoPage($page)
     {
         $this->setPage($page);

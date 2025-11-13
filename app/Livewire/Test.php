@@ -14,11 +14,13 @@ class Test extends Component
     public $allRegions;
     public $companyName;
     public $companyAddress;
+    public $defaultCurrency;
+    public $currencies;
 
-    public function something($payload)
+    public function updatedDefaultCurrency()
     {
-        dump($this->existingRegions);
-        dump($this->allRegions);
+        $company = Auth::user()->company;
+        $company->default_currency = $this->currencies[$this->defaultCurrency];
     }
 
     public function save()
@@ -26,10 +28,12 @@ class Test extends Component
         $this->validate([
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
+            'defaultCurrency' => 'required|string',
         ]);
 
         $company = Auth::user()->company;
         $company->name = $this->companyName;
+        $company->default_currency = $this->defaultCurrency;
         $company->address = $this->companyAddress;
         $company->save();
 
@@ -72,6 +76,8 @@ class Test extends Component
         $this->companyAddress = $company->address;
         $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
             ->where('selected', true)->get();
+        $this->currencies = collect([1 => 'USD', 2 => 'RON', 3 => 'ARS']);
+        $this->defaultCurrency = $this->currencies[$company->default_currency];
         $regionIds = $companyRegions->pluck('region_id');
         $regions = Region::whereIn('id', $regionIds)->get();
         $regionNames = $regions->pluck('name')->toArray();

@@ -106,7 +106,8 @@ class CreateInvoice extends Component
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
 
-        $this->currency = Auth::user()->company->default_currency;
+        $currencies = [1 => 'USD', 2 => 'RON', 3 => 'ARS'];
+        $this->currency = $currencies[Auth::user()->company->default_currency];
 
         $date = new DateTime();
         $date->modify('-1 month');
