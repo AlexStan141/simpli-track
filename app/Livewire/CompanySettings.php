@@ -3,28 +3,66 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-
-use App\Models\Region;
 use App\Models\CompanyRegion;
-use App\Services\CompanyService;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Region;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 
 class CompanySettings extends Component
 {
     use WithFileUploads;
-    protected $listeners = ['setCompanyRegions' => 'setCompanyRegions'];
-    public $companyName;
-    public $companyAddress;
-    public $currencies;
+    public $variable;
     public $existingRegions;
     public $allRegions;
-    public $region = null;
+    public $companyName;
+    public $companyAddress;
     public $defaultCurrency;
     public $displayInvoiceAmount;
+    public $currencies;
+
     public $logo;
-    public $success;
+
+    public function updatedPhoto()
+    {
+        $this->validate([
+            'logo' => 'image|max:204800',
+        ]);
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'companyName' => 'required|string',
+            'companyAddress' => 'required|string',
+            'defaultCurrency' => 'required|string',
+            'displayInvoiceAmount' => 'required|boolean',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:204800'
+        ]);
+
+        $company = Auth::user()->company;
+
+        if ($this->logo instanceof UploadedFile) {
+            $path = $this->logo->store('company_logos', 'public');
+            $this->logo = $path;
+            $company->logo = $path;
+        }
+
+        $company->name = $this->companyName;
+        $company->default_currency = $this->defaultCurrency;
+        $company->address = $this->companyAddress;
+        $company->display_invoice_amount = $this->displayInvoiceAmount;
+        $company->save();
+
+        $companyRegions = CompanyRegion::where('company_id', $company->id)->get();
+        foreach ($companyRegions as $companyRegion) {
+            if (isset($companyRegion->selectedBeforeSave)) {
+                $companyRegion->selected = $companyRegion->selectedBeforeSave;
+                $companyRegion->save();
+            }
+        }
+    }
+
     public function toggleRegion($region)
     {
         $companyId = Auth::user()->company->id;
@@ -43,56 +81,6 @@ class CompanySettings extends Component
         }
     }
 
-    public function updatedDisplayInvoiceAmount()
-    {
-        $company = Auth::user()->company;
-        $company->display_invoice_amount = $this->displayInvoiceAmount;
-        if ($this->displayInvoiceAmount) {
-            $this->dispatch('displayInvoiceAmount');
-        } else {
-            $this->dispatch('hideInvoiceAmount');
-        }
-    }
-
-    public function updatedDefaultCurrency()
-    {
-        $company = Auth::user()->company;
-        $company->default_currency = $this->currencies[$this->defaultCurrency];
-    }
-
-    public function save()
-    {
-        $this->validate([
-            'companyName' => 'required|string',
-            'companyAddress' => 'required|string',
-            'defaultCurrency' => 'required|string',
-            'displayInvoiceAmount' => 'required|boolean',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
-
-        $company = Auth::user()->company;
-
-        if ($this->logo instanceof UploadedFile) {
-            $path = $this->logo->store('logos', 'public');
-            $company->logo = $path;
-        }
-
-        $company->name = $this->companyName;
-        $company->address = $this->companyAddress;
-        $company->default_currency = $this->currencies[$this->defaultCurrency];
-        $company->display_invoice_amount = $this->displayInvoiceAmount;
-        $company->save();
-
-        $companyRegions = CompanyRegion::where('company_id', $company->id)->get();
-        foreach ($companyRegions as $companyRegion) {
-            if (isset($companyRegion->selectedBeforeSave)) {
-                $companyRegion->selected = $companyRegion->selectedBeforeSave;
-                $companyRegion->save();
-            }
-        }
-
-        $this->success = true;
-    }
 
     public function render()
     {
@@ -104,16 +92,16 @@ class CompanySettings extends Component
         $company = Auth::user()->company;
         $this->companyName = $company->name;
         $this->companyAddress = $company->address;
-        $this->currencies = collect([1 => 'USD', 2 => 'RON', 3 => 'ARS']);
-        $this->defaultCurrency = $this->currencies[$company->default_currency];
-        $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
         $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
             ->where('selected', true)->get();
+        $this->currencies = collect(['USD', 'RON', 'ARS']);
+        $this->defaultCurrency = $company->default_currency ?? 'USD';
+        $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
+        $this->logo = $company->logo ?? null;
         $regionIds = $companyRegions->pluck('region_id');
         $regions = Region::whereIn('id', $regionIds)->get();
         $regionNames = $regions->pluck('name')->toArray();
         $this->existingRegions = $regionNames;
         $this->allRegions = Region::all()->pluck('name')->toArray();
-        $this->success = false;
     }
 }
