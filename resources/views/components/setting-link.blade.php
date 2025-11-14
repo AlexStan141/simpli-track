@@ -4,7 +4,7 @@
             <a href="{{ $link }}" class="inline-block">{{$slot}}</a>
         </li>
     @else
-        <li class="flex justify-center w-[200px] bg-setting pt-[11px] pb-[15px] font-nunito">
+        <li class="flex justify-center w-[200px] border border-setting bg-bgsetting pt-[11px] pb-[15px] font-nunito">
             <a href="{{ $link }}" class="inline-block">{{$slot}}</a>
         </li>
     @endif

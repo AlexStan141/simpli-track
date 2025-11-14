@@ -18,7 +18,11 @@ use Illuminate\Validation\Rule;
 
 class CreateInvoice extends Component
 {
-    protected $listeners = ['setCurrencyInInvoiceForm' => 'setCurrency'];
+    protected $listeners = [
+        'setCurrencyInInvoiceForm' => 'setCurrency',
+        'updateDefaultDueDate' => 'setDueDate',
+        'updateDefaulInvoicesForAttention' => 'setInvoicesForAttention'
+    ];
     public $amount;
     public $currencies;
     public $currency;
@@ -43,9 +47,14 @@ class CreateInvoice extends Component
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
     public $selected_frequency = 'monthly';
-
     public function setCurrency($payload){
         $this->currency = $payload['currency'];
+    }
+    public function setDueDate($payload){
+        $this->selected_due_day = $payload['defaultDueDate'];
+    }
+    public function setInvoicesForAttention($payload){
+        $this->selected_invoice_for_attention = $payload['defaultInvoicesForAttention'];
     }
     public function updatedSelectedRegion($value)
     {

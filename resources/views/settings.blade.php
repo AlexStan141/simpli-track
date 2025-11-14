@@ -17,6 +17,8 @@
                     <livewire:company-settings />
                 @elseif($page === 'Users & Roles')
                     <livewire:user-settings />
+                @elseif($page == 'Priority')
+                    <livewire:priority-settings />
                 @endif
             </div>
         </div>

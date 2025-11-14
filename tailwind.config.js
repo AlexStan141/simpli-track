@@ -36,7 +36,8 @@ export default {
                 setting: '#E4E4E4',
                 selectedsetting: '#E86542',
                 uploadbuttonborder: '#909EAC',
-                uploadbuttontext: '#0C5489'
+                uploadbuttontext: '#0C5489',
+                bgsetting: '#F5F5F5'
             }
         },
     },
