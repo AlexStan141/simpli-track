@@ -65,7 +65,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::match(['GET', 'POST'], '/settings/company', function () {
         return view('settings', ['page' => 'Company']);
     });
-    Route::get('/settings/users/{user}', function (User $user) {
+    Route::get('/settings/users', function () {
         return view('settings', ['page' => 'Users & Roles']);
     })->name('settings.users');
     Route::get('/settings/priority', function () {

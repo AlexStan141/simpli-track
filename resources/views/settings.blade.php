@@ -15,6 +15,8 @@
             <div class="h-[820px]">
                 @if ($page === 'Company')
                     <livewire:company-settings />
+                @elseif($page === 'Users & Roles')
+                    <livewire:user-settings />
                 @endif
             </div>
         </div>

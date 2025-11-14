@@ -7,7 +7,7 @@
                 <div class="ml-9 mt-[43px] flex flex-col gap-2">
                     <x-input-label for="name" :value="__('Company Name')"
                         class="text-[16px] leading-[14px] h-[12px] !text-editprofilelabel" />
-                    <x-text-input id="name" class="setting-text-input" type="text" name="name"
+                    <x-text-input id="name" class="setting-text-input w-[590px]" type="text" name="name"
                         wire:model="companyName" :value="$companyName" required />
                     @error('companyName')
                         <p>{{ $message }}</p>
@@ -17,7 +17,7 @@
                 <div class="ml-9 mt-[50px] flex flex-col gap-2">
                     <x-input-label for="address" :value="__('Address')"
                         class="text-[16px] leading-[14px] h-[12px] !text-editprofilelabel" />
-                    <x-text-input id="address" class="setting-text-input" type="text" name="address"
+                    <x-text-input id="address" class="setting-text-input w-[590px]" type="text" name="address"
                         wire:model="companyAddress" :value="$companyAddress" required />
                     @error('companyAddress')
                         <p>{{ $message }}</p>
