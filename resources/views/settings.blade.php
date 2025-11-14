@@ -19,6 +19,8 @@
                     <livewire:user-settings />
                 @elseif($page == 'Priority')
                     <livewire:priority-settings />
+                @elseif($page == 'Categories')
+                    <livewire:categories-settings />
                 @endif
             </div>
         </div>
