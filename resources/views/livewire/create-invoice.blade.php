@@ -99,7 +99,7 @@
             <div class="flex items-center gap-[43px]">
                 Due date
                 <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                    wire:model="selected_due_day" wire:change="updateLastTimePaid" defaultValue="{{ $due_days->first() }}"/>
+                    wire:model="selected_due_day" wire:change="updateLastTimePaid" defaultValue="{{ $selected_due_day }}"/>
                 of each month
                 @error('selected_due_day')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -108,7 +108,7 @@
             <div class="flex items-center gap-[43px]">
                 Flag invoices for attention
                 <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label="" width="200px"
-                    wire:model="selected_invoice_for_attention" defaultValue="{{ $invoices_for_attention->first() }}"/>
+                    wire:model="selected_invoice_for_attention" defaultValue="{{ $selected_invoice_for_attention }}"/>
                 before due date
                 @error('selected_invoice')
                     <span class="text-red-500 text-sm">{{ $message }}</span>

@@ -19,13 +19,13 @@
     <p class="mt-[78px] ml-[100px] text-[20px] height-[15px] text-formtitle font-inter">Default Due Date</p>
     <div class="mt-[47px] ml-[134px] text-[20px] height-[15px] text-formtitle font-inter flex gap-[35px] items-center">
         Due on the
-        <x-select-input :values="$dueDays" defaultValue="{{ $dueDays->first() }}" id="defaultDueDate" label="" width="200px"></x-select-input>
+        <x-select-input :values="$dueDays" defaultValue="{{ $defaultDueDate }}" wire:model="defaultDueDate" wire:change="updateDefaultDueDate" id="defaultDueDate" label="" width="200px"></x-select-input>
         of each month
     </div>
     <p class="mt-[78px] ml-[100px] text-[20px] height-[15px] text-formtitle font-inter">Attention Window</p>
     <div class="mt-[47px] ml-[134px] text-[20px] height-[15px] text-formtitle font-inter flex gap-[35px] items-center">
         Flag invoices for attention
-        <x-select-input :values="$invoicesForAttention" defaultValue="{{ $invoicesForAttention->first() }}" id="defaultInvoicesForAttention" label="" width="200px"></x-select-input>
+        <x-select-input :values="$invoicesForAttention" defaultValue="{{ $defaultInvoicesForAttention }}" wire:model="defaultInvoicesForAttention" wire:change="updateDefaultInvoicesForAttention" id="defaultInvoicesForAttention" label="" width="200px"></x-select-input>
         before due date
     </div>
     <div></div>

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('role', User::$role);
             $table->string('phone');
             $table->timestamps();
-            $table->foreignIdFor(Company::class);
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

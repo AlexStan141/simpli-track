@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\CompanyRegion;
 use App\Models\Region;
+use App\Models\Currency;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
@@ -35,7 +36,6 @@ class CompanySettings extends Component
         $this->validate([
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
-            'defaultCurrency' => 'required|string',
             'displayInvoiceAmount' => 'required|boolean',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:204800'
         ]);
@@ -49,7 +49,7 @@ class CompanySettings extends Component
         }
 
         $company->name = $this->companyName;
-        $company->default_currency = $this->defaultCurrency;
+        $company->currency_id = $this->defaultCurrency;
         $company->address = $this->companyAddress;
         $company->display_invoice_amount = $this->displayInvoiceAmount;
         $company->save();
@@ -94,8 +94,8 @@ class CompanySettings extends Component
         $this->companyAddress = $company->address;
         $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
             ->where('selected', true)->get();
-        $this->currencies = collect(['USD', 'RON', 'ARS']);
-        $this->defaultCurrency = $company->default_currency ?? 'USD';
+        $this->currencies = Currency::pluck('name', 'id');
+        $this->defaultCurrency = Auth::user()->company->currency->id;
         $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
         $this->logo = $company->logo ?? null;
         $regionIds = $companyRegions->pluck('region_id');

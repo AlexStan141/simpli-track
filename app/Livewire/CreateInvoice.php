@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\DueDay;
 use App\Models\InvoiceForAttention;
 use App\Models\InvoiceTemplate;
@@ -20,8 +21,6 @@ class CreateInvoice extends Component
 {
     protected $listeners = [
         'setCurrencyInInvoiceForm' => 'setCurrency',
-        'updateDefaultDueDate' => 'setDueDate',
-        'updateDefaulInvoicesForAttention' => 'setInvoicesForAttention'
     ];
     public $amount;
     public $currencies;
@@ -49,12 +48,6 @@ class CreateInvoice extends Component
     public $selected_frequency = 'monthly';
     public function setCurrency($payload){
         $this->currency = $payload['currency'];
-    }
-    public function setDueDate($payload){
-        $this->selected_due_day = $payload['defaultDueDate'];
-    }
-    public function setInvoicesForAttention($payload){
-        $this->selected_invoice_for_attention = $payload['defaultInvoicesForAttention'];
     }
     public function updatedSelectedRegion($value)
     {
@@ -93,6 +86,8 @@ class CreateInvoice extends Component
     }
     public function mount()
     {
+        $company = Auth::user()->company;
+
         // Categorii
         $this->categories = Category::pluck('name', 'id');
         $this->selected_category = $this->categories->keys()->first();
@@ -111,13 +106,13 @@ class CreateInvoice extends Component
         $this->selected_landlord = $this->landlords->keys()->first();
 
         $this->due_days = DueDay::pluck('day', 'id');
-        $this->selected_due_day = $this->due_days->keys()->first();
+        $this->selected_due_day = $company->due_day_id;
 
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
-        $this->selected_invoice_for_attention = $this->invoices_for_attention->keys()->first();
+        $this->selected_invoice_for_attention = $company->invoice_for_attention_id;
 
-        $this->currencies = collect(['USD', 'RON', 'ARS']);
-        $this->currency = $this->currencies[Auth::user()->company->default_currency];
+        $this->currencies = Currency::pluck('name');
+        $this->currency = Auth::user()->company->currency->name;
 
         $date = new DateTime();
         $date->modify('-1 month');
