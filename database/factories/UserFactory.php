@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
+use App\Models\Role;
 
 
 
@@ -50,7 +51,7 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'role' => fake()->randomElement(User::$role),
+            'role_id' => fake()->numberBetween(1, Role::count()),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'phone' => $international

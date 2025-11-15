@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout class="pt-[67px] pb-[88px]">
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -34,7 +34,7 @@
             </label>
         </div>
 
-        <div class="flex items-center justify-flex-start">
+        <div class="flex flex-col items-start gap-1 mt-4">
             {{-- @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
@@ -44,6 +44,10 @@
             <x-primary-button class="mt-[52px] bg-transparent ring-1 ring-white w-[226px] h-[49px] justify-center font-nunito text-[18px]">
                 {{ __('Log in') }}
             </x-primary-button>
+            <a class="underline text-sm text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                href="{{ route('register') }}">
+                {{ __('Not registered yet?') }}
+            </a>
         </div>
     </form>
 </x-guest-layout>

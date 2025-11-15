@@ -26,7 +26,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'company_id',
-        'role'
+        'role_id'
     ];
 
     /**
@@ -52,7 +52,7 @@ class User extends Authenticatable
         ];
     }
 
-    public static array $role = ['Admin', 'Portofolio Manager', 'Lease Admin', 'Director', 'User'];
+    //public static array $role = ['Admin', 'Portofolio Manager', 'Lease Admin', 'Director', 'User'];
 
     public function company(): BelongsTo
     {
@@ -67,5 +67,9 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function role(): BelongsTo{
+        return $this->belongsTo(Role::class);
     }
 }

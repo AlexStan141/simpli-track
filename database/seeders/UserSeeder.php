@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -21,27 +22,27 @@ class UserSeeder extends Seeder
             $company = $companies->pop();
 
             User::factory(10)->create([
-                'role' => 'User',
+                'role_id' => Role::where('name', 'User')->first()->id,
                 'company_id' => $company->id
             ]);
 
             User::factory(2)->create([
-                'role' => 'Lease Admin',
+                'role_id' => Role::where('name', 'Lease Admin')->first()->id,
                 'company_id' => $company->id
             ]);
 
             User::factory(2)->create([
-                'role' => 'Portofolio Manager',
+                'role_id' => Role::where('name', 'Portofolio Manager')->first()->id,
                 'company_id' => $company->id
             ]);
 
             User::factory(2)->create([
-                'role' => 'Director',
+                'role_id' => Role::where('name', 'Director')->first()->id,
                 'company_id' => $company->id
             ]);
 
             User::factory()->create([
-                'role' => 'Admin',
+                'role_id' => Role::where('name', 'Admin')->first()->id,
                 'company_id' => $company->id
             ]);
         }

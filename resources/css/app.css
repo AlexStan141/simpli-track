@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.iti--allow-dropdown{
+    margin-top: 4px;
+    width: 100%;
+}
+
 .iti__selected-flag{
     width: 70px;
     display: flex;
