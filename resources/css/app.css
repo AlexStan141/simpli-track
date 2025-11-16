@@ -9,7 +9,6 @@
 }
 
 .iti__selected-flag{
-    width: 70px;
     display: flex;
     justify-content: space-evenly;
 }

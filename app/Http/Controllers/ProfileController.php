@@ -30,6 +30,8 @@ class ProfileController extends Controller
 
         $user->fill($request->safe()->except(['password']));
 
+        $user->phone = $request->input('phone_normalized');
+
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }

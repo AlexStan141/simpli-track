@@ -8,14 +8,22 @@ import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.querySelector("#phone");
-    if (input) {
-        const iti = window.intlTelInput(input, {
-            initialCountry: "ro",
-            preferredCountries: ["ro", "us", "gb"],
-            nationalMode: false,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
-        });
-        const fullPhoneNumber = iti.getNumber();
-    }
+    const hiddenInput = document.querySelector("#phone_normalized");
+    const dialCodeInput = document.querySelector("#dial_code");
+
+    const iti = window.intlTelInput(input, {
+        initialCountry: "ro",
+        preferredCountries: ["ro", "us", "gb"],
+        separateDialCode: false,
+        nationalMode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+
+    // La submit, salvează numărul în format internațional
+    input.form.addEventListener("submit", function () {
+        if (iti.isValidNumber()) {
+            hiddenInput.value = iti.getNumber(); // ex: +40729626513
+        }
+    });
 });
 

@@ -9,10 +9,10 @@
             <div class="flex flex-col items-center gap-2">
                 <div class="font-nunito text-loginblue text-2xl leading-none">
                     {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</div>
-                <div class="font-nunito text-loginblue text-base leading-none">{{ auth()->user()->role }}</div>
+                <div class="font-nunito text-loginblue text-base leading-none">{{ auth()->user()->role->name }}</div>
             </div>
         </div>
-        @if(session()->has('success'))
+        @if (session()->has('success'))
             <p class="bg-green-300 px-[10px] py-[20px] mb-[5px]">{{ session('success') }}</p>
         @endif
         <form class="border-t-[1px] border-formgray py-12" action="{{ route('profile.update') }}" method="POST">
@@ -21,57 +21,63 @@
             <p class="font-semibold text-formtitle text-xl h-[14px]">Basic details</p>
             <div class="grid grid-cols-2 gap-x-[22.5px] gap-y-[39px] mt-[32px]">
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="first_name" :value="__('First Name')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-input-label for="first_name" :value="__('First Name')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="first_name"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text"
-                        name="first_name" value="{{ old('first_name') ?? $user['first_name'] }}"/>
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="text" name="first_name" value="{{ old('first_name') ?? $user['first_name'] }}" />
                     <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="last_name" :value="__('Last Name')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-input-label for="last_name" :value="__('Last Name')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="last_name"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text"
-                        name="last_name" value="{{ old('last_name') ?? $user['last_name'] }}"  />
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="text" name="last_name" value="{{ old('last_name') ?? $user['last_name'] }}" />
                     <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="email" :value="__('Email')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-input-label for="email" :value="__('Email')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="email"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="email"
-                        name="email" value="{{ old('email') ?? $user['email'] }}"  />
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="email" name="email" value="{{ old('email') ?? $user['email'] }}" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="phone" :value="__('Phone')" class="text-editprofilelabel leading-[14px] h-[12px]" />
-                    <x-text-input id="phone"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="tel"
-                        name="phone" value="{{ old('phone') ?? $user['phone'] }}" ></x-text-input>
+                    <label for="phone">Număr de telefon</label>
+                    <input type="tel" id="phone" name="phone" class="border px-3 py-2 rounded"/>
+                    <input type="hidden" name="phone_normalized" id="phone_normalized" />
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="password" :value="__('Current Password')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-input-label for="password" :value="__('Current Password')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="password"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="password"
-                        name="password" value="" ></x-text-input>
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="password" name="password" value=""></x-text-input>
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="new_password" :value="__('New Password')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-input-label for="new_password" :value="__('New Password')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="new_password"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="password"
-                        name="new_password" value="" ></x-text-input>
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="password" name="new_password" value=""></x-text-input>
                     <x-input-error :messages="$errors->get('new_password')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="confirm_new_password" :value="__('Confirm New Password')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-input-label for="confirm_new_password" :value="__('Confirm New Password')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
                     <x-text-input id="confirm_new_password"
-                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="password"
-                        name="confirm_new_password" value="" ></x-text-input>
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="password" name="confirm_new_password" value=""></x-text-input>
                     <x-input-error :messages="$errors->get('confirm_new_password')" class="mt-2" />
                 </div>
             </div>
             <div class="text-center mt-[76px]">
-                <button type="submit" class="bg-loginblue py-[12px] px-[93px] mx-auto rounded-[80px] text-white font-nunito">Save</button>
+                <button type="submit"
+                    class="bg-loginblue py-[12px] px-[93px] mx-auto rounded-[80px] text-white font-nunito">Save</button>
             </div>
         </form>
     </div>
