@@ -45,8 +45,8 @@
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="phone">Număr de telefon</label>
-                    <input type="tel" id="phone" name="phone" class="border px-3 py-2 rounded"/>
+                    <x-input-label for="phone" :value="__('Phone')" class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-text-input id="phone" class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="phone" name="phone" value="{{ old('phone') ?? $user['phone'] }}" />
                     <input type="hidden" name="phone_normalized" id="phone_normalized" />
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>

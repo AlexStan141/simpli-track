@@ -41,7 +41,8 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role_id' => ['required', 'integer', 'min:1', 'max:' . Role::all()->count()],
-            'phone' => ['nullable', 'phone:INTERNATIONAL'],
+            'phone' => ['required', 'string', 'max:30'],
+            'phone_normalized' => ['required', 'phone:INTERNATIONAL'],
             'company_id' => ['required', 'integer', 'min:1', 'max:' . Company::all()->count()]
         ]);
 
@@ -51,7 +52,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
-            'phone' => $request->phone,
+            'phone' => $request->phone_normalized,
             'company_id' => $request->company_id
         ]);
 
