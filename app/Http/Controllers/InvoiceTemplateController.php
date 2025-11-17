@@ -6,7 +6,6 @@ use App\Http\Requests\InvoiceRequest;
 use App\Models\InvoiceTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
 class InvoiceTemplateController extends Controller
 {
     /**
@@ -31,7 +30,7 @@ class InvoiceTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(InvoiceRequest $request)
     {
         //
     }
@@ -47,9 +46,9 @@ class InvoiceTemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(InvoiceTemplate $initialInvoice)
     {
-        //
+        return view('invoice_template.edit', ['initialInvoice' => $initialInvoice]);
     }
 
     /**

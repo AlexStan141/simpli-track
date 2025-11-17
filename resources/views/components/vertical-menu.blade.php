@@ -10,8 +10,8 @@
             <img src="{{ $activeLink === '/dashboard' ? asset('/images/selected_dashboard.png') : asset('/images/dashboard.png') }}"
                 alt="dashboard">
         </x-menu-link>
-        <x-menu-link active="{{ $activeLink === '/invoice' }}" link="/invoice">
-            <img src="{{ $activeLink === '/invoice' ? asset('/images/selected_invoices.png') : asset('/images/invoices.png') }}"
+        <x-menu-link active="{{ $activeLink === '/invoices' }}" link="/invoices">
+            <img src="{{ $activeLink === '/invoices' ? asset('/images/selected_invoices.png') : asset('/images/invoices.png') }}"
                 alt="invoices">
         </x-menu-link>
         <x-menu-link active="{{ $activeLink === '/alerts' }}" link="/alerts" text="Alerts">

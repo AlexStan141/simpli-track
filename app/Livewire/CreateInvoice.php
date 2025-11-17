@@ -46,6 +46,7 @@ class CreateInvoice extends Component
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
     public $selected_frequency = 'monthly';
+    public $newOneCreated;
     public function setCurrency($payload){
         $this->currency = $payload['currency'];
     }
@@ -121,6 +122,8 @@ class CreateInvoice extends Component
         $day = (int) $this->selected_due_day;
         $date->setDate($year, $month, $day);
         $this->last_time_paid = $date;
+
+        $this->newOneCreated = false;
     }
 
     public function createInvoiceTemplate(){
@@ -136,7 +139,7 @@ class CreateInvoice extends Component
             'selected_city' => 'required',
             'last_time_paid' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
-            'lease_no' => ['nullable', 'regex:/^[A-Z]{3}\d{2}\s#\d{4}\/\d{2}\/\d{2}$/']
+            'lease_no' => ['required', 'string', 'max:50']
         ]);
 
         InvoiceTemplate::create([
@@ -156,6 +159,7 @@ class CreateInvoice extends Component
             "last_time_paid" => $this->last_time_paid
         ]);
         $this->dispatch('invoiceTemplateCreated');
+        $this->newOneCreated = true;
     }
 
     public function render()

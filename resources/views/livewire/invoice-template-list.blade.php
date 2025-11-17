@@ -73,7 +73,9 @@
                     <tr class= "h-[56px] border">
                         <td class="w-[62px]">
                             <div class="flex justify-center items-center">
-                                <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
+                                <a href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice]) }}">
+                                     <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
+                                </a>
                             </div>
                         </td>
                         <td class="w-[178px]">{{ $user_invoice->category->name }}</td>

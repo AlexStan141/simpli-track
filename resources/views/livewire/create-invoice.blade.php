@@ -19,6 +19,9 @@
     <p class="leading-[1.25rem] h-[15px] font-semibold font-inter ml-[11px]">Add Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
+    @if($newOneCreated)
+        <p class="bg-green-300 py-[10px] pl-[10px]">Invoice added successfully!</p>
+    @endif
     <div class="flex justify-between mt-[79px]">
         <a href="{{ route('invoice.index') }}" class="leading-[14px] h-[12px] ml-[24px]">Back</a>
         <span class="leading-[14px] h-[12px]">Import from CSV</span>
@@ -41,7 +44,7 @@
                     @enderror
                 </div>
                 <div>
-                    <x-select-input :values=$users width="200px" id="user_id" label="Assignee"
+                    <x-select-input :values="$users" width="200px" id="user_id" label="Assignee"
                         wire:model="selected_user" defaultValue="{{ $users->first() }}"></x-select-input>
                     @error('selected_user')
                         <span class="text-red-500 text-sm">{{ $message }}</span>

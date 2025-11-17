@@ -46,14 +46,18 @@ Route::get('/test', function(){
     return view('test');
 });
 
-Route::get('/invoice', [InvoiceTemplateController::class, 'index'])
+Route::get('/invoices', [InvoiceTemplateController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('invoice.index');
 
-Route::get('/invoice/create', [InvoiceTemplateController::class, 'create'])
+Route::get('/invoices/create', [InvoiceTemplateController::class, 'create'])
     ->middleware(['auth', 'verified'])->name('invoice.create');
 
-Route::post('/invoice', [InvoiceTemplateController::class, 'store'])
+Route::post('/invoices', [InvoiceTemplateController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('invoice.store');
+
+Route::get('/invoices/{initialInvoice}/edit', [InvoiceTemplateController::class, 'edit'])
+    ->middleware(['auth', 'verified'])->name('invoice.edit');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
