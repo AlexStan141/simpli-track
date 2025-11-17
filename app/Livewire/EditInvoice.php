@@ -37,7 +37,13 @@ class EditInvoice extends Component
     public $selected_city;
     public $landlords;
     public $selected_landlord;
-
+    public $due_days;
+    public $selected_due_day;
+    public $invoices_for_attention;
+    public $selected_invoice_for_attention;
+    public $last_time_paid;
+    public $frequency_options = ['monthly', 'quarterly'];
+    public $selected_frequency = 'monthly';
 
     public function updatedSelectedRegion($value)
     {
@@ -55,6 +61,26 @@ class EditInvoice extends Component
     {
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
+    }
+
+    public function updateLastTimePaid()
+    {
+        $date = new DateTime();
+        $date->modify('-1 month');
+        $year = date_format($date, 'Y');
+        $month = date_format($date, 'n');
+        $day = (int) $this->selected_due_day;
+        $date->setDate($year, $month, $day);
+        $this->last_time_paid = $date;
+    }
+
+    public function updateFrequency($option)
+    {
+        if($option == 0){
+            $this->selected_frequency = 'monthly';
+        } else {
+            $this->selected_frequency = 'quarterly';
+        }
     }
 
     public function mount(){
@@ -84,7 +110,11 @@ class EditInvoice extends Component
 
         $this->landlords = Landlord::pluck('name', 'id');
         $this->selected_landlord = Landlord::find($this->initialInvoice->landlord_id)->name;
+
+        $this->due_days = DueDay::pluck('day', 'id');
+        $this->selected_due_day = DueDay::find($this->initialInvoice->due_day_id)->day;
+
+        $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
+        $this->selected_invoice_for_attention = InvoiceForAttention::find($this->initialInvoice->invoice_for_attention_id)->period;
     }
-
-
 }

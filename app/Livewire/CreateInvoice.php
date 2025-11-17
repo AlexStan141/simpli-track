@@ -50,24 +50,10 @@ class CreateInvoice extends Component
     public function setCurrency($payload){
         $this->currency = $payload['currency'];
     }
+
     public function updatedSelectedRegion($value)
     {
         $this->updateCountryList();
-    }
-
-    public function updatedSelectedDueDay($value){
-        $this->updateLastTimePaid();
-    }
-
-    public function updateLastTimePaid()
-    {
-        $date = new DateTime();
-        $date->modify('-1 month');
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $day = (int) $this->selected_due_day;
-        $date->setDate($year, $month, $day);
-        $this->last_time_paid = $date;
     }
 
     public function updatedSelectedCountry($value)
@@ -85,6 +71,31 @@ class CreateInvoice extends Component
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
     }
+
+    public function updatedSelectedDueDay($value){
+        $this->updateLastTimePaid();
+    }
+
+    public function updateLastTimePaid()
+    {
+        $date = new DateTime();
+        $date->modify('-1 month');
+        $year = date_format($date, 'Y');
+        $month = date_format($date, 'n');
+        $day = (int) $this->selected_due_day;
+        $date->setDate($year, $month, $day);
+        $this->last_time_paid = $date;
+    }
+
+    public function updateFrequency($option)
+    {
+        if($option == 0){
+            $this->selected_frequency = 'monthly';
+        } else {
+            $this->selected_frequency = 'quarterly';
+        }
+    }
+
     public function mount()
     {
         $company = Auth::user()->company;
@@ -139,7 +150,8 @@ class CreateInvoice extends Component
             'selected_city' => 'required',
             'last_time_paid' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
-            'lease_no' => ['required', 'string', 'max:50']
+            'lease_no' => ['required', 'string', 'max:50'],
+            'amount' => ['required', 'min:100', 'max:5000']
         ]);
 
         InvoiceTemplate::create([
