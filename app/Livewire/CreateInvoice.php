@@ -24,7 +24,7 @@ class CreateInvoice extends Component
     ];
     public $amount;
     public $currencies;
-    public $currency;
+    public $selected_currency;
     public $categories;
     public $selected_category;
     public $users;
@@ -46,9 +46,8 @@ class CreateInvoice extends Component
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
     public $selected_frequency = 'monthly';
-    public $newOneCreated;
     public function setCurrency($payload){
-        $this->currency = $payload['currency'];
+        $this->selected_currency = $payload['currency'];
     }
 
     public function updatedSelectedRegion($value)
@@ -70,10 +69,6 @@ class CreateInvoice extends Component
     {
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
-    }
-
-    public function updatedSelectedDueDay($value){
-        $this->updateLastTimePaid();
     }
 
     public function updateLastTimePaid()
@@ -123,8 +118,8 @@ class CreateInvoice extends Component
         $this->invoices_for_attention = InvoiceForAttention::pluck('period', 'id');
         $this->selected_invoice_for_attention = $company->invoice_for_attention_id;
 
-        $this->currencies = Currency::pluck('name');
-        $this->currency = Auth::user()->company->currency->name;
+        $this->currencies = Currency::pluck('name', 'id');
+        $this->selected_currency = Auth::user()->company->currency->id;
 
         $date = new DateTime();
         $date->modify('-1 month');
@@ -133,8 +128,6 @@ class CreateInvoice extends Component
         $day = (int) $this->selected_due_day;
         $date->setDate($year, $month, $day);
         $this->last_time_paid = $date;
-
-        $this->newOneCreated = false;
     }
 
     public function createInvoiceTemplate(){
@@ -149,15 +142,15 @@ class CreateInvoice extends Component
             'selected_country' => 'required',
             'selected_city' => 'required',
             'last_time_paid' => 'required',
+            'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
             'lease_no' => ['required', 'string', 'max:50'],
-            'amount' => ['required', 'min:100', 'max:5000']
+            'amount' => ['required', 'integer', 'min:100', 'max:5000'],
         ]);
 
-        InvoiceTemplate::create([
+        $createdInvoice = InvoiceTemplate::create([
             'frequency' => $this->selected_frequency,
             'amount' => $this->amount,
-            'currency' => $this->currency,
             'lease_no' => $this->lease_no,
             'due_day_id' => $this->selected_due_day,
             'invoice_for_attention_id' => $this->selected_invoice_for_attention,
@@ -168,10 +161,13 @@ class CreateInvoice extends Component
             "country_id" => $this->selected_country,
             "city_id" => $this->selected_city,
             "landlord_id" => $this->selected_landlord,
-            "last_time_paid" => $this->last_time_paid
+            'currency_id' => $this->selected_currency,
+            "last_time_paid" => $this->last_time_paid,
         ]);
         $this->dispatch('invoiceTemplateCreated');
-        $this->newOneCreated = true;
+        return redirect()->to(route('invoice.edit', [
+            'initialInvoice' => $createdInvoice
+        ]))->with('success', 'Invoice template created successfully.');
     }
 
     public function render()

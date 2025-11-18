@@ -18,14 +18,17 @@
     <p class="leading-[1.25rem] h-[15px] font-semibold font-inter ml-[11px]">Add Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
+    @if(session()->has('success'))
+        <p class="bg-green-300 py-2 pl-2">{{ session('success')}}</p>
+    @endif
     <div class="flex justify-between mt-[79px]">
         <a href="{{ route('invoice.index') }}" class="leading-[14px] h-[12px] ml-[24px]">Back</a>
         <span class="leading-[14px] h-[12px]">Import from CSV</span>
     </div>
     <div class="bg-white ml-[17px] mt-[14px] pt-[55px] pl-[72px] pr-[39px]">
-        <form action="{{ route('invoice.store') }}" method="POST" wire:submit.prevent="createInvoiceTemplate"
+        <form action="{{ route('invoice.store') }}" wire:submit.prevent="createInvoiceTemplate"
             class="pt-7 flex flex-col gap-10">
-            <div class="flex justify-between items-end">
+            <div class="flex justify-between items-start">
                 <div>
                     <x-select-input :values="$categories" width="200px" id="category_id" label="Category"
                         wire:model="selected_category" defaultValue="{{ $categories->first() }}"></x-select-input>
@@ -50,7 +53,7 @@
                     @error('amount')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
-                    @error('currency')
+                    @error('selected_currency')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -62,7 +65,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between items-start">
                 <div>
                     <x-select-input :values="$regions" id="region_id" label="Region" width="200px"
                         wire:model="selected_region" wire:change="updateCountryList"
@@ -94,7 +97,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between items-start">
                 <div class="flex items-center gap-[43px]">
                     Due date
                     <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"

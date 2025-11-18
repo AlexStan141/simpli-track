@@ -18,12 +18,19 @@
     <p class="leading-[1.25rem] h-[15px] font-semibold font-inter ml-[11px]">Edit Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
+    @if(session()->has('success'))
+        <p class="bg-green-300 py-2 pl-2">{{ session('success')}}</p>
+    @endif
     <div class="flex justify-between mt-[79px]">
         <a href="{{ route('invoice.index') }}" class="leading-[14px] h-[12px] ml-[24px]">Back</a>
         <span class="leading-[14px] h-[12px]">Import from CSV</span>
     </div>
     <div class="bg-white ml-[17px] mt-[14px] pt-[55px] pl-[72px] pr-[39px]">
-        <form action="" class="pt-7 flex flex-col gap-10">
+        <form class="pt-7 flex flex-col gap-10"
+            action="{{ route('invoice.update', [
+                'initialInvoice' => $initialInvoice,
+            ]) }}"
+            wire:submit.prevent="editInvoiceTemplate({{ $initialInvoice }})">
             <div class="flex justify-between">
                 <div>
                     <x-select-input :values="$categories" width="200px" id="category_id" label="Category"
@@ -45,7 +52,7 @@
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                     <x-select-input :values="$currencies" width="200px" id="user_id" label=""
-                        wire:model="selected_currency" defaultValue="{{ $currency }}"></x-select-input>
+                        wire:model="selected_currency" defaultValue="{{ $selected_currency }}"></x-select-input>
                     @error('selected_currency')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -112,16 +119,17 @@
                     @enderror
                 </div>
                 <div>
-                    <x-custom-input id="last_time_paid" label="Last Time Paid" width="150px" type="hidden" wire:model="last_time_paid"/>
+                    <x-custom-input id="last_time_paid" label="Last Time Paid" width="150px" type="hidden"
+                        wire:model="last_time_paid" />
                     @error('last_time_paid')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
-             <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4">
                 Frequency
                 <div class="flex gap-[6px]">
-                    @if ($selected_frequency === 'monthly')
+                    @if ($selected_frequency === 'Monthly')
                         <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px] cursor-pointer"
                             wire:click="updateFrequency(0)">monthly</div>
                         <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px] cursor-pointer"
@@ -135,8 +143,12 @@
                 </div>
             </div>
             <input type="hidden" name="frequency" value="{{ $selected_frequency }}">
-            <button type="submit"
-                class="bg-loginblue text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Save Template</button>
+            <div class="flex gap-2">
+                <button type="submit"
+                    class="bg-loginblue text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Save
+                    Template</button>
+                <button wire:click.prevent="deleteInvoiceTemplate({{ $initialInvoice }})" class="bg-red-500 text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Delete invoice template</button>
+            </div>
         </form>
     </div>
 </div>

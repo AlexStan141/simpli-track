@@ -16,6 +16,11 @@ class InvoiceTemplate extends Model
 
     protected $guarded = [];
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

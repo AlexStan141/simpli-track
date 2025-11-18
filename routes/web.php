@@ -58,6 +58,8 @@ Route::post('/invoices', [InvoiceTemplateController::class, 'store'])
 Route::get('/invoices/{initialInvoice}/edit', [InvoiceTemplateController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('invoice.edit');
 
+Route::put('/invoices/{initialInvoice}', [InvoiceTemplateController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('invoice.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

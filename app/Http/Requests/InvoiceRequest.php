@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+
 class InvoiceRequest extends FormRequest
 {
     /**
@@ -22,15 +23,19 @@ class InvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'due_day_id' => 'required',
-            'invoice_for_attention_id' => 'required',
-            'category_id' => 'required',
-            'user_id' => 'required',
-            'region_id' => 'required',
-            'country_id' => 'required',
-            'city_id' => 'required',
-            'frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
-            'lease_no' => ['required', 'string', 'max:50']
+            'selected_due_day' => 'required',
+            'selected_invoice_for_attention' => 'required',
+            'selected_category' => 'required',
+            'selected_user' => 'required',
+            'selected_status' => 'required',
+            'selected_region' => 'required',
+            'selected_country' => 'required',
+            'selected_city' => 'required',
+            'last_time_paid' => 'required',
+            'selected_currency' => 'required',
+            'selected_frequency' => ['required', Rule::in(['Monthly', 'Quarterly'])],
+            'lease_no' => ['required', 'string', 'max:50'],
+            'amount' => ['required', 'integer', 'min:100', 'max:5000'],
         ];
     }
 }

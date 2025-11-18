@@ -14,4 +14,8 @@ class Currency extends Model
     public function companies(): HasMany {
         return $this->hasMany(Company::class);
     }
+
+    public function invoiceTemplates(): HasMany {
+        return $this->hasMany(InvoiceTemplate::class);
+    }
 }

@@ -2,6 +2,9 @@
     <p class="text-xl leading-none h-[15px] font-semibold">Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
+    @if(session()->has('success'))
+        <p class="bg-green-300 py-2 pl-2">{{ session("success") }}</p>
+    @endif
     <a href="{{ route('invoice.create') }}">
         <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
     </a>

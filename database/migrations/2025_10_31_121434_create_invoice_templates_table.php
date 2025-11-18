@@ -25,8 +25,8 @@ return new class extends Migration
             $table->id();
             $table->enum('frequency', InvoiceTemplate::$frequencies);
             $table->unsignedInteger('amount')->nullable();
-            $table->string('currency')->nullable();
             $table->string('lease_no')->nullable();
+            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
             $table->foreignId('due_day_id')->constrained()->onDelete('cascade');
             $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->foreignId('country_id')->constrained()->onDelete('cascade');
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
             $table->foreignId('landlord_id')->constrained()->onDelete('cascade');
-            $table->date('last_time_paid')->nullable(); 
+            $table->date('last_time_paid')->nullable();
             $table->timestamps();
         });
     }
