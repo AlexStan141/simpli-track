@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusSeeder::class);
         $this->call(CompanyRegionSeeder::class);
         $this->call(InvoiceTemplateSeeder::class);
+        $this->call(CategoryUserSeeder::class);
     }
 }
