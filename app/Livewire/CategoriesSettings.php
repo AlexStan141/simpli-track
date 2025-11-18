@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriesSettings extends Component
 {
@@ -16,6 +17,9 @@ class CategoriesSettings extends Component
 
     public function mount()
     {
-        $this->categories = Category::pluck('name');
+        $user = Auth::user();
+        $categories_ids = $user->category_users->pluck('category_id');
+        $categories = Category::whereIn('id', $categories_ids)->pluck('name');
+        $this->categories = $categories;
     }
 }
