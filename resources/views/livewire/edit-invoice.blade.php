@@ -147,7 +147,7 @@
                 <button type="submit"
                     class="bg-loginblue text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Save
                     Template</button>
-                <button wire:click.prevent="deleteInvoiceTemplate({{ $initialInvoice }})" class="bg-red-500 text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Delete invoice template</button>
+                <button wire:click.prevent="deleteInvoiceTemplate({{ $initialInvoice }}, '{{ $from }}')" class="bg-red-500 text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Delete invoice template</button>
             </div>
         </form>
     </div>

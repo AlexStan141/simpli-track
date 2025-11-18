@@ -3,6 +3,9 @@
 @endphp
 
 <div>
+    @if(session()->has('success'))
+        <p class="bg-green-300 py-2 pl-2">{{ session("success") }}</p>
+    @endif
     @if (count($user_invoices) == 0)
         <p>No user invoices for this moment.</p>
     @else
@@ -62,7 +65,9 @@
                     <tr class= "h-[56px] border">
                         <td class="w-[62px]">
                             <div class="flex justify-center items-center">
-                                <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
+                                <a href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice, 'from' => 'Dashboard']) }}">
+                                     <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
+                                </a>
                             </div>
                         </td>
                         <td class="w-[196px]">{{ $user_invoice->city->name }}</td>

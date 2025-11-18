@@ -22,6 +22,7 @@ use Illuminate\Validation\Rule;
 class EditInvoice extends Component
 {
     public $initialInvoice;
+    public $from;
     public $categories;
     public $selected_category;
     public $selected_status = 1;
@@ -85,11 +86,16 @@ class EditInvoice extends Component
         }
     }
 
-    public function deleteInvoiceTemplate($initialInvoice)
+    public function deleteInvoiceTemplate($initialInvoice, $from)
     {
         $initialInvoiceAsObject = InvoiceTemplate::findOrFail($initialInvoice['id']);
         $initialInvoiceAsObject->delete();
-        return redirect()->to(route('invoice.index'))->with('success', 'Invoice template deleted successfully.');
+        if($from === 'Dashboard'){
+            return redirect()->to(route('dashboard'))->with('success', 'Invoice template deleted successfully.');
+        }
+        else{
+            return redirect()->to(route('invoice.index'))->with('success', 'Invoice template deleted successfully.');
+        }
     }
 
     public function editInvoiceTemplate($initialInvoice)

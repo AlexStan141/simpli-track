@@ -2,15 +2,12 @@
     <p class="text-xl leading-none h-[15px] font-semibold">Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
-    @if(session()->has('success'))
-        <p class="bg-green-300 py-2 pl-2">{{ session("success") }}</p>
-    @endif
     <a href="{{ route('invoice.create') }}">
         <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
     </a>
     <div class="after:content-[''] after:block after:clear-both"></div>
     @if (session()->has('success'))
-        <div>{{ session('success') }}</div>
+        <p class="bg-green-300 py-2 pl-2 mb-4">'{{ session('success') }}'</p>
     @endif
     @if (count($user_invoices) == 0)
         <p>No user invoices for this moment.</p>
@@ -76,7 +73,7 @@
                     <tr class= "h-[56px] border">
                         <td class="w-[62px]">
                             <div class="flex justify-center items-center">
-                                <a href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice]) }}">
+                                <a href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice, 'from' => 'List']) }}">
                                      <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
                                 </a>
                             </div>
