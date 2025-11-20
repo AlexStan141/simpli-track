@@ -25,4 +25,8 @@ class Company extends Model
     public function currency(): BelongsTo{
         return $this->belongsTo(Currency::class);
     }
+
+    public function categories(){
+        return $this->hasMany(Category::class);
+    }
 }

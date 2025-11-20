@@ -11,7 +11,7 @@ class Status extends Model
     /** @use HasFactory<\Database\Factories\StatusFactory> */
     use HasFactory;
 
-    public function invoice_templates(): HasMany{
-        return $this->hasMany(InvoiceTemplate::class);
+    public function bills(){
+        return $this->hasMany(Bill::class);
     }
 }

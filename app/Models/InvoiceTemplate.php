@@ -26,11 +26,6 @@ class InvoiceTemplate extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function status(): BelongsTo
-    {
-        return $this->belongsTo(Status::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -64,5 +59,15 @@ class InvoiceTemplate extends Model
     public function invoices_for_attention(): BelongsTo
     {
         return $this->belongsTo(InvoiceForAttention::class);
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+
+    public function note()
+    {
+        return $this->hasOne(Note::class);
     }
 }

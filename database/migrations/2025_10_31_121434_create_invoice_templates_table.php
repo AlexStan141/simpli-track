@@ -30,7 +30,6 @@ return new class extends Migration
             $table->foreignId('due_day_id')->constrained()->onDelete('cascade');
             $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('status_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->foreignId('country_id')->constrained()->onDelete('cascade');

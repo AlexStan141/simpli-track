@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\City;
-use App\Models\Status;
 use App\Models\User;
 use App\Models\Region;
 use App\Models\Country;
@@ -13,9 +12,7 @@ use App\Models\DueDay;
 use App\Models\InvoiceForAttention;
 use App\Models\InvoiceTemplate;
 use App\Models\Landlord;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class InvoiceTemplateSeeder extends Seeder
 {
@@ -25,7 +22,6 @@ class InvoiceTemplateSeeder extends Seeder
     public function run(): void
     {
         $categories = Category::all();
-        $statuses = Status::all();
         $users = User::all();
         $regions = Region::all();
         $landlords = Landlord::all();
@@ -36,7 +32,6 @@ class InvoiceTemplateSeeder extends Seeder
         foreach ($users as $user) {
             for ($i = 1; $i <= 20; $i++) {
                 $category = $categories->random();
-                $status = $statuses->random();
                 $region = $regions->random();
                 $countries = Country::where('region_id', $region->id)->get();
                 $country = $countries->random();
@@ -48,7 +43,6 @@ class InvoiceTemplateSeeder extends Seeder
                 $currency = $currencies->random();
                 InvoiceTemplate::factory()->create([
                     'category_id' => $category->id,
-                    'status_id' => $status->id,
                     'user_id' => $user->id,
                     'region_id' => $region->id,
                     'country_id' => $country->id,

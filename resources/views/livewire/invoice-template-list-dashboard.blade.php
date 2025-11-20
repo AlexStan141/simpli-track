@@ -3,7 +3,8 @@
 @endphp
 
 <div>
-    @if(session()->has('success'))
+    Here will be the bills
+    {{-- @if(session()->has('success'))
         <p class="bg-green-300 py-2 pl-2">{{ session("success") }}</p>
     @endif
     @if (count($user_invoices) == 0)
@@ -91,5 +92,5 @@
         <nav class="pagination">
             {{ $user_invoices->onEachSide(1)->links('vendor.pagination.bootstrap-4') }}
         </nav>
-    @endif
+    @endif --}}
 </div>

@@ -90,47 +90,48 @@ class InvoiceTemplateListDashboard extends Component
 
     public function render()
     {
-        $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'cities.name', 'statuses.name', 'due_days.day', 'users.first_name')
-            ->with(['landlord', 'status', 'due_day', 'invoices_for_attention', 'city', 'category', 'user'])
-            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-            ->join('statuses', 'invoice_templates.status_id', '=', 'statuses.id')
-            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-            ->where('user_id', Auth::id())
-            ->whereHas('region', function ($query) {
-                $query->whereIn('name', $this->selectedRegions);
-            });
+        // $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'cities.name', 'statuses.name', 'due_days.day', 'users.first_name')
+        //     ->with(['landlord', 'status', 'due_day', 'invoices_for_attention', 'city', 'category', 'user'])
+        //     ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+        //     ->join('statuses', 'invoice_templates.status_id', '=', 'statuses.id')
+        //     ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
+        //     ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+        //     ->where('user_id', Auth::id())
+        //     ->whereHas('region', function ($query) {
+        //         $query->whereIn('name', $this->selectedRegions);
+        //     });
 
-        if ($this->selectedStatus !== 'All') {
-            $invoice_templates->whereHas('status', function ($query) {
-                $query->where('name', '=', $this->selectedStatus);
-            });
-        }
-        if ($this->selectedCity !== 'All') {
-            $invoice_templates->whereHas('city', function ($query) {
-                $query->where('name', '=', $this->selectedCity);
-            });
-        }
-        if ($this->selectedCategory !== 'All') {
-            $invoice_templates->whereHas('category', function ($query) {
-                $query->where('name', '=', $this->selectedCategory);
-            });
-        }
+        // if ($this->selectedStatus !== 'All') {
+        //     $invoice_templates->whereHas('status', function ($query) {
+        //         $query->where('name', '=', $this->selectedStatus);
+        //     });
+        // }
+        // if ($this->selectedCity !== 'All') {
+        //     $invoice_templates->whereHas('city', function ($query) {
+        //         $query->where('name', '=', $this->selectedCity);
+        //     });
+        // }
+        // if ($this->selectedCategory !== 'All') {
+        //     $invoice_templates->whereHas('category', function ($query) {
+        //         $query->where('name', '=', $this->selectedCategory);
+        //     });
+        // }
 
-        if ($this->sortField == 'assignee') {
-            $invoice_templates = $invoice_templates
-                ->orderByRaw($this->sortField, $this->sortType)
-                ->paginate(5);
-        } else {
-            $invoice_templates = $invoice_templates
-                ->orderBy($this->sortField, $this->sortType)
-                ->paginate(5);
-        }
+        // if ($this->sortField == 'assignee') {
+        //     $invoice_templates = $invoice_templates
+        //         ->orderByRaw($this->sortField, $this->sortType)
+        //         ->paginate(5);
+        // } else {
+        //     $invoice_templates = $invoice_templates
+        //         ->orderBy($this->sortField, $this->sortType)
+        //         ->paginate(5);
+        // }
 
 
-        return view('livewire.invoice-template-list-dashboard', [
-            'user_invoices' => $invoice_templates,
-        ]);
+        // return view('livewire.invoice-template-list-dashboard', [
+        //     'user_invoices' => $invoice_templates,
+        // ]);
+        return view('livewire.invoice-template-list-dashboard');
     }
 
     public function mount()
