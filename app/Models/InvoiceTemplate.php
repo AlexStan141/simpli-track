@@ -56,7 +56,7 @@ class InvoiceTemplate extends Model
         return $this->belongsTo(DueDay::class);
     }
 
-    public function invoices_for_attention(): BelongsTo
+    public function invoice_for_attention(): BelongsTo
     {
         return $this->belongsTo(InvoiceForAttention::class);
     }

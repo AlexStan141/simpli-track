@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Bill;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class InvoiceTemplateListDashboard extends Component
+class BillList extends Component
 {
     use WithPagination;
     public array $selectedRegions = [];
@@ -90,16 +91,19 @@ class InvoiceTemplateListDashboard extends Component
 
     public function render()
     {
-        // $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'cities.name', 'statuses.name', 'due_days.day', 'users.first_name')
-        //     ->with(['landlord', 'status', 'due_day', 'invoices_for_attention', 'city', 'category', 'user'])
-        //     ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-        //     ->join('statuses', 'invoice_templates.status_id', '=', 'statuses.id')
-        //     ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-        //     ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-        //     ->where('user_id', Auth::id())
-        //     ->whereHas('region', function ($query) {
-        //         $query->whereIn('name', $this->selectedRegions);
-        //     });
+        $bills = Bill::select('bills.*', 'cities.name', 'due_days.day', 'users.first_name')
+            ->with(['invoice_template', 'invoice_template.due_day',
+            'invoice_template.invoice_for_attention', 'invoice_template.city',
+            'invoice_template.category', 'invoice_template.user'])
+            ->join('invoice_templates', 'invoice_templates.id', '=', 'bills.invoice_template_id')
+            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
+            ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
+            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+            ->where('user_id', Auth::id())->get();
+            // ->whereHas('invoice_template.region', function ($query) {
+            //     $query->whereIn('name', $this->selectedRegions);
+            // });
 
         // if ($this->selectedStatus !== 'All') {
         //     $invoice_templates->whereHas('status', function ($query) {
@@ -131,7 +135,9 @@ class InvoiceTemplateListDashboard extends Component
         // return view('livewire.invoice-template-list-dashboard', [
         //     'user_invoices' => $invoice_templates,
         // ]);
-        return view('livewire.invoice-template-list-dashboard');
+        return view('livewire.bill-list', [
+            'bills' => $bills
+        ]);
     }
 
     public function mount()

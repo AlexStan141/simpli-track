@@ -29,7 +29,7 @@
     <div class="min-h-screen bg-bodycolor flex flex-col">
         @include('layouts.navigation')
         <!-- Page Content -->
-        <main class="grow flex">
+        <main class="grow flex items-start">
             {{ $slot }}
         </main>
     </div>

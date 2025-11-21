@@ -15,6 +15,6 @@
                 @livewire('filter', ['type' => 'Category', 'values' => $category_names, 'selected_value' => $category_names[1]])
             </div>
         </div>
-            @livewire('invoice-template-list-dashboard')
+            @livewire('bill-list')
     </div>
 </x-app-layout>

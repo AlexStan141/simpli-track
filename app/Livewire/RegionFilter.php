@@ -14,7 +14,7 @@ class RegionFilter extends Component
         $this->dispatch('toggleRegion', [
             'selected' => $this->selected,
             'value' => $this->value
-        ])->to('invoice-template-list-dashboard');
+        ])->to('bill-list');
     }
 
     public function render()

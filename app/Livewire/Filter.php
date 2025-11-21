@@ -13,11 +13,11 @@ class Filter extends Component
     }
     public function updatedSelectedValue(){
         if($this->type === 'Status'){
-            $this->dispatch('statusChanged', ['statusValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
+            $this->dispatch('statusChanged', ['statusValue' => $this->selectedValue])->to('bill-list');
         } else if ($this->type === 'Location'){
-            $this->dispatch('cityChanged', ['cityValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
+            $this->dispatch('cityChanged', ['cityValue' => $this->selectedValue])->to('bill-list');
         } else {
-            $this->dispatch('categoryChanged', ['categoryValue' => $this->selectedValue])->to('invoice-template-list-dashboard');
+            $this->dispatch('categoryChanged', ['categoryValue' => $this->selectedValue])->to('bill-list');
         }
     }
     public function render()

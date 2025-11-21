@@ -10,7 +10,9 @@ class Bill extends Model
     /** @use HasFactory<\Database\Factories\BillFactory> */
     use HasFactory;
 
-    public function invoiceTemplate(){
+    protected $guarded = [];
+
+    public function invoice_template(){
         return $this->belongsTo(InvoiceTemplate::class);
     }
 
