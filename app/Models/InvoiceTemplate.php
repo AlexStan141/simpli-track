@@ -65,9 +65,4 @@ class InvoiceTemplate extends Model
     {
         return $this->hasMany(Bill::class);
     }
-
-    public function note()
-    {
-        return $this->hasOne(Note::class);
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Company;
 use App\Models\CompanyRegion;
 use App\Models\Region;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,9 @@ class RegionFilterList extends Component
 
     public function mount()
     {
-        $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
-                            ->where('selected', true)->get();
-        $regionIds = $companyRegions->pluck('region_id');
-        $regionNames = Region::whereIn('id', $regionIds)->pluck('name')->toArray();
+        $company = Company::all()->first();
+        $companyRegions = $company->regions->where('selected', true);
+        $regionNames = $companyRegions->pluck('name')->toArray();
         $this->allRegions = $regionNames;
         $this->selectedRegions = $this->allRegions;
     }

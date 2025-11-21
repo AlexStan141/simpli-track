@@ -11,8 +11,8 @@ class Currency extends Model
     /** @use HasFactory<\Database\Factories\CurrencyFactory> */
     use HasFactory;
 
-    public function companies(): HasMany {
-        return $this->hasMany(Company::class);
+    public function company() {
+        return $this->hasOne(Company::class);
     }
 
     public function invoiceTemplates(): HasMany {

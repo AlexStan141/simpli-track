@@ -58,12 +58,10 @@ class CompanySettings extends Component
         $company->display_invoice_amount = $this->displayInvoiceAmount;
         $company->save();
 
-        $companyRegions = CompanyRegion::where('company_id', $company->id)->get();
+        $companyRegions = Region::where('company_id', $company->id)->get();
         foreach ($companyRegions as $companyRegion) {
-            if (isset($companyRegion->selectedBeforeSave)) {
-                $companyRegion->selected = $companyRegion->selectedBeforeSave;
-                $companyRegion->save();
-            }
+            $companyRegion->selected = $companyRegion->selectedBeforeSave;
+            $companyRegion->save();
         }
 
         return redirect()->to(route('settings.company'))->with("success", "Settings updated successfully!");
@@ -71,9 +69,8 @@ class CompanySettings extends Component
 
     public function toggleRegion($region)
     {
-        $companyId = Auth::user()->company->id;
-        $regionId = Region::where('name', $region)->value('id');
-        $companyRegion = CompanyRegion::where('company_id', $companyId)->where('region_id', $regionId)->first();
+        $company = Auth::user()->company;
+        $companyRegion = Region::where('name', $region)->where('company_id', $company->id)->first();
         if (in_array($region, $this->existingRegions)) {
             $this->existingRegions = array_filter($this->existingRegions, function ($el) use ($region) {
                 return $el !== $region;
@@ -98,14 +95,11 @@ class CompanySettings extends Component
         $company = Auth::user()->company;
         $this->companyName = $company->name;
         $this->companyAddress = $company->address;
-        $companyRegions = CompanyRegion::where('company_id', Auth::user()->company->id)
-            ->where('selected', true)->get();
         $this->currencies = Currency::pluck('name', 'id');
         $this->defaultCurrency = Auth::user()->company->currency->id;
         $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
         $this->logo = $company->logo ?? null;
-        $regionIds = $companyRegions->pluck('region_id');
-        $regions = Region::whereIn('id', $regionIds)->get();
+        $regions = $company->regions->where('selected', true);
         $regionNames = $regions->pluck('name')->toArray();
         $this->existingRegions = $regionNames;
         $this->allRegions = Region::all()->pluck('name')->toArray();

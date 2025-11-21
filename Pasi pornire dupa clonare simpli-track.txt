@@ -1,0 +1,31 @@
+1.
+
+Am clonat proiectul
+Am sters containerul de pe Docker
+docker compose up
+composer install
+php artisan migrate //Nu functioneaza
+
+2. DB_PORT=<ce e inainte de : la MySQL container in docker>
+php artisan migrate //Functioneaza
+php artisan db:seed  //Cannot write to directory "public/storage/company_logos"
+
+3.
+
+mkdir -p public/storage/company_logos
+chmod -R 775 public/storage/company_logos
+php artisan db:seed // It works
+
+
+4. php artisan serve
+   npm run dev // 'vite' is not recognized as an internal or external command, operable program or batch file.
+   Solutie: npm install vite --save-dev
+
+
+5. No application encryption key has been specified. 
+
+php artisan key:generate
+Punerea ei in setarea APP_KEY
+APP_KEY=base64:<cheie>
+
+(Poti vedea cheia cu php artisan key:generate --show)

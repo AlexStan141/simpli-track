@@ -84,5 +84,8 @@
                 @endforeach
             </tbody>
         </table>
+        <nav class="pagination">
+            {{ $bills->onEachSide(1)->links('vendor.pagination.bootstrap-4') }}
+        </nav>
     @endif
 </div>

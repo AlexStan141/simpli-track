@@ -19,7 +19,7 @@ class CompanyFactory extends Factory
         return [
             'name' => fake()->name(),
             'display_invoice_amount' => fake()->boolean(),
-            'logo' => 'company_logos/' . fake()->image('public/storage/company_logos', 300, 300, null, false)
+            'logo' => null
         ];
     }
 }

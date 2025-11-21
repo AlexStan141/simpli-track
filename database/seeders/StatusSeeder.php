@@ -15,28 +15,36 @@ class StatusSeeder extends Seeder
     public function run(): void
     {
         Status::factory()->create([
-            'name' => 'Pending'
+            'name' => 'Pending',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Paid'
+            'name' => 'Paid',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Entered'
+            'name' => 'Entered',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Validate'
+            'name' => 'Validate',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Missing'
+            'name' => 'Missing',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Overdue'
+            'name' => 'Overdue',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Dispute'
+            'name' => 'Dispute',
+            'company_id' => 1
         ]);
         Status::factory()->create([
-            'name' => 'Reconcile'
+            'name' => 'Reconcile',
+            'company_id' => 1
         ]);
     }
 }

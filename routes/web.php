@@ -27,8 +27,7 @@ Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name(
 
 
 Route::get('/dashboard', function () {
-    $region_ids = Auth::user()->company->companyRegions->pluck('region_id');
-    $regions = Region::whereIn('id', $region_ids);
+    $regions = Auth::user()->company->regions;
     $region_names = $regions->pluck('name');
     $status_names = Status::pluck('name', 'id')->toArray();
     $city_names = City::pluck('name', 'id')->toArray();

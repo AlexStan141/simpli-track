@@ -65,7 +65,7 @@
             @endif
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 hidden">
             <x-input-label for="company_id" :value="__('Company')" class="text-white leading-[1rem]"/>
             <x-select-input id="company_id" label="" :values="$companies" defaultValue="{{ $companies[1] }}"
                 class="w-[300px]"></x-select-input>

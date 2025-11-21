@@ -14,13 +14,16 @@ class RegionSeeder extends Seeder
     public function run(): void
     {
         Region::factory()->create([
-            'name' => 'AMER'
+            'name' => 'AMER',
+            'company_id' => 1
         ]);
         Region::factory()->create([
-            'name' => 'EMEA'
+            'name' => 'EMEA',
+            'company_id' => 1
         ]);
         Region::factory()->create([
-            'name' => 'APAC'
+            'name' => 'APAC',
+            'company_id' => 1
         ]);
     }
 }

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->foreignId('currency_id')->constrained()->onDelete('cascade');
-            $table->foreignId('due_day_id')->constrained()->onDelete('cascade');;
-            $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('cascade');;
+            $table->foreignId('due_day_id')->constrained()->onDelete('cascade');
+            $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('cascade');
             $table->boolean('display_invoice_amount');
             $table->string('logo')->nullable();
             $table->timestamps();

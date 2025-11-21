@@ -19,4 +19,9 @@ class Bill extends Model
     public function status() {
         return $this->belongsTo(Status::class);
     }
+
+    public function note()
+    {
+        return $this->hasOne(Note::class);
+    }
 }

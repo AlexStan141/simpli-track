@@ -25,7 +25,6 @@ class EditInvoice extends Component
     public $from;
     public $categories;
     public $selected_category;
-    public $selected_status = 1;
     public $lease_no;
     public $amount;
     public $currencies;
@@ -106,7 +105,6 @@ class EditInvoice extends Component
             'selected_invoice_for_attention' => 'required',
             'selected_category' => 'required',
             'selected_user' => 'required',
-            'selected_status' => 'required',
             'selected_region' => 'required',
             'selected_country' => 'required',
             'selected_city' => 'required',
@@ -124,7 +122,6 @@ class EditInvoice extends Component
             'due_day_id' => $this->selected_due_day,
             'invoice_for_attention_id' => $this->selected_invoice_for_attention,
             'category_id' => $this -> selected_category,
-            "status_id" => $this->selected_status,
             "user_id" => $this->selected_user,
             "region_id" => $this->selected_region,
             "country_id" => $this->selected_country,

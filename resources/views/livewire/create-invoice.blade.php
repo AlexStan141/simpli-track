@@ -103,7 +103,7 @@
                     Due date
                     <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
                         wire:model="selected_due_day" wire:change="updateLastTimePaid"
-                        defaultValue="{{ $due_days->first() }}" />
+                        defaultValue="{{ Auth::user()->company->due_day_id }}" />
                     of each month
                     @error('selected_due_day')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -113,7 +113,7 @@
                     Flag invoices for attention
                     <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label="" width="200px"
                         wire:model="selected_invoice_for_attention"
-                        defaultValue="{{ $invoices_for_attention->first() }}" />
+                        defaultValue="{{ Auth::user()->company->invoices_for_attention_id }}" />
                     before due date
                     @error('selected_invoice')
                         <span class="text-red-500 text-sm">{{ $message }}</span>

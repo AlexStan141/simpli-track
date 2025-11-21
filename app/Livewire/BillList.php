@@ -138,8 +138,8 @@ class BillList extends Component
 
     public function mount()
     {
-        $regionIds = CompanyRegion::where('company_id', Auth::user()->company->id)->where('selected', 1)->pluck('region_id');
-        $regions = Region::whereIn('id', $regionIds)->get();
+        $company = Company::all()->first();
+        $regions = $company->regions->where('selected', true);
         $this->selectedRegions = $regions->pluck('name')->toArray();
         $this->selectedStatus = 'All';
         $this->selectedCity = 'All';

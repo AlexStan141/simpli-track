@@ -15,11 +15,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $companies = Company::all();
+        $company = Company::all()->first();
 
         for ($i = 0; $i < 4; $i++) {
-
-            $company = $companies->pop();
 
             User::factory(10)->create([
                 'role_id' => Role::where('name', 'User')->first()->id,
