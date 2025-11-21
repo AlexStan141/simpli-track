@@ -94,32 +94,32 @@ class BillList extends Component
         $bills = Bill::select('bills.*', 'cities.name', 'due_days.day', 'users.first_name')
             ->with(['invoice_template', 'invoice_template.due_day',
             'invoice_template.invoice_for_attention', 'invoice_template.city',
-            'invoice_template.category', 'invoice_template.user'])
+            'invoice_template.category', 'invoice_template.user', 'invoice_template.region'])
             ->join('invoice_templates', 'invoice_templates.id', '=', 'bills.invoice_template_id')
             ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
             ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
             ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
             ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-            ->where('user_id', Auth::id())->get();
-            // ->whereHas('invoice_template.region', function ($query) {
-            //     $query->whereIn('name', $this->selectedRegions);
-            // });
+            ->where('user_id', Auth::id())
+            ->whereHas('invoice_template.region', function ($query) {
+                 $query->whereIn('name', $this->selectedRegions);
+            });
 
-        // if ($this->selectedStatus !== 'All') {
-        //     $invoice_templates->whereHas('status', function ($query) {
-        //         $query->where('name', '=', $this->selectedStatus);
-        //     });
-        // }
-        // if ($this->selectedCity !== 'All') {
-        //     $invoice_templates->whereHas('city', function ($query) {
-        //         $query->where('name', '=', $this->selectedCity);
-        //     });
-        // }
-        // if ($this->selectedCategory !== 'All') {
-        //     $invoice_templates->whereHas('category', function ($query) {
-        //         $query->where('name', '=', $this->selectedCategory);
-        //     });
-        // }
+        if ($this->selectedStatus !== 'All') {
+             $bills->whereHas('status', function ($query) {
+                $query->where('name', '=', $this->selectedStatus);
+             });
+        }
+        if ($this->selectedCity !== 'All') {
+             $bills->whereHas('invoice_template.city', function ($query) {
+                $query->where('name', '=', $this->selectedCity);
+             });
+        }
+        if ($this->selectedCategory !== 'All') {
+             $bills->whereHas('invoice_template.category', function ($query) {
+                $query->where('name', '=', $this->selectedCategory);
+             });
+        }
 
         // if ($this->sortField == 'assignee') {
         //     $invoice_templates = $invoice_templates
@@ -130,11 +130,7 @@ class BillList extends Component
         //         ->orderBy($this->sortField, $this->sortType)
         //         ->paginate(5);
         // }
-
-
-        // return view('livewire.invoice-template-list-dashboard', [
-        //     'user_invoices' => $invoice_templates,
-        // ]);
+        $bills = $bills->paginate(5);
         return view('livewire.bill-list', [
             'bills' => $bills
         ]);
@@ -145,8 +141,8 @@ class BillList extends Component
         $regionIds = CompanyRegion::where('company_id', Auth::user()->company->id)->where('selected', 1)->pluck('region_id');
         $regions = Region::whereIn('id', $regionIds)->get();
         $this->selectedRegions = $regions->pluck('name')->toArray();
-        $this->selectedStatus = Status::pluck('name')->first();
-        $this->selectedCity = City::pluck('name')->first();
-        $this->selectedCategory = Category::pluck('name')->first();
+        $this->selectedStatus = 'All';
+        $this->selectedCity = 'All';
+        $this->selectedCategory = 'All';
     }
 }

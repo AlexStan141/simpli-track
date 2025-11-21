@@ -12,7 +12,7 @@
                 <x-setting-link link="/settings/statuses" :active="$page === 'Statuses'">Statuses</x-setting-link>
                 <x-setting-link link="/settings/locations" :active="$page === 'Regions & Locations'">Regions & Locations</x-setting-link>
             </ul>
-            <div class="h-[820px]">
+            <div class="pb-2">
                 @if ($page === 'Company')
                     <livewire:company-settings />
                 @elseif($page === 'Users & Roles')

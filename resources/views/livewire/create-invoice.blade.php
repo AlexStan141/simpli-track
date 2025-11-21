@@ -48,7 +48,8 @@
                         <x-custom-input id="amount" label="Amount" width="150px" type="number"
                             wire:model="amount" />
                         <x-select-input :values="$currencies" width="200px" id="user_id" label=""
-                            wire:model="selected_currency" defaultValue="{{ $currencies->first() }}"></x-select-input>
+                            wire:model="selected_currency"
+                            defaultValue="{{ Auth::user()->company->currency->name }}"></x-select-input>
                     </div>
                     @error('amount')
                         <span class="text-red-500 text-sm">{{ $message }}</span>

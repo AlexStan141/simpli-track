@@ -36,9 +36,9 @@ Route::get('/dashboard', function () {
     $category_names = Category::where('company_id', $company_id)->pluck('name', 'id')->toArray();
     return view('dashboard', [
         'region_names' => $region_names,
-        'status_names' => [...$status_names, 'All'],
-        'city_names' => [...$city_names, 'All'],
-        'category_names' => [...$category_names, 'All']
+        'status_names' => ['All', ...$status_names],
+        'city_names' => ['All', ...$city_names],
+        'category_names' => ['All', ...$category_names]
 
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -53,7 +53,7 @@ Route::get('/bills', function () {
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
     $new_bills = false;
-    if ($today == 20) {
+    if ($today == 21) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;
@@ -78,7 +78,7 @@ Route::get('/bills', function () {
         }
     } else {
         return view('bill.index', [
-            'message' => 'NBills already generated for this month. Come back on 1st day of the next month.',
+            'message' => 'Bills already generated for this month. Come back on 1st day of the next month.',
             'generated' => false
         ]);
     }
@@ -109,7 +109,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::match(['GET', 'POST'], '/settings/company', function () {
         return view('settings', ['page' => 'Company']);
-    });
+    })->name('settings.company');
     Route::get('/settings/users', function () {
         return view('settings', ['page' => 'Users & Roles']);
     })->name('settings.users');

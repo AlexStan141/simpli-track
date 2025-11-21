@@ -6,6 +6,7 @@ use Livewire\Component;
 
 class RegionFilter extends Component
 {
+    
     public $selected;
     public $value;
 

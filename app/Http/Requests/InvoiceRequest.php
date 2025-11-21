@@ -34,7 +34,7 @@ class InvoiceRequest extends FormRequest
             'last_time_paid' => 'required',
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['Monthly', 'Quarterly'])],
-            'lease_no' => ['required', 'string', 'max:50'],
+            'lease_no' => ['nullable', 'string', 'max:50'],
             'amount' => ['required', 'integer', 'min:100', 'max:5000'],
         ];
     }

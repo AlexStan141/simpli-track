@@ -27,7 +27,7 @@ class CompanySettings extends Component
     public function updatedPhoto()
     {
         $this->validate([
-            'logo' => 'image|max:204800',
+            'logo' => 'image|mimes:jpg,jpeg,png|max:204800',
         ]);
     }
 
@@ -37,15 +37,19 @@ class CompanySettings extends Component
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
             'displayInvoiceAmount' => 'required|boolean',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:204800'
         ]);
 
         $company = Auth::user()->company;
 
         if ($this->logo instanceof UploadedFile) {
+            $this->validate([
+                'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:204800',
+            ]);
             $path = $this->logo->store('company_logos', 'public');
-            $this->logo = $path;
             $company->logo = $path;
+        } else {
+            // deja e path salvat, nu mai validezi ca imagine
+            $company->logo = $this->logo;
         }
 
         $company->name = $this->companyName;
@@ -61,6 +65,8 @@ class CompanySettings extends Component
                 $companyRegion->save();
             }
         }
+
+        return redirect()->to(route('settings.company'))->with("success", "Settings updated successfully!");
     }
 
     public function toggleRegion($region)

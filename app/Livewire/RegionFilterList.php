@@ -21,7 +21,7 @@ class RegionFilterList extends Component
                 return $el !== $payload['value'];
             });
         } else {
-            $this->selectedRegions[] = $$payload['value'];
+            $this->selectedRegions[] = $payload['value'];
         }
     }
 

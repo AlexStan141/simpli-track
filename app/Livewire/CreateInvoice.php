@@ -119,7 +119,7 @@ class CreateInvoice extends Component
         $this->selected_invoice_for_attention = $company->invoice_for_attention_id;
 
         $this->currencies = Currency::pluck('name', 'id');
-        $this->selected_currency = Auth::user()->company->currency->id;
+        $this->selected_currency = Auth::user()->company->currency_id;
 
         $date = new DateTime();
         $date->modify('-1 month');
@@ -143,7 +143,7 @@ class CreateInvoice extends Component
             'last_time_paid' => 'required',
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
-            'lease_no' => ['required', 'string', 'max:50'],
+            'lease_no' => ['nullable', 'string', 'max:50'],
             'amount' => ['required', 'integer', 'min:100', 'max:5000'],
         ]);
 

@@ -1,5 +1,8 @@
 <div>
     <h3 class="ml-[51px] mt-[49px] font-inter text-[20px] h-[15px]">Company</h3>
+    @if(session()->has('success'))
+        <p class="mt-4 ml-4 p-2 bg-green-300">{{ session('success') }}</p>
+    @endif
     <form method="POST" enctype="multipart/form-data" wire:submit.prevent="save" class="flex flex-col">
         @csrf
         <div class="flex gap-[165px]">
