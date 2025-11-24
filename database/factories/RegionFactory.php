@@ -19,7 +19,7 @@ class RegionFactory extends Factory
         return [
             'name' => fake()->name(),
             'selected' => true,
-            'selectedBeforeSave' => true
+            'selected_before_save' => true
         ];
     }
 }

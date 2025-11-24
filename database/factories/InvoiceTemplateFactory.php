@@ -23,7 +23,6 @@ class InvoiceTemplateFactory extends Factory
             'frequency' => fake()->randomElement(InvoiceTemplate::$frequencies),
             'amount' => fake()->numberBetween(100,3000),
             'lease_no' => 'DHQ55 #' . Carbon::now()->addDays(rand(0, 365))->format('Y/m/d'),
-            'last_time_paid' => fake()->dateTimeBetween('-1 month -3 days', 'now')
         ];
     }
 }

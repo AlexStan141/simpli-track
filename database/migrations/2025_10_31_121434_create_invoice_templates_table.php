@@ -35,7 +35,6 @@ return new class extends Migration
             $table->foreignId('country_id')->constrained()->onDelete('cascade');
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
             $table->foreignId('landlord_id')->constrained()->onDelete('cascade');
-            $table->date('last_time_paid')->nullable();
             $table->timestamps();
         });
     }

@@ -21,6 +21,8 @@
                     <livewire:priority-settings />
                 @elseif($page == 'Categories')
                     <livewire:categories-settings />
+                @elseif($page == 'Statuses')
+                    <livewire:statuses-settings />
                 @endif
             </div>
         </div>

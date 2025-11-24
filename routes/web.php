@@ -29,7 +29,7 @@ Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name(
 Route::get('/dashboard', function () {
     $regions = Auth::user()->company->regions;
     $region_names = $regions->pluck('name');
-    $status_names = Status::pluck('name', 'id')->toArray();
+    $status_names = Status::where('company_id', Auth::user()->company_id)->pluck('name', 'id')->toArray();
     $city_names = City::pluck('name', 'id')->toArray();
     $company_id = Auth::user()->company_id;
     $category_names = Category::where('company_id', $company_id)->pluck('name', 'id')->toArray();
@@ -52,7 +52,7 @@ Route::get('/bills', function () {
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
     $new_bills = false;
-    if ($today == 21) {
+    if ($today == 1) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;

@@ -11,6 +11,8 @@ class Status extends Model
     /** @use HasFactory<\Database\Factories\StatusFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function bills(){
         return $this->hasMany(Bill::class);
     }

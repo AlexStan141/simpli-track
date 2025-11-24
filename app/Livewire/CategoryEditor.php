@@ -37,7 +37,9 @@ class CategoryEditor extends Component
 
     public function deleteCategory()
     {
-        Category::find($this->categoryId)?->delete();
+        $category = Category::find($this->categoryId);
+        $category->company_id = null;
+        $category->save();
 
         $this->dispatch('categoryDeleted');
     }

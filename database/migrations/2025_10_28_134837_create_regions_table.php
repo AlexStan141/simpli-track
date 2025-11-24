@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('selected');
-            $table->boolean('selectedBeforeSave');
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->boolean('selected_before_save');
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
