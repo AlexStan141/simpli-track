@@ -10,6 +10,8 @@ class Note extends Model
     /** @use HasFactory<\Database\Factories\NoteFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function bill(){
         return $this->belongsTo(Bill::class);
     }

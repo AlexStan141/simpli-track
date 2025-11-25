@@ -60,7 +60,7 @@ class CompanySettings extends Component
 
         $companyRegions = Region::where('company_id', $company->id)->get();
         foreach ($companyRegions as $companyRegion) {
-            $companyRegion->selected = $companyRegion->selectedBeforeSave;
+            $companyRegion->selected = $companyRegion->selected_before_save;
             $companyRegion->save();
         }
 
@@ -75,11 +75,11 @@ class CompanySettings extends Component
             $this->existingRegions = array_filter($this->existingRegions, function ($el) use ($region) {
                 return $el !== $region;
             });
-            $companyRegion->selectedBeforeSave = false;
+            $companyRegion->selected_before_save = false;
             $companyRegion->save();
         } else {
             $this->existingRegions[] = $region;
-            $companyRegion->selectedBeforeSave = true;
+            $companyRegion->selected_before_save = true;
             $companyRegion->save();
         }
     }

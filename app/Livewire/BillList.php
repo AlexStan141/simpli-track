@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\CompanyRegion;
 use App\Models\Country;
 use App\Models\InvoiceTemplate;
+use App\Models\Note;
 use App\Models\Region;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;

@@ -2,6 +2,7 @@
     use App\Helpers\DateHelpers;
 @endphp
 
+
 <div>
     @if (count($bills) == 0)
         <p>No bills for this moment</p>
@@ -76,7 +77,9 @@
                             {{ DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) }}
                         </td>
                         <td class="w-[171px] flex gap-2" >
-                            <img src="{{ asset('images/social.png') }}" alt="call">
+                            <a href="{{ route('note.create') }}">
+                                <img src="{{ asset('images/social.png') }}" alt="call">
+                            </a>
                             <span>call</span>
                         </td>
                         <td class="w-[205px]">

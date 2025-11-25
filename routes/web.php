@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InvoiceTemplateController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Request;
 use App\Models\Category;
 use App\Models\City;
@@ -16,6 +17,7 @@ use App\Http\Controllers\UploadController;
 use App\Livewire\CompanySettings;
 use App\Models\Bill;
 use App\Models\InvoiceTemplate;
+use App\Models\Note;
 
 Route::get('/company-settings', CompanySettings::class)->name('company.settings');
 Route::get('/', function () {
@@ -57,10 +59,14 @@ Route::get('/bills', function () {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;
                 $day = $invoice_template->due_day_id;
-                Bill::create([
+                $bill = Bill::create([
                     'invoice_template_id' => $invoice_template->id,
                     'status_id' => Status::where('name', 'Pending')->first()->id,
                     'due_date' => date_create($this_year . '-' . $this_month . '-' . $day)
+                ]);
+                Note::create([
+                    'bill_id' => $bill->id,
+                    'message' => ""
                 ]);
             }
         }
@@ -83,6 +89,7 @@ Route::get('/bills', function () {
     }
 });
 
+//Route::put('/notes/{note_id}', )
 
 Route::get('/invoices', [InvoiceTemplateController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('invoice.index');
@@ -126,6 +133,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     })->name('settings.locations');
 });
 
-
+Route::get('/notes/create', [NoteController::class, 'create'])
+    ->middleware(['auth', 'verified'])->name('note.create');
 
 require __DIR__ . '/auth.php';
