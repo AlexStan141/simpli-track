@@ -49,3 +49,7 @@
 .pagination .hidden div:first-child{
     display: none;
 }
+
+.edit-input{
+    grid-column: 1 / span 2;
+}

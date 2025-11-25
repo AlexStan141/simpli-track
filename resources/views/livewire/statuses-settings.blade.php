@@ -24,7 +24,6 @@
                 ],
                 key($status->id)
             )
-
         @empty
         @endforelse
     </div>

@@ -23,6 +23,8 @@
                     <livewire:categories-settings />
                 @elseif($page == 'Statuses')
                     <livewire:statuses-settings />
+                @else
+                    <livewire:location-settings />
                 @endif
             </div>
         </div>

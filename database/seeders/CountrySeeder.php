@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\Country;
 use App\Models\Region;
 use Database\Factories\CountryFactory;
@@ -20,7 +21,8 @@ class CountrySeeder extends Seeder
         for($i = 0; $i < 3; $i++){
             $region = $regions->pop();
             Country::factory(3)->create([
-                'region_id' => $region->id
+                'region_id' => $region->id,
+                'company_id' => Company::all()->first()->id
             ]);
         }
     }

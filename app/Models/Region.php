@@ -12,6 +12,8 @@ class Region extends Model
     /** @use HasFactory<\Database\Factories\RegionFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function countries(): HasMany{
         return $this->hasMany(Country::class);
     }

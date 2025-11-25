@@ -12,6 +12,8 @@ class Country extends Model
     /** @use HasFactory<\Database\Factories\CountryFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function region(): BelongsTo{
         return $this->belongsTo(Region::class);
     }

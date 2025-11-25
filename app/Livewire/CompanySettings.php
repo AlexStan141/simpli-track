@@ -102,6 +102,6 @@ class CompanySettings extends Component
         $regions = $company->regions->where('selected', true);
         $regionNames = $regions->pluck('name')->toArray();
         $this->existingRegions = $regionNames;
-        $this->allRegions = Region::all()->pluck('name')->toArray();
+        $this->allRegions = Region::all()->where('company_id', $company->id)->pluck('name')->toArray();
     }
 }
