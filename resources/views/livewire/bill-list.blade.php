@@ -10,7 +10,7 @@
             <thead>
                 <tr class="bg-formgray w-full h-[56px] border">
                     <th class="w-[62px]"></th>
-                    <th class="w-[178px]">
+                    <th class="w-[196px]">
                         <div class="flex justify-between">
                             Location
                             <a href="#">
@@ -18,7 +18,7 @@
                             </a>
                         </div>
                     </th>
-                    <th>
+                    <th class="w-[200px]">
                         <div class="flex justify-between">
                             Status
                             <a href="#">
@@ -26,7 +26,7 @@
                             </a>
                         </div>
                     </th>
-                    <th>
+                    <th class="w-[225px]">
                         <div class="flex justify-between">
                             Due Date
                             <a href="#">
@@ -34,7 +34,7 @@
                             </a>
                         </div>
                     </th>
-                    <th>
+                    <th class="w-[171px]">
                         <div class="flex justify-between">
                             Notes
                             <a href="#">
@@ -42,7 +42,7 @@
                             </a>
                         </div>
                     </th>
-                    <th>
+                    <th class="w-[205px]">
                         <div class="flex justify-between">
                             Assignee
                             <a href="#">
@@ -50,7 +50,7 @@
                             </a>
                         </div>
                     </th>
-                    <th>
+                    <th class="w-[200px]">
                         <div class="flex justify-between">
                             Last Updated
                             <a href="#">
@@ -70,16 +70,19 @@
                                 </a>
                             </div>
                         </td>
-                        <td class="w-[178px]">{{ $bill->invoice_template->city->name }}</td>
+                        <td class="w-[196px]">{{ $bill->invoice_template->city->name }}</td>
                         <td class="w-[200px]">{{ $bill->status->name }}</td>
-                        <td class="w-[200px]">
+                        <td class="w-[225px]">
                             {{ DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) }}
                         </td>
-                        <td class="w-[184px]"></td>
-                        <td class="w-[200px]">
+                        <td class="w-[171px] flex gap-2" >
+                            <img src="{{ asset('images/social.png') }}" alt="call">
+                            <span>call</span>
+                        </td>
+                        <td class="w-[205px]">
                             {{ $bill->invoice_template->user->first_name . ' ' . $bill->invoice_template->user->last_name }}
                         </td>
-                        <td class="w-[184px]">{{ $bill->updated_at }}</td>
+                        <td class="w-[200px]">{{ $bill->updated_at }}</td>
                     </tr>
                 @endforeach
             </tbody>

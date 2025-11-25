@@ -50,6 +50,6 @@
     display: none;
 }
 
-.edit-input{
-    grid-column: 1 / span 2;
+.simpli-track-input{
+    @apply bg-editprofileinput rounded-[8px] border border-formgray
 }

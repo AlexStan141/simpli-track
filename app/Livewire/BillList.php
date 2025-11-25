@@ -53,7 +53,9 @@ class BillList extends Component
         'toggleRegion' => 'handleToggle',
         'statusChanged' => 'handleStatus',
         'cityChanged' => 'handleCity',
-        'categoryChanged' => 'handleCategory'
+        'categoryChanged' => 'handleCategory',
+        'category_list_changed' => 'refresh_bill_list'
+
     ];
     public function handleToggle($payload)
     {
@@ -69,6 +71,52 @@ class BillList extends Component
             }
         }
         $this->render();
+    }
+
+    public function refresh_bill_list(){
+        $bills = Bill::select('bills.*', 'cities.name', 'due_days.day', 'users.first_name')
+            ->with(['invoice_template', 'invoice_template.due_day',
+            'invoice_template.invoice_for_attention', 'invoice_template.city',
+            'invoice_template.category', 'invoice_template.user', 'invoice_template.region', 'status', 'status.company'])
+            ->join('invoice_templates', 'invoice_templates.id', '=', 'bills.invoice_template_id')
+            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
+            ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
+            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+            ->where('user_id', Auth::id())
+            ->whereHas('invoice_template.region', function ($query) {
+                 $query->whereIn('name', $this->selectedRegions);
+            })
+            ->whereHas('status.company', function($query){
+                $query->whereNotNull('id');
+            });
+
+        if ($this->selectedStatus !== 'All') {
+             $bills->whereHas('status', function ($query) {
+                $query->where('name', '=', $this->selectedStatus);
+             });
+        }
+        if ($this->selectedCity !== 'All') {
+             $bills->whereHas('invoice_template.city', function ($query) {
+                $query->where('name', '=', $this->selectedCity);
+             });
+        }
+        if ($this->selectedCategory !== 'All') {
+             $bills->whereHas('invoice_template.category', function ($query) {
+                $query->where('name', '=', $this->selectedCategory);
+             });
+        }
+
+        // if ($this->sortField == 'assignee') {
+        //     $invoice_templates = $invoice_templates
+        //         ->orderByRaw($this->sortField, $this->sortType)
+        //         ->paginate(5);
+        // } else {
+        //     $invoice_templates = $invoice_templates
+        //         ->orderBy($this->sortField, $this->sortType)
+        //         ->paginate(5);
+        // }
+        $bills = $bills->paginate(5);
     }
 
     public function handleStatus($payload)
@@ -94,7 +142,7 @@ class BillList extends Component
         $bills = Bill::select('bills.*', 'cities.name', 'due_days.day', 'users.first_name')
             ->with(['invoice_template', 'invoice_template.due_day',
             'invoice_template.invoice_for_attention', 'invoice_template.city',
-            'invoice_template.category', 'invoice_template.user', 'invoice_template.region'])
+            'invoice_template.category', 'invoice_template.user', 'invoice_template.region', 'status', 'status.company'])
             ->join('invoice_templates', 'invoice_templates.id', '=', 'bills.invoice_template_id')
             ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
             ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
@@ -103,7 +151,11 @@ class BillList extends Component
             ->where('user_id', Auth::id())
             ->whereHas('invoice_template.region', function ($query) {
                  $query->whereIn('name', $this->selectedRegions);
+            })
+            ->whereHas('status.company', function($query){
+                $query->whereNotNull('id');
             });
+
 
         if ($this->selectedStatus !== 'All') {
              $bills->whereHas('status', function ($query) {

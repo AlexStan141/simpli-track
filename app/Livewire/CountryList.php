@@ -8,23 +8,26 @@ use Livewire\Component;
 
 class CountryList extends Component
 {
-    protected $listeners = ['region_list_updated' => 'render'];
+    protected $listeners = ['region_list_updated' => 'refresh', 'country_list_updated' => 'refresh'];
     public $regions;
     public $selected_region_id;
     public $countries;
-    public function render()
+
+    public function trigger_region_update(){
+        $this->countries = Country::where('region_id', $this->selected_region_id)
+                            ->whereNotNull('company_id')->get();
+    }
+
+    public function refresh()
     {
         $this->regions = Region::pluck('name', 'id');
+        $this->selected_region_id = Region::all()->first()->id;
         $this->countries = Country::where('region_id', $this->selected_region_id)->get();
+    }
+
+    public function render()
+    {
         return view('livewire.country-list');
-    }
-
-    public function triggerRegionFilterUpdate(){
-        $this->updatedRegion();
-    }
-
-    public function updatedRegion(){
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
     }
 
     public function mount(){

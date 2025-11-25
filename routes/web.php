@@ -52,7 +52,7 @@ Route::get('/bills', function () {
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
     $new_bills = false;
-    if ($today == 1) {
+    if ($today == 25) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;

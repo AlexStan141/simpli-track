@@ -21,7 +21,7 @@ class AddCountryForm extends Component
             'company_id' => Company::all()->first()->id
         ]);
         $this->countryToAdd = '';
-        $this->dispatch('renderCountries');
+        $this->dispatch('country_list_updated');
     }
     public function render()
     {
