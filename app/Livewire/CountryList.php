@@ -8,12 +8,13 @@ use Livewire\Component;
 
 class CountryList extends Component
 {
-    protected $listeners = ['renderCountries', 'render'];
+    protected $listeners = ['region_list_updated' => 'render'];
     public $regions;
     public $selected_region_id;
     public $countries;
     public function render()
     {
+        $this->regions = Region::pluck('name', 'id');
         $this->countries = Country::where('region_id', $this->selected_region_id)->get();
         return view('livewire.country-list');
     }

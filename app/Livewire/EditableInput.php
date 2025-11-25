@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Country;
+use App\Models\Region;
 use Livewire\Component;
 
 class EditableInput extends Component
@@ -32,6 +33,12 @@ class EditableInput extends Component
             $country->name = $this->new_value;
             $country->save();
         }
+        else if($this->role == 'region_settings'){
+            $region = Region::where('name', $this->old_value)->first();
+            $region->name = $this->new_value;
+            $region->save();
+            $this->dispatch('region_list_updated');
+        }
         $this->old_value = $this->new_value;
         $this->edit_mode = false;
     }
@@ -39,8 +46,15 @@ class EditableInput extends Component
     public function deleteInput()
     {
         $this->deleted = true;
-        $country = Country::where('name', $this->old_value)->first();
-        $country->delete();
+        if($this->role == 'country_settings'){
+            $country = Country::where('name', $this->old_value)->first();
+            $country->delete();
+        }
+        else if($this->role == 'region_settings'){
+            $region = Region::where('name', $this->old_value)->first();
+            $region->delete();
+            $this->dispatch('region_list_updated');
+        }
     }
 
     public function render()

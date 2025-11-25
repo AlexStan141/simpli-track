@@ -9,6 +9,7 @@ use Livewire\Component;
 
 class AddCountryForm extends Component
 {
+    protected $listeners = ['region_list_updated' => 'render'];
     public $regions;
     public $selected_region_id;
     public $countryToAdd;
@@ -24,6 +25,7 @@ class AddCountryForm extends Component
     }
     public function render()
     {
+        $this->regions = Region::pluck('name', 'id');
         return view('livewire.add-country-form');
     }
     public function mount()
