@@ -15,7 +15,7 @@ class AddStatusForm extends Component
         Status::create([
             'name' => $this->statusToAdd,
             'company_id' => Company::all()->first()->id,
-            'color' => $this->statusColorToAdd,
+            'color' => $this->statusColorToAdd ?? sprintf('#%06X', 0),
         ]);
         $this->statusToAdd = '';
         $this->dispatch('status_list_updated');

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -32,7 +33,6 @@ class UserSettings extends Component
             ],
             'confirmPassword' => ['required', 'same:password'],
             'email' => ['required', 'email'],
-            'role' => ['required', 'in:Admin,Portofolio Manager,Director,Lease Admin']
         ]);
 
         User::create([
@@ -42,7 +42,7 @@ class UserSettings extends Component
             'phone' => '',
             'password' => $this->password,
             'company_id' => Auth::user()->company->id,
-            'role' => $this->role
+            'role_id' => $this->role
         ]);
 
         return back()->with('success', 'User saved successfully');
@@ -55,6 +55,7 @@ class UserSettings extends Component
 
     public function mount()
     {
-        $this->roles = ['Admin', 'Portofolio Manager', 'Lease Admin', 'Director'];
+        $this->roles = Role::pluck('name', 'id');
+        $this->role = Role::all()->first()->id;
     }
 }

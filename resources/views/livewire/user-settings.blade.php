@@ -46,15 +46,13 @@
                 @enderror
             </div>
             <div class="relative">
-                <x-input-label>User Role</x-input-label>
-                <x-text-input id="role" class="setting-text-input w-[450px]" type="text" name="role"
-                    wire:model="role" required />
+                <x-input-label for="role" :value="__('Role')" class="text-white leading-[1rem]" />
+                <x-select-input id="role" label="" :values="$roles" defaultValue="{{ $roles[1] }}"
+                    class="w-[300px]" wire:model="role"></x-select-input>
                 <p class="absolute right-[63px] top-0">hierarchy</p>
                 <p class="text-[10px] mt-[11px] italic">Admin (all), Portfolio Manager (regional), Lease Admin (input),
                     Director (summary)</p>
-                @error('role')
-                    <p class="text-red-500">{{ $message }}</p>
-                @enderror
+                <x-input-error :messages="$errors->get('role')" class="mt-2" />
             </div>
         </div>
         <div class="flex justify-center">

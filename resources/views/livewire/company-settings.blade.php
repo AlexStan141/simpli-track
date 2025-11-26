@@ -13,7 +13,7 @@
                     <x-text-input id="name" class="setting-text-input w-[590px]" type="text" name="name"
                         wire:model="companyName" :value="$companyName" required />
                     @error('companyName')
-                        <p>{{ $message }}</p>
+                        <p class="text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -23,7 +23,7 @@
                     <x-text-input id="address" class="setting-text-input w-[590px]" type="text" name="address"
                         wire:model="companyAddress" :value="$companyAddress" required />
                     @error('companyAddress')
-                        <p>{{ $message }}</p>
+                        <p class="text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="ml-9 mt-[50px] flex flex-col gap-2">
@@ -50,14 +50,14 @@
                         :values="$currencies" wire:model="defaultCurrency"
                         defaultValue="{{ $defaultCurrency }}"></x-select-input>
                     @error('defaultCurrency')
-                        <p>{{ $message }}</p>
+                        <p class="text-red-500">{{ $message }}</p>
                     @enderror
                     <div class="flex items-center gap-[22px]">
                         <input type="checkbox" id="display_invoice_amount" name="display_invoice_amount"
                             wire:model="displayInvoiceAmount" :checked="{{ $displayInvoiceAmount }}"></input>
                         <x-input-label for="display_invoice_amount">Display Invoice Amount</x-input-label>
                         @error('displayInvoiceAmount')
-                            <p>{{ $message }}</p>
+                            <p class="text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                         </div>
                     @endif
                     @error('logo')
-                        <p>{{ $message }}</p>
+                        <p class="text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
