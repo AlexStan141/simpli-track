@@ -133,7 +133,23 @@ Route::middleware(['auth', 'admin'])->group(function () {
     })->name('settings.locations');
 });
 
-Route::get('/notes/create', [NoteController::class, 'create'])
+Route::get('/notes/{bill_id}/create', [NoteController::class, 'create'])
     ->middleware(['auth', 'verified'])->name('note.create');
+
+Route::post('/notes/{bill_id}', [NoteController::class, 'store'])
+    ->middleware(['auth', 'verified'])->name('note.store');
+
+Route::get('/notes/{bill_id}', [NoteController::class, 'show'])
+    ->middleware(['auth', 'verified'])->name('note.show');
+
+Route::get('/notes/{bill_id}/edit', [NoteController::class, 'edit'])
+    ->middleware(['auth', 'verified'])->name('note.edit');
+
+Route::put('/notes/{bill_id}', [NoteController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('note.update');
+
+Route::delete('/notes/{bill_id}', [NoteController::class, 'delete'])
+    ->middleware(['auth', 'verified'])->name('note.destroy');
+
 
 require __DIR__ . '/auth.php';

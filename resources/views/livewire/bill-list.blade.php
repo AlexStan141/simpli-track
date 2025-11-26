@@ -4,6 +4,7 @@
 
 
 <div>
+    {!! $modal ?? '' !!}
     @if (count($bills) == 0)
         <p>No bills for this moment</p>
     @else
@@ -77,8 +78,9 @@
                             {{ DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) }}
                         </td>
                         <td class="w-[171px] flex gap-2" >
-                            <a href="{{ route('note.create') }}">
-                                <img src="{{ asset('images/social.png') }}" alt="call">
+                            <a href="{{ $bill->note ? route('note.show', ['bill_id' => $bill->id])
+                                                    : route('note.create', ['bill_id' => $bill->id])}}">
+                                <img src="{{  $bill->note ? asset('images/selected_social.png') : asset('images/social.png') }}" alt="call">
                             </a>
                             <span>call</span>
                         </td>
