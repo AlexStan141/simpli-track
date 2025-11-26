@@ -43,7 +43,7 @@
                     <th class="w-[225px]">
                         <div class="flex justify-between">
                             Due Date
-                            <a href="#" wire:click.prevent="sort('due_days.day')">
+                            <a href="#" wire:click.prevent="sort('due_days.id')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>

@@ -108,15 +108,13 @@ class BillList extends Component
              });
         }
 
-        // if ($this->sortField == 'assignee') {
-        //     $invoice_templates = $invoice_templates
-        //         ->orderByRaw($this->sortField, $this->sortType)
-        //         ->paginate(5);
-        // } else {
-        //     $invoice_templates = $invoice_templates
-        //         ->orderBy($this->sortField, $this->sortType)
-        //         ->paginate(5);
-        // }
+        if ($this->sortField == 'assignee') {
+            $bills = $bills
+                ->orderByRaw($this->sortField, $this->sortType);
+        } else {
+            $bills = $bills
+                ->orderBy($this->sortField, $this->sortType);
+        }
         $bills = $bills->paginate(5);
     }
 
@@ -149,6 +147,7 @@ class BillList extends Component
             ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
             ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
             ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+            ->join('statuses', 'status_id', '=', 'statuses.id')
             ->where('user_id', Auth::id())
             ->whereHas('invoice_template.region', function ($query) {
                  $query->whereIn('name', $this->selectedRegions);
@@ -174,15 +173,13 @@ class BillList extends Component
              });
         }
 
-        // if ($this->sortField == 'assignee') {
-        //     $invoice_templates = $invoice_templates
-        //         ->orderByRaw($this->sortField, $this->sortType)
-        //         ->paginate(5);
-        // } else {
-        //     $invoice_templates = $invoice_templates
-        //         ->orderBy($this->sortField, $this->sortType)
-        //         ->paginate(5);
-        // }
+        if ($this->sortField == 'assignee') {
+            $bills = $bills
+                ->orderByRaw($this->sortField, $this->sortType);
+        } else {
+            $bills = $bills
+                ->orderBy($this->sortField, $this->sortType);
+        }
         $bills = $bills->paginate(5);
         return view('livewire.bill-list', [
             'bills' => $bills

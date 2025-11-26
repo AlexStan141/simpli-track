@@ -15,7 +15,7 @@
                     <th class="w-[196px]">
                         <div class="flex justify-between">
                             Location
-                            <a href="#">
+                            <a href="#" wire:click.prevent="sort('cities.name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -23,7 +23,7 @@
                     <th class="w-[200px]">
                         <div class="flex justify-between">
                             Status
-                            <a href="#">
+                            <a href="#" wire:click.prevent="sort('statuses.name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -31,7 +31,7 @@
                     <th class="w-[225px]">
                         <div class="flex justify-between">
                             Due Date
-                            <a href="#">
+                            <a href="#" wire:click.prevent="sort('due_days.id')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -47,7 +47,7 @@
                     <th class="w-[205px]">
                         <div class="flex justify-between">
                             Assignee
-                            <a href="#">
+                            <a href="#" wire:click.prevent="sort('users.first_name')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
@@ -55,7 +55,7 @@
                     <th class="w-[200px]">
                         <div class="flex justify-between">
                             Last Updated
-                            <a href="#">
+                            <a href="#" wire:click.prevent="sort('updated_at')">
                                 <img src="{{ asset('/images/sort.svg') }}" alt="sort">
                             </a>
                         </div>
