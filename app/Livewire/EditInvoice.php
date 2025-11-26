@@ -43,7 +43,6 @@ class EditInvoice extends Component
     public $selected_due_day;
     public $invoices_for_attention;
     public $selected_invoice_for_attention;
-    public $last_time_paid;
     public $frequency_options = ['Monthly', 'Quarterly'];
     public $selected_frequency;
 
@@ -63,17 +62,6 @@ class EditInvoice extends Component
     {
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
-    }
-
-    public function updateLastTimePaid()
-    {
-        $date = new DateTime();
-        $date->modify('-1 month');
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $day = (int) $this->selected_due_day;
-        $date->setDate($year, $month, $day);
-        $this->last_time_paid = $date;
     }
 
     public function updateFrequency($option)
@@ -108,7 +96,6 @@ class EditInvoice extends Component
             'selected_region' => 'required',
             'selected_country' => 'required',
             'selected_city' => 'required',
-            'last_time_paid' => 'required',
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['Monthly', 'Quarterly'])],
             'lease_no' => ['required', 'string', 'max:50'],
@@ -128,7 +115,6 @@ class EditInvoice extends Component
             "city_id" => $this->selected_city,
             "landlord_id" => $this->selected_landlord,
             'currency_id' => $this->selected_currency,
-            "last_time_paid" => $this->last_time_paid,
         ]);
         $initialInvoiceAsObject->save();
         return redirect()->to(route('invoice.edit', [
@@ -168,13 +154,5 @@ class EditInvoice extends Component
         $this->selected_invoice_for_attention = $this->initialInvoice->invoice_for_attention_id;
 
         $this->selected_frequency = $this->initialInvoice->frequency;
-
-        $date = new DateTime();
-        $date->modify('-1 month');
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $day = (int) $this->selected_due_day;
-        $date->setDate($year, $month, $day);
-        $this->last_time_paid = $date;
     }
 }

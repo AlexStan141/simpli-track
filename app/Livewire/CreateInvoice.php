@@ -41,7 +41,6 @@ class CreateInvoice extends Component
     public $due_days;
     public $selected_status = 1;
     public $selected_due_day;
-    public $last_time_paid;
     public $invoices_for_attention;
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
@@ -69,17 +68,6 @@ class CreateInvoice extends Component
     {
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
         $this->selected_city = $this->cities->keys()->first();
-    }
-
-    public function updateLastTimePaid()
-    {
-        $date = new DateTime();
-        $date->modify('-1 month');
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $day = (int) $this->selected_due_day;
-        $date->setDate($year, $month, $day);
-        $this->last_time_paid = $date;
     }
 
     public function updateFrequency($option)
@@ -120,14 +108,6 @@ class CreateInvoice extends Component
 
         $this->currencies = Currency::pluck('name', 'id');
         $this->selected_currency = Auth::user()->company->currency_id;
-
-        $date = new DateTime();
-        $date->modify('-1 month');
-        $year = date_format($date, 'Y');
-        $month = date_format($date, 'n');
-        $day = (int) $this->selected_due_day;
-        $date->setDate($year, $month, $day);
-        $this->last_time_paid = $date;
     }
 
     public function createInvoiceTemplate(){
@@ -140,7 +120,6 @@ class CreateInvoice extends Component
             'selected_region' => 'required',
             'selected_country' => 'required',
             'selected_city' => 'required',
-            'last_time_paid' => 'required',
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
             'lease_no' => ['nullable', 'string', 'max:50'],
@@ -160,7 +139,6 @@ class CreateInvoice extends Component
             "city_id" => $this->selected_city,
             "landlord_id" => $this->selected_landlord,
             'currency_id' => $this->selected_currency,
-            "last_time_paid" => $this->last_time_paid,
         ]);
         $this->dispatch('invoiceTemplateCreated');
         return redirect()->to(route('invoice.edit', [

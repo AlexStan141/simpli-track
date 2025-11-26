@@ -54,7 +54,7 @@ Route::get('/bills', function () {
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
     $new_bills = false;
-    if ($today == 25) {
+    if ($today == 26) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;
@@ -63,10 +63,6 @@ Route::get('/bills', function () {
                     'invoice_template_id' => $invoice_template->id,
                     'status_id' => Status::where('name', 'Pending')->first()->id,
                     'due_date' => date_create($this_year . '-' . $this_month . '-' . $day)
-                ]);
-                Note::create([
-                    'bill_id' => $bill->id,
-                    'message' => ""
                 ]);
             }
         }

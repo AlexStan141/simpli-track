@@ -60,7 +60,7 @@
                 class="block mt-1 w-full p-[16px] h-[42px] text-[14px] leading-none"
                 type="tel" name="phone" value="{{ old('phone') }}"></x-text-input>
             <input type="hidden" name="phone_normalized" id="phone_normalized" />
-            @if(count($errors->get('phone')))
+            @if(count($errors->get('phone_normalized')))
                 <x-input-error :messages="['Invalid phone number for selected country!']" class="mt-2" />
             @endif
         </div>

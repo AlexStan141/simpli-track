@@ -102,7 +102,7 @@
                 <div class="flex items-center gap-[43px]">
                     Due date
                     <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                        wire:model="selected_due_day" wire:change="updateLastTimePaid"
+                        wire:model="selected_due_day"
                         defaultValue="{{ Auth::user()->company->due_day_id }}" />
                     of each month
                     @error('selected_due_day')
@@ -116,13 +116,6 @@
                         defaultValue="{{ Auth::user()->company->invoices_for_attention_id }}" />
                     before due date
                     @error('selected_invoice')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div>
-                    <x-custom-input id="last_time_paid" label="Last Time Paid" width="150px" type="hidden"
-                        wire:model="last_time_paid" />
-                    @error('last_time_paid')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
