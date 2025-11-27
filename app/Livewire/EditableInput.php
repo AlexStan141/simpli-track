@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Country;
 use App\Models\Region;
 use App\Models\Status;
@@ -30,7 +31,13 @@ class EditableInput extends Component
 
     public function save()
     {
-        if($this->role == 'country_settings'){
+        if($this->role == 'city_settings'){
+            $city = City::where('name', $this->old_value)->first();
+            $city->name = $this->new_value;
+            $city->save();
+            $this->dispatch('city_list_updated');
+        }
+        else if($this->role == 'country_settings'){
             $country = Country::where('name', $this->old_value)->first();
             $country->name = $this->new_value;
             $country->save();
@@ -61,7 +68,12 @@ class EditableInput extends Component
     public function deleteInput()
     {
         $this->deleted = true;
-        if($this->role == 'country_settings'){
+        if($this->role == 'city_settings'){
+            $city = City::where('name', $this->old_value)->first();
+            $city->delete();
+            $this->dispatch('city_list_updated');
+        }
+        else if($this->role == 'country_settings'){
             $country = Country::where('name', $this->old_value)->first();
             $country->delete();
             $this->dispatch('country_list_updated');

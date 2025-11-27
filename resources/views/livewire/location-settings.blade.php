@@ -3,7 +3,7 @@
     @if(session()->has('error'))
         <p class="mt-4 ml-4 p-2 bg-red-300">{{ session('error') }}</p>
     @endif
-    <div class="flex mt-[89px]">
+    <div class="flex mt-[50px]">
         <div>
             @livewire('add-region-form')
             @livewire('region-list')
@@ -14,4 +14,15 @@
             @livewire('country-list')
         </div>
     </div>
+    <hr>
+    <div class="flex pt-[50px] pb-[10px] pl-[52px]">
+        <div class="mr-[100px]">
+            @livewire('add-city-form')
+        </div>
+        <div class="bg-setting w-[1px] h-[443px]"></div>
+        <div class="ml-[43px]">
+            @livewire('city-list')
+        </div>
+    </div>
+    <hr>
 </div>

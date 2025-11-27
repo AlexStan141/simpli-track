@@ -11,6 +11,7 @@ class City extends Model
 {
     /** @use HasFactory<\Database\Factories\CityFactory> */
     use HasFactory;
+    protected $guarded = [];
 
     public function country(): BelongsTo{
         return $this->belongsTo(Country::class);

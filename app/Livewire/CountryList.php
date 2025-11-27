@@ -8,7 +8,8 @@ use Livewire\Component;
 
 class CountryList extends Component
 {
-    protected $listeners = ['region_list_updated' => 'refresh', 'country_list_updated' => 'refresh'];
+    protected $listeners = ['region_list_updated' => 'refresh',
+                            'country_list_updated' => 'refresh'];
     public $regions;
     public $selected_region_id;
     public $countries;
