@@ -16,8 +16,9 @@
                         <span>{{ Auth::user()->phone }}</span>
                     </div>
                 </div>
-                <div class="bg-red-500 w-[60px] h-[60px] rounded-full mr-[26px] relative" x-on:click="open = !open">
-                    <div class="absolute bg-white w-max p-5 top-[4rem] left-[-15px]" x-show="open">
+                <div class="bg-red-500 w-[60px] h-[60px] rounded-full mr-[26px] relative flex justify-center items-center" x-on:click="open = !open">
+                    <p class="text-xl font-bold text-white">{{substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)}}</p>
+                    <div class="absolute bg-loginblue w-max p-5 top-[4rem] left-[-15px] z-10 text-white border border-white" x-show="open">
                         <div>
                             <a href="{{ route('profile.edit') }}">Profile</a>
                         </div>

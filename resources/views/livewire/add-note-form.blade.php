@@ -3,7 +3,7 @@
     @csrf
     <label for="message">Add a note here</label>
     <textarea name="message" id="message" class="w-[75%] h-[100px] mt-2"></textarea>
-    <input type="hidden" name="bill_id" value="{{ $bill_id }}"></input>
+    <input type="hidden" name="bill_id" value="{{ $bill_id }}" />
     @error('message')
         <p>{{ $message }}</p>
     @enderror

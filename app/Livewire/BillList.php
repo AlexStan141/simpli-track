@@ -118,6 +118,14 @@ class BillList extends Component
         $bills = $bills->paginate(5);
     }
 
+    public function displayModal($bill_id){
+        $this->dispatch('display_modal', ['bill_id' => $bill_id]);
+    }
+
+    public function displayNoteModal($bill_id){
+        $this->dispatch('display_note_modal', ['bill_id' => $bill_id]);
+    }
+
     public function handleStatus($payload)
     {
         $this->selectedStatus = $payload['statusValue'];

@@ -67,7 +67,7 @@
                     <tr class= "h-[56px] border">
                         <td class="w-[62px]">
                             <div class="flex justify-center items-center">
-                                <a href="#">
+                                <a href="{{ route('bill.edit', ['bill_id' => $bill->id]) }}" wire:click.prevent="displayModal({{ $bill->id }})">
                                     <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
                                 </a>
                             </div>
@@ -78,10 +78,7 @@
                             {{ DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) }}
                         </td>
                         <td class="w-[171px] flex gap-2" >
-                            <a href="{{ $bill->note ? route('note.show', ['bill_id' => $bill->id])
-                                                    : route('note.create', ['bill_id' => $bill->id])}}">
-                                <img src="{{  $bill->note ? asset('images/selected_social.png') : asset('images/social.png') }}" alt="call">
-                            </a>
+                            <img src="{{  $bill->note ? asset('images/selected_social.png') : asset('images/social.png') }}" alt="call" wire:click="displayNoteModal({{ $bill->id }})">
                             <span>call</span>
                         </td>
                         <td class="w-[205px]">

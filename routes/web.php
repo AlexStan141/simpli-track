@@ -4,6 +4,7 @@ use App\Helpers\BillHelpers;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\InvoiceTemplateController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Request;
@@ -54,7 +55,7 @@ Route::get('/bills', function () {
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
     $new_bills = false;
-    if ($today == 26) {
+    if ($today == 27) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;
@@ -146,6 +147,9 @@ Route::put('/notes/{bill_id}', [NoteController::class, 'update'])
 
 Route::delete('/notes/{bill_id}', [NoteController::class, 'delete'])
     ->middleware(['auth', 'verified'])->name('note.destroy');
+
+Route::get('/bills/{bill_id}/edit', [BillController::class, 'edit'])
+    ->middleware(['auth', 'verified'])->name('bill.edit');
 
 
 require __DIR__ . '/auth.php';
