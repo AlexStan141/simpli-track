@@ -37,6 +37,14 @@ class UpdateBillModal extends Component
         $this->displayed = false;
     }
 
+    public function delete_bill()
+    {
+        $this->dispatch('bill_deleted', [
+            'bill_id' => $this->bill_id
+        ]);
+        $this->displayed = false;
+    }
+
     public function mount()
     {
         $this->displayed = false;

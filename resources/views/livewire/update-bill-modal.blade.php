@@ -22,7 +22,7 @@
                     <hr class="border-gray-500 w-[100px]">
                 </div>
                 <button class="py-3 px-[93px] bg-red-500 text-white rounded-[80px] mt-5 ml-2" type="submit"
-                    >Delete</button>
+                    wire:click.prevent = 'delete_bill'>Delete</button>
             </div>
         </div>
     @endif
