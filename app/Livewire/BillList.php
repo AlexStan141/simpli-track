@@ -55,8 +55,8 @@ class BillList extends Component
         'statusChanged' => 'handleStatus',
         'cityChanged' => 'handleCity',
         'categoryChanged' => 'handleCategory',
-        'category_list_changed' => 'refresh_bill_list'
-
+        'category_list_changed' => 'refresh_bill_list',
+        'bill_status_updated' => 'bill_status_updated'
     ];
     public function handleToggle($payload)
     {
@@ -143,6 +143,12 @@ class BillList extends Component
         $this->selectedCategory = $payload['categoryValue'];
         $this->render();
     }
+    public function bill_status_updated($payload)
+    {
+        $bill = Bill::where('id', $payload['bill_id'])->first();
+        $bill->status_id = $payload['status'];
+        $bill->save();
+    }
 
     public function render()
     {
@@ -192,6 +198,13 @@ class BillList extends Component
         return view('livewire.bill-list', [
             'bills' => $bills
         ]);
+    }
+
+    public function update_bill_status($payload)
+    {
+        $bill = Bill::where('id', $payload['bill_id']);
+        $bill->status = $payload['status'];
+        $bill->save();
     }
 
     public function mount()
