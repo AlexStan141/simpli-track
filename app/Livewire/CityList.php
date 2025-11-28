@@ -47,7 +47,7 @@ class CityList extends Component
         $this->regions = Region::pluck('name', 'id');
         $this->selected_region_id = Region::all()->first()->id;
         $this->countries = Country::where('region_id', $this->selected_region_id)->pluck('name', 'id');
-        $this->selected_country_id = Country::all()->first()->id;
+        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id;
         $this->cities = City::where('country_id', $this->selected_country_id)->get();
     }
 }
