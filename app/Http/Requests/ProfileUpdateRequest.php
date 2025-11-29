@@ -22,8 +22,13 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:30'],
-            'phone_normalized' => ['required', 'phone:INTERNATIONAL'],
+            'phone' => [
+                'required',
+                'string',
+                'min:7',
+                'max:20',
+                'regex:/^\+?[0-9\s\-\(\)]+$/'
+            ],
             'email' => [
                 'required',
                 'string',
@@ -51,17 +56,14 @@ class ProfileUpdateRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if(!$this->filled('phone_normalized')){
-                $validator->errors()->add('phone', 'The phone format is invalid.');
-            }
             if ($this->filled('password')) {
                 if (!Hash::check($this->input('password'), Auth::user()->password)) {
                     $validator->errors()->add('password', 'The old password is incorrect.');
                 }
-                if(!$this->filled('new_password')){
+                if (!$this->filled('new_password')) {
                     $validator->errors()->add('new_password', 'New password is required.');
                 }
-                if(!$this->filled('confirm_new_password')){
+                if (!$this->filled('confirm_new_password')) {
                     $validator->errors()->add('confirm_new_password', 'Confirm password is required.');
                 }
             }
