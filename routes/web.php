@@ -19,13 +19,15 @@ use App\Livewire\CompanySettings;
 use App\Models\Bill;
 use App\Models\InvoiceTemplate;
 use App\Models\Note;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
 
 Route::get('/company-settings', CompanySettings::class)->name('company.settings');
 Route::get('/', function () {
-    return view('auth.login');
+    return redirect()->route('login');
 });
 
-Route::delete('logout', fn() => to_route("auth.destroy"));
+Route::delete('logout', fn(): RedirectResponse => to_route("auth.destroy"));
 Route::delete('auth', [AuthenticatedSessionController::class, 'destroy'])->name("auth.destroy");
 
 
