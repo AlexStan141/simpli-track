@@ -1,3 +1,29 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.querySelector("#phone");
+        const countryInput = document.querySelector("#country");
+
+        const iti = window.intlTelInput(input, {
+            initialCountry: "ro",
+            preferredCountries: ["ro", "us", "gb", "ca"],
+            separateDialCode: true,
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        iti.setCountry("{{ $flag }}" ?  "{{ $flag }}" : "ro");
+
+        input.form.addEventListener("submit", function() {
+            const countryData = iti.getSelectedCountryData();
+            document.cookie = "flag=" + countryData.iso2;
+            input.value = iti.getNumber();
+        });
+
+        input.addEventListener("blur", function(){
+            countryInput.value = iti.getSelectedCountryData().iso2;
+        })
+    });
+</script>
 <x-app-layout>
     <x-vertical-menu active-link="/profile"></x-vertical-menu>
     <div class="p-[54px] flex flex-col">
@@ -45,10 +71,14 @@
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <x-input-label for="phone" :value="__('Phone')" class="text-editprofilelabel leading-[14px] h-[12px]" />
-                    <x-text-input id="phone" class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none" type="text" name="phone" value="{{ old('phone') ?? $user['phone'] }}" />
+                    <x-input-label for="phone" :value="__('Phone')"
+                        class="text-editprofilelabel leading-[14px] h-[12px]" />
+                    <x-text-input id="phone"
+                        class="block mt-1 w-full bg-editprofileinput border-formgray border p-[16px] h-[42px] text-[14px] leading-none"
+                        type="text" name="phone" value="{{ old('phone') ?? $user['phone'] }}" />
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
+                <input id="country" type="hidden" name="country" value="{{ old('country') ?? $user['country'] }}">
                 <div class="flex flex-col gap-2">
                     <x-input-label for="password" :value="__('Current Password')"
                         class="text-editprofilelabel leading-[14px] h-[12px]" />

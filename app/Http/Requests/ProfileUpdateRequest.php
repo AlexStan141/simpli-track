@@ -49,6 +49,7 @@ class ProfileUpdateRequest extends FormRequest
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/',
             ],
+            //'country' => ['required', 'string'],
             'confirm_new_password' => ['nullable', 'string']
         ];
     }

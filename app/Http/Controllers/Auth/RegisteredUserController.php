@@ -12,8 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+
 
 class RegisteredUserController extends Controller
 {
@@ -58,7 +58,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
             'phone' => $request->phone,
-            'company_id' => $request->company_id
+            'company_id' => $request->company_id,
+            "country" => $request->cookie("flag")
         ]);
 
         event(new Registered($user));

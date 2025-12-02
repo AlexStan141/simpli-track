@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Cookie;
 
 class ProfileController extends Controller
 {
@@ -18,6 +19,7 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            'flag' => request()->cookie('flag')
         ]);
     }
 
@@ -39,6 +41,10 @@ class ProfileController extends Controller
         if ($request->filled('password')) {
             $user->password = bcrypt($request->validated()['new_password']);
         }
+
+        Cookie::queue('flag', $request->country, 1440);
+
+        Auth::user()->country = $request->country;
 
         $user->save();
 

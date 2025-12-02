@@ -1,3 +1,28 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.querySelector("#phone");
+        const countryInput = document.querySelector("#country");
+
+        const iti = window.intlTelInput(input, {
+            initialCountry: "ro",
+            preferredCountries: ["ro", "us", "gb", "ca"],
+            separateDialCode: true,
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        input.form.addEventListener("submit", function() {
+            const countryData = iti.getSelectedCountryData();
+            document.cookie = "flag=" + countryData.iso2;
+            input.value = iti.getNumber();
+            iti.setCountry(countryData.iso2);
+        });
+
+        input.addEventListener("blur", function(){
+            countryInput.value = iti.getSelectedCountryData().iso2;
+        })
+    });
+</script>
 <x-guest-layout class="pt-[67px] pb-[88px]">
 
     <img src="{{ asset('images/Logo.png') }}" alt="logo register" width="420" height="82"/>
@@ -68,6 +93,8 @@
                 class="w-[300px]"></x-select-input>
             <x-input-error :messages="$errors->get('company_id')" class="mt-2" />
         </div>
+
+        <input id="country" type="hidden" name="country" value="">
 
         <div class="flex flex-col items-start gap-1 mt-4">
             <x-primary-button class="mt-[52px] bg-transparent ring-1 ring-white w-[226px] h-[49px] justify-center font-nunito text-[18px]">

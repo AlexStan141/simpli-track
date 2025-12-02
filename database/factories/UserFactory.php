@@ -34,13 +34,13 @@ class UserFactory extends Factory
         $phoneUtil = PhoneNumberUtil::getInstance();
 
         // Lista de regiuni ISO (poți extinde)
-        $regions = ['US', 'GB', 'FR', 'DE', 'JP', 'RO', 'CN', 'IN', 'BR', 'AU'];
-        $region = $this->faker->randomElement($regions);
+        $countries = ["RO", "FR"];
+        $country = $this->faker->randomElement($countries);
 
         // Generează un număr valid pentru regiune
         try {
             // Creează un număr fictiv valid pentru regiune
-            $exampleNumber = $phoneUtil->getExampleNumberForType($region, PhoneNumberType::MOBILE);
+            $exampleNumber = $phoneUtil->getExampleNumberForType($country, PhoneNumberType::MOBILE);
             $international = $phoneUtil->format($exampleNumber, PhoneNumberFormat::E164);
         } catch (\libphonenumber\NumberParseException $e) {
             $international = '+40729626513'; // fallback
@@ -54,6 +54,7 @@ class UserFactory extends Factory
             'role_id' => fake()->numberBetween(1, Role::count()),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'country' => $country,
             'phone' => $international
         ];
     }
