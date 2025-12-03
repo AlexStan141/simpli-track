@@ -12,14 +12,20 @@
         }
     }
 
+    function valid_amount_format($txt)
+    {
+        $pattern = '/[0-9,]/';
+        return preg_match_all($pattern, $txt) == strlen($txt);
+    }
+
 @endphp
 
 <div class="pl-[43px] pr-[28px] pt-[64px] grow">
     <p class="leading-[1.25rem] h-[15px] font-semibold font-inter ml-[11px]">Add Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
-    @if(session()->has('success'))
-        <p class="bg-green-300 py-2 pl-2">{{ session('success')}}</p>
+    @if (session()->has('success'))
+        <p class="bg-green-300 py-2 pl-2">{{ session('success') }}</p>
     @endif
     <div class="flex justify-between mt-[79px]">
         <a href="{{ route('invoice.index') }}" class="leading-[14px] h-[12px] ml-[24px]">Back</a>
@@ -45,8 +51,8 @@
                 </div>
                 <div class="flex flex-col gap-2">
                     <div class="flex gap-2 items-end">
-                        <x-custom-input id="amount" label="Amount" width="150px" type="number"
-                            wire:model="amount" />
+                        <x-custom-input id="amount" label="Amount" width="150px" type="text"
+                            wire:change="format_amount" wire:model="amount" />
                         <x-select-input :values="$currencies" width="200px" id="user_id" label=""
                             wire:model="selected_currency"
                             defaultValue="{{ Auth::user()->company->currency->name }}"></x-select-input>
@@ -102,8 +108,7 @@
                 <div class="flex items-center gap-[43px]">
                     Due date
                     <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                        wire:model="selected_due_day"
-                        defaultValue="{{ Auth::user()->company->due_day_id }}" />
+                        wire:model="selected_due_day" defaultValue="{{ Auth::user()->company->due_day_id }}" />
                     of each month
                     @error('selected_due_day')
                         <span class="text-red-500 text-sm">{{ $message }}</span>

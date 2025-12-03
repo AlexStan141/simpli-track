@@ -30,8 +30,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        Cookie::queue('flag', Auth::user()->country, 1440);
-
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

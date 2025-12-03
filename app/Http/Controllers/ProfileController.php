@@ -19,7 +19,6 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
-            'flag' => request()->cookie('flag')
         ]);
     }
 
@@ -41,10 +40,6 @@ class ProfileController extends Controller
         if ($request->filled('password')) {
             $user->password = bcrypt($request->validated()['new_password']);
         }
-
-        Cookie::queue('flag', $request->country, 1440);
-
-        Auth::user()->country = $request->country;
 
         $user->save();
 

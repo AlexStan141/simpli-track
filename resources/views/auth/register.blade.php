@@ -12,15 +12,9 @@
         });
 
         input.form.addEventListener("submit", function() {
-            const countryData = iti.getSelectedCountryData();
-            document.cookie = "flag=" + countryData.iso2;
             input.value = iti.getNumber();
-            iti.setCountry(countryData.iso2);
-        });
-
-        input.addEventListener("blur", function(){
             countryInput.value = iti.getSelectedCountryData().iso2;
-        })
+        });
     });
 </script>
 <x-guest-layout class="pt-[67px] pb-[88px]">

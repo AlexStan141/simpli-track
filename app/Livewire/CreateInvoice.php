@@ -79,6 +79,11 @@ class CreateInvoice extends Component
         }
     }
 
+    public function format_amount(){
+        $this->amount = str_replace(",", "", $this->amount);
+        $this->amount = $this->amount ? number_format($this->amount) : "";
+    }
+
     public function mount()
     {
         $company = Auth::user()->company;
@@ -111,7 +116,6 @@ class CreateInvoice extends Component
     }
 
     public function createInvoiceTemplate(){
-
         $this->validate([
             'selected_due_day' => 'required',
             'selected_invoice_for_attention' => 'required',
@@ -123,12 +127,12 @@ class CreateInvoice extends Component
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['monthly', 'quarterly'])],
             'lease_no' => ['nullable', 'string', 'max:50'],
-            'amount' => ['required', 'integer', 'min:100', 'max:5000'],
+            'amount' => ['required', 'string', 'formatted_number'],
         ]);
 
         $createdInvoice = InvoiceTemplate::create([
             'frequency' => $this->selected_frequency,
-            'amount' => $this->amount,
+            'amount' => str_replace(",", "", $this->amount),
             'lease_no' => $this->lease_no,
             'due_day_id' => $this->selected_due_day,
             'invoice_for_attention_id' => $this->selected_invoice_for_attention,

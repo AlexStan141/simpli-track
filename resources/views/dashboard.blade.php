@@ -1,7 +1,3 @@
-<script>
-    localStorage.removeItem('flag');
-</script>
-
 <div>
     @livewire('update-bill-modal')
     @livewire('note-modal')

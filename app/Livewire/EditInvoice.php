@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Http\Requests\InvoiceRequest;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Company;
@@ -14,8 +13,6 @@ use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
-use DateTime;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
@@ -98,8 +95,8 @@ class EditInvoice extends Component
             'selected_city' => 'required',
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['Monthly', 'Quarterly'])],
-            'lease_no' => ['required', 'string', 'max:50'],
-            'amount' => ['required', 'integer', 'min:100', 'max:5000'],
+            'lease_no' => ['nullable', 'string', 'max:50'],
+            'amount' => ['required', 'formatted_number'],
         ]);
 
         $initialInvoiceAsObject->fill([

@@ -48,6 +48,7 @@ class RegisteredUserController extends Controller
                 'max:20',
                 'regex:/^\+?[0-9\s\-\(\)]+$/'
             ],
+            'country' => ['required'],
             'company_id' => ['required', 'integer', 'min:1', 'max:' . Company::all()->count()]
         ]);
 
@@ -59,7 +60,7 @@ class RegisteredUserController extends Controller
             'role_id' => $request->role_id,
             'phone' => $request->phone,
             'company_id' => $request->company_id,
-            "country" => $request->cookie("flag")
+            "country" => $request->country
         ]);
 
         event(new Registered($user));

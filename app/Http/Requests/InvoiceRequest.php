@@ -15,6 +15,7 @@ class InvoiceRequest extends FormRequest
         return true;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,15 +28,13 @@ class InvoiceRequest extends FormRequest
             'selected_invoice_for_attention' => 'required',
             'selected_category' => 'required',
             'selected_user' => 'required',
-            'selected_status' => 'required',
             'selected_region' => 'required',
             'selected_country' => 'required',
             'selected_city' => 'required',
-            'last_time_paid' => 'required',
             'selected_currency' => 'required',
             'selected_frequency' => ['required', Rule::in(['Monthly', 'Quarterly'])],
             'lease_no' => ['nullable', 'string', 'max:50'],
-            'amount' => ['required', 'integer', 'min:100', 'max:5000'],
+            'amount' => ['required', 'formatted_number'],
         ];
     }
 }
