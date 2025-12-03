@@ -14,11 +14,8 @@
         iti.setCountry("{{ $user->country }}");
 
         input.form.addEventListener("submit", function() {
-
-            let countryClass = document.getElementsByClassName('iti__selected-flag')[0].getAttribute('aria-activedescendant');
-            let countryCode = countryClass.replace('iti-0__item-', '').replace('-preferred', '');
-            countryInput.value = countryCode;
             input.value = iti.getNumber();
+            countryInput.value = iti.getSelectedCountryData().iso2;
         });
     });
 
