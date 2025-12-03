@@ -4,7 +4,7 @@
         const countryInput = document.querySelector("#country");
 
         const iti = window.intlTelInput(input, {
-            initialCountry: "ro",
+            initialCountry: "us",
             preferredCountries: ["ro", "us", "gb", "ca"],
             separateDialCode: true,
             nationalMode: false,
