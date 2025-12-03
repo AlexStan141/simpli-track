@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\InvoiceTemplate;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -22,11 +23,13 @@ class InvoiceTemplateList extends Component
         $this->setPage($page);
     }
 
-    public function displayInvoiceAmount(){
+    public function displayInvoiceAmount()
+    {
         $this->showInvoiceAmount = true;
     }
 
-    public function hideInvoiceAmount(){
+    public function hideInvoiceAmount()
+    {
         $this->showInvoiceAmount = false;
     }
 
@@ -50,15 +53,29 @@ class InvoiceTemplateList extends Component
 
     public function render()
     {
-        $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
-            ->with(['category', 'city', 'user', 'due_day'])
-            ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
-            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-            ->where('users.id', '=', Auth::id())
-            ->orderBy($this->sortField, $this->sortType)
-            ->paginate(5);
+        $adminRoleId = Role::where('name', 'Admin')->first()->id;
+        if (Auth::user()->role->id === $adminRoleId) {
+            $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
+                ->with(['category', 'city', 'user', 'due_day'])
+                ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
+                ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+                ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+                ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
+                ->orderBy($this->sortField, $this->sortType)
+                ->paginate(5);
+        } else {
+            $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
+                ->with(['category', 'city', 'user', 'due_day'])
+                ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
+                ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+                ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+                ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
+                ->where('users.id', '=', Auth::id())
+                ->orderBy($this->sortField, $this->sortType)
+                ->paginate(5);
+        }
+
+
         return view('livewire.invoice-template-list', ['user_invoices' => $invoice_templates]);
     }
 

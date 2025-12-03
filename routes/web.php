@@ -52,17 +52,21 @@ Route::get('/test', function () {
 });
 
 Route::get('/bills', function () {
-    $invoice_templates = InvoiceTemplate::where('user_id', Auth::user()->id)->get();
+    if(Auth::user()->role->name === 'Admin'){
+        $invoice_templates = InvoiceTemplate::all();
+    } else {
+        $invoice_templates = InvoiceTemplate::where('user_id', Auth::user()->id)->get();
+    }
     $today = date_format(new DateTime(), 'j');
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
     $new_bills = false;
-    if ($today == 27) {
+    if ($today == 3) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $new_bills = true;
                 $day = $invoice_template->due_day_id;
-                $bill = Bill::create([
+                Bill::create([
                     'invoice_template_id' => $invoice_template->id,
                     'status_id' => Status::where('name', 'Pending')->first()->id,
                     'due_date' => date_create($this_year . '-' . $this_month . '-' . $day)

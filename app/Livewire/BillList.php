@@ -91,10 +91,20 @@ class BillList extends Component
             ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
             ->join('users', 'invoice_templates.user_id', '=', 'users.id')
             ->join('statuses', 'status_id', '=', 'statuses.id')
-            ->where('user_id', Auth::id())
             ->whereHas('invoice_template.region', function ($query) use ($filters) {
                 $query->whereIn('name', $filters['selectedRegions']);
             })
+            ->whereHas('status.company', function ($query) {
+                $query->whereNotNull('id');
+            });
+
+        if (Auth::user()->role->name !== "Admin") {
+            $bills->where('user_id', Auth::id());
+        }
+
+        $bills->whereHas('invoice_template.region', function ($query) use ($filters) {
+            $query->whereIn('name', $filters['selectedRegions']);
+        })
             ->whereHas('status.company', function ($query) {
                 $query->whereNotNull('id');
             });
