@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="border-b border-white py-[5px] bg-loginblue">
+<nav x-data="{ open: false }" class="border-b border-white py-[5px] bg-loginblue fixed z-10 w-full">
     <div class="max-w-auto">
         <div class="flex justify-between items-center">
             <div class="flex">

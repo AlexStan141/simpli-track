@@ -24,5 +24,4 @@
             @livewire('city-list')
         </div>
     </div>
-    <hr>
 </div>

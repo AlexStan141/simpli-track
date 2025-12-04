@@ -3,7 +3,7 @@
     @livewire('note-modal')
     <x-app-layout>
         <x-vertical-menu active-link="/dashboard"></x-vertical-menu>
-        <div class="flex flex-col mt-[44px] ml-[25px] w-full">
+        <div class="flex flex-col mt-[125px] ml-[150px] mr-[25px] w-full">
             <div class="flex justify-between mb-[42px]">
                 <div class="flex">
                     @livewire('region-filter-list')

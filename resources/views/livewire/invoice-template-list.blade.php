@@ -1,4 +1,4 @@
-<div class="pl-[52px] pr-[28px] pt-[64px] grow">
+<div class="pl-[150px] pr-[25px] pt-[125px] grow">
     <p class="text-xl leading-none h-[15px] font-semibold">Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>

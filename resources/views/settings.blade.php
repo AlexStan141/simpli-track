@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-vertical-menu active-link="/settings"></x-vertical-menu>
-    <div class="mt-[63px] ml-[54px]">
+    <div class="mt-[63px] ml-[150px] mb-[25px]">
         <p class="text-xl leading-[20px] h-[15px] font-semibold">Settings</p>
         <hr class="mt-[16px] w-[100%]">
         <div class="flex flex-col border border-setting mt-[65px]">

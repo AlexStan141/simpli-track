@@ -97,7 +97,7 @@ class CreateInvoice extends Component
         $this->selected_user = $this->users->keys()->first();
 
         // Regiuni
-        $this->regions = Region::pluck('name', 'id');
+        $this->regions = Region::where('selected', true)->pluck('name', 'id');
         $this->selected_region = $this->regions->keys()->first();
         $this->updateCountryList();
 

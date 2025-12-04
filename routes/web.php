@@ -157,8 +157,21 @@ Route::delete('/notes/{bill_id}', [NoteController::class, 'delete'])
 Route::get('/bills/{bill_id}/edit', [BillController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('bill.edit');
 
+
+Route::get("/alerts", function(){
+    return view('alerts.index');
+});
+
+Route::get("/help", function(){
+    return view('not-found', [
+        'active_link' => '/help'
+    ]);
+});
+
 Route::fallback(function () {
-    return '404 - Not found';
+    return view('not-found', [
+        'active_link' => '/notfound'
+    ]);
 });
 
 require __DIR__ . '/auth.php';

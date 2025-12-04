@@ -90,13 +90,7 @@ class BillList extends Component
             ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
             ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
             ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-            ->join('statuses', 'status_id', '=', 'statuses.id')
-            ->whereHas('invoice_template.region', function ($query) use ($filters) {
-                $query->whereIn('name', $filters['selectedRegions']);
-            })
-            ->whereHas('status.company', function ($query) {
-                $query->whereNotNull('id');
-            });
+            ->join('statuses', 'status_id', '=', 'statuses.id');
 
         if (Auth::user()->role->name !== "Admin") {
             $bills->where('user_id', Auth::id());
@@ -161,7 +155,7 @@ class BillList extends Component
     public function mount()
     {
         $this->filters = [
-            'selectedRegions' => Region::pluck('name')->toArray(),
+            'selectedRegions' => Region::where('selected', true)->pluck('name')->toArray(),
             'selectedStatus' => 'All',
             'selectedCity' => 'All',
             'selectedCategory' => 'All'

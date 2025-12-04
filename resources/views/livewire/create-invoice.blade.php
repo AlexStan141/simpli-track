@@ -20,7 +20,7 @@
 
 @endphp
 
-<div class="pl-[43px] pr-[28px] pt-[64px] grow">
+<div class="pl-[150px] pr-[28px] pt-[64px] pb-[64px] grow">
     <p class="leading-[1.25rem] h-[15px] font-semibold font-inter ml-[11px]">Add Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
