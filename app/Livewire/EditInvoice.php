@@ -13,6 +13,7 @@ use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
+use App\Models\Role;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
@@ -123,13 +124,14 @@ class EditInvoice extends Component
         $this->categories = Category::pluck('name', 'id');
         $this->selected_category = $this->initialInvoice->category_id;
 
+        $adminRoleId = Role::where('name', 'Admin')->first()->id;
         $this->lease_no = $this->initialInvoice->lease_no;
 
         $this->amount = $this->initialInvoice->amount;
         $this->currencies = Currency::pluck('name', 'id');
         $this->selected_currency = $this->initialInvoice->currency_id;
 
-        $this->users = User::get()->mapWithKeys(fn($user) => [$user->id => $user->full_name]);
+        $this->users = User::whereNot('role_id', $adminRoleId)->get()->mapWithKeys(fn($user) => [$user->id => $user->full_name]);
         $this->selected_user = $this->initialInvoice->user_id;
 
         $this->regions = Region::pluck('name', 'id');

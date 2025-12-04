@@ -12,6 +12,7 @@ use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Landlord;
+use App\Models\Role;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -87,13 +88,14 @@ class CreateInvoice extends Component
     public function mount()
     {
         $company = Auth::user()->company;
+        $adminRoleId = Role::where('name', 'Admin')->first()->id;
 
         // Categorii
         $this->categories = Category::pluck('name', 'id');
         $this->selected_category = $this->categories->keys()->first();
 
         // Utilizatori
-        $this->users = User::get()->mapWithKeys(fn($user) => [$user->id => $user->full_name]);
+        $this->users = User::whereNot('role_id', $adminRoleId)->get()->mapWithKeys(fn($user) => [$user->id => $user->full_name]);
         $this->selected_user = $this->users->keys()->first();
 
         // Regiuni
