@@ -8,7 +8,7 @@
             <div>
                 <x-input-label>First Name</x-input-label>
                 <x-text-input id="firstName" class="setting-text-input w-[450px]" type="text" name="firstName"
-                    wire:model="firstName" required />
+                    wire:model="firstName" />
                 @error('firstName')
                     <p class="text-red-500">{{ $message }}</p>
                 @enderror
@@ -16,7 +16,7 @@
             <div>
                 <x-input-label>Last Name</x-input-label>
                 <x-text-input id="lastName" class="setting-text-input w-[450px]" type="text" name="lastName"
-                    wire:model="lastName" required />
+                    wire:model="lastName" />
                 @error('lastName')
                     <p class="text-red-500">{{ $message }}</p>
                 @enderror
@@ -24,7 +24,7 @@
             <div>
                 <x-input-label>Password</x-input-label>
                 <x-text-input id="password" class="setting-text-input w-[450px]" type="password" name="password"
-                    wire:model="password" required />
+                    wire:model="password" />
                 @error('password')
                     <p class="text-red-500">{{ $message }}</p>
                 @enderror
@@ -32,7 +32,7 @@
             <div>
                 <x-input-label>Confirm Password</x-input-label>
                 <x-text-input id="confirmPassword" class="setting-text-input w-[450px]" type="password"
-                    name="confirmPassword" wire:model="confirmPassword" required />
+                    name="confirmPassword" wire:model="confirmPassword" />
                 @error('confirmPassword')
                     <p class="text-red-500">{{ $message }}</p>
                 @enderror
@@ -40,20 +40,38 @@
             <div>
                 <x-input-label>Email</x-input-label>
                 <x-text-input id="email" class="setting-text-input w-[450px]" type="email" name="email"
-                    wire:model="email" required />
+                    wire:model="email" />
                 @error('email')
                     <p class="text-red-500">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="relative">
-                <x-input-label for="role" :value="__('Role')" class="text-white leading-[1rem]" />
-                <x-select-input id="role" label="" :values="$roles" defaultValue="{{ $roles[1] }}"
-                    class="w-[300px]" wire:model="role"></x-select-input>
-                <p class="absolute right-[63px] top-0">hierarchy</p>
+            <div class="w-[450px]">
+                <div class="flex justify-between">
+                    <x-input-label for="role_id" :value="__('Role')" />
+                    <p class="right-[63px]">hierarchy</p>
+                </div>
+                <x-select-input id="role_id" label="" :values="$roles" defaultValue="{{ $roles[1] }}"
+                    class="w-full" wire:model="role_id"></x-select-input>
                 <p class="text-[10px] mt-[11px] italic">Admin (all), Portfolio Manager (regional), Lease Admin (input),
                     Director (summary)</p>
-                <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
             </div>
+            <div class="mt-4">
+                <x-input-label for="phone" :value="__('Phone')" />
+                <x-text-input id="phone" class="block mt-1 w-[450px] p-[16px] h-[42px] text-[14px] leading-none"
+                    type="text" name="phone" value="{{ old('phone') }}"></x-text-input>
+                <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+            </div>
+
+            <div class="mt-4 hidden">
+                <x-input-label for="company_id" :value="__('Company')" />
+                <x-select-input id="company_id" label="" :values="$companies" defaultValue="{{ $companies[1] }}"
+                    class="w-[300px]"></x-select-input>
+                <x-input-error :messages="$errors->get('company_id')" class="mt-2" />
+            </div>
+
+            <input id="country" type="hidden" name="country" value="">
+
         </div>
         <div class="flex justify-center">
             <button type="submit" class="mt-[75px] px-[93px] py-[12px] mb-[19px] bg-loginblue rounded-[80px]">
@@ -61,4 +79,24 @@
             </button>
         </div>
     </form>
+    @livewire('user-list')
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.querySelector("#phone");
+        const countryInput = document.querySelector("#country");
+
+        const iti = window.intlTelInput(input, {
+            initialCountry: "us",
+            preferredCountries: ["ro", "us", "gb", "ca"],
+            separateDialCode: true,
+            nationalMode: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        input.form.addEventListener("submit", function() {
+            input.value = iti.getNumber();
+            countryInput.value = iti.getSelectedCountryData().iso2;
+        });
+    });
+</script>

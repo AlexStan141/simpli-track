@@ -22,7 +22,7 @@
 </script>
 <x-app-layout>
     <x-vertical-menu active-link="/profile"></x-vertical-menu>
-    <div class="p-[54px] flex flex-col">
+    <div class="px-[150px] py-[125px] flex flex-col">
         <div
             class="ring-1 ring-loginblue w-[1205px] h-[280px] mb-[48px] rounded-[22px] flex flex-col items-center gap-[18px]">
             <div class="mt-[28.5px]">
