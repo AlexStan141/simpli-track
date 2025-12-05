@@ -3,7 +3,22 @@
     @if (session()->has('success'))
         <p class="p-2 bg-green-300 border-l-green-700 border-[2px]">{{ session('success') }}</p>
     @endif
-    <form wire:submit.prevent="save">
+    <form wire:submit.prevent="save" x-data="{ iti: null }" x-init="iti = intlTelInput($refs.phone, {
+        initialCountry: 'ro',
+        separateDialCode: true,
+        utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
+    });
+
+    // re-initializează după fiecare update Livewire
+    Livewire.hook('message.processed', () => {
+        if (!$refs.phone.classList.contains('iti')) {
+            iti = intlTelInput($refs.phone, {
+                initialCountry: 'ro',
+                separateDialCode: true,
+                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
+            });
+        }
+    });">
         <div class="grid grid-cols-2 gap-x-[143px] gap-y-[32px] mt-[55px] ml-[36px]">
             <div>
                 <x-input-label>First Name</x-input-label>
@@ -62,18 +77,12 @@
                     class="w-[300px]"></x-select-input>
                 <x-input-error :messages="$errors->get('company_id')" class="mt-2" />
             </div>
-            <div x-data="{ iti: null }" x-init="iti = intlTelInput($refs.phone, {
-                initialCountry: 'ro',
-                separateDialCode: true,
-                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
-            });">
-                <!-- Input vizibil pentru telefon -->
-                <input x-ref="phone" type="tel" wire:model.defer="phone"
-                    @blur="$refs.phone.value = iti.getNumber(); $refs.country.value = iti.getSelectedCountryData().iso2">
 
-                <!-- Input hidden pentru country -->
-                <input type="hidden" x-ref="country" wire:model.defer="country">
-            </div>
+            <input id="phone" x-ref="phone" type="tel" wire:model.defer="phone"
+                @blur="$refs.phone.value = iti.getNumber(); $refs.country.value = iti.getSelectedCountryData().iso2">
+
+            <!-- Input hidden pentru country -->
+            <input type="hidden" x-ref="country" wire:model.defer="country">
         </div>
         <div class="flex justify-center">
             <button type="submit" class="mt-[75px] px-[93px] py-[12px] mb-[19px] bg-loginblue rounded-[80px]">
