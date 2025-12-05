@@ -3,22 +3,7 @@
     @if (session()->has('success'))
         <p class="p-2 bg-green-300 border-l-green-700 border-[2px]">{{ session('success') }}</p>
     @endif
-    <form wire:submit.prevent="save" x-data="{ iti: null }" x-init="iti = intlTelInput($refs.phone, {
-        initialCountry: 'ro',
-        separateDialCode: true,
-        utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
-    });
-
-    // re-initializează după fiecare update Livewire
-    Livewire.hook('message.processed', () => {
-        if (!$refs.phone.classList.contains('iti')) {
-            iti = intlTelInput($refs.phone, {
-                initialCountry: 'ro',
-                separateDialCode: true,
-                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
-            });
-        }
-    });">
+    <form wire:submit.prevent="save">
         <div class="grid grid-cols-2 gap-x-[143px] gap-y-[32px] mt-[55px] ml-[36px]">
             <div>
                 <x-input-label>First Name</x-input-label>
@@ -78,11 +63,34 @@
                 <x-input-error :messages="$errors->get('company_id')" class="mt-2" />
             </div>
 
-            <input id="phone" x-ref="phone" type="tel" wire:model.defer="phone"
-                @blur="$refs.phone.value = iti.getNumber(); $refs.country.value = iti.getSelectedCountryData().iso2">
-
-            <!-- Input hidden pentru country -->
-            <input type="hidden" x-ref="country" wire:model.defer="country">
+            <div x-data="{
+                iti: null,
+                syncValues() {
+                    if (!this.iti) return;
+                    this.$refs.phoneHidden.value = this.iti.getNumber();
+                    this.$refs.countryHidden.value = this.iti.getSelectedCountryData().iso2;
+                    this.$refs.phoneHidden.dispatchEvent(new Event('input'));
+                    this.$refs.countryHidden.dispatchEvent(new Event('input'));
+                }
+            }" x-init="
+                iti = window.intlTelInput($refs.phoneInput, {
+                    initialCountry: 'ro',
+                    preferredCountries: ['ro', 'us', 'gb', 'ca'],
+                    separateDialCode: true,
+                    nationalMode: false,
+                    utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
+                });
+                $refs.phoneInput.addEventListener('countrychange', () => syncValues());
+                $refs.phoneInput.addEventListener('blur', () => syncValues());
+                syncValues();
+            ">
+                <div wire:ignore>
+                    <x-input-label for="phone" :value="__('Phone')" />
+                    <input id="phone" x-ref="phoneInput" type="tel" class="setting-text-input w-[450px]" autocomplete="tel">
+                </div>
+                <input type="hidden" x-ref="phoneHidden" wire:model.defer="phone">
+                <input type="hidden" x-ref="countryHidden" wire:model.defer="country">
+            </div>
         </div>
         <div class="flex justify-center">
             <button type="submit" class="mt-[75px] px-[93px] py-[12px] mb-[19px] bg-loginblue rounded-[80px]">
@@ -92,24 +100,3 @@
     </form>
     @livewire('user-list')
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const input = document.querySelector("#phone");
-        const countryInput = document.querySelector("#country");
-
-
-        const iti = window.intlTelInput(input, {
-            initialCountry: "us",
-            preferredCountries: ["ro", "us", "gb", "ca"],
-            separateDialCode: true,
-            nationalMode: false,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
-        });
-
-        input.form.addEventListener("submit", function() {
-            input.value = iti.getNumber();
-            countryInput.value = iti.getSelectedCountryData().iso2;
-        });
-    });
-</script>
