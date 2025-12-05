@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class UserList extends Component
 {
-    protected $listeners = ["users_list_changed" => "render"];
+    protected $listeners = ["user_list_changed" => "render"];
     public $users;
     public function render()
     {

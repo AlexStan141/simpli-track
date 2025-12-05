@@ -47,8 +47,6 @@ class UserSettings extends Component
             'country' => ['required']
         ]);
 
-        dump($this->phone, $this->country);
-
         User::create([
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
@@ -57,7 +55,7 @@ class UserSettings extends Component
             'password' => Hash::make($this->password),
             'company_id' => Auth::user()->company->id,
             'role_id' => $this->role_id,
-            'country' => 'RO',
+            'country' => $this->country,
 
         ]);
 
