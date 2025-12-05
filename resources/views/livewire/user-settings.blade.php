@@ -56,22 +56,24 @@
                     Director (summary)</p>
                 <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
             </div>
-            <div class="mt-4">
-                <x-input-label for="phone" :value="__('Phone')" />
-                <x-text-input id="phone" class="block mt-1 w-[450px] p-[16px] h-[42px] text-[14px] leading-none"
-                    type="text" name="phone" value="{{ old('phone') }}"></x-text-input>
-                <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-            </div>
-
             <div class="mt-4 hidden">
                 <x-input-label for="company_id" :value="__('Company')" />
                 <x-select-input id="company_id" label="" :values="$companies" defaultValue="{{ $companies[1] }}"
                     class="w-[300px]"></x-select-input>
                 <x-input-error :messages="$errors->get('company_id')" class="mt-2" />
             </div>
+            <div x-data="{ iti: null }" x-init="iti = intlTelInput($refs.phone, {
+                initialCountry: 'ro',
+                separateDialCode: true,
+                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js'
+            });">
+                <!-- Input vizibil pentru telefon -->
+                <input x-ref="phone" type="tel" wire:model.defer="phone"
+                    @blur="$refs.phone.value = iti.getNumber(); $refs.country.value = iti.getSelectedCountryData().iso2">
 
-            <input id="country" type="hidden" name="country" value="">
-
+                <!-- Input hidden pentru country -->
+                <input type="hidden" x-ref="country" wire:model.defer="country">
+            </div>
         </div>
         <div class="flex justify-center">
             <button type="submit" class="mt-[75px] px-[93px] py-[12px] mb-[19px] bg-loginblue rounded-[80px]">
@@ -81,10 +83,12 @@
     </form>
     @livewire('user-list')
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const input = document.querySelector("#phone");
         const countryInput = document.querySelector("#country");
+
 
         const iti = window.intlTelInput(input, {
             initialCountry: "us",
