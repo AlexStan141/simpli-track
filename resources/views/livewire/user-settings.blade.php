@@ -74,7 +74,7 @@
                 }
             }" x-init="
                 iti = window.intlTelInput($refs.phoneInput, {
-                    initialCountry: 'ro',
+                    initialCountry: 'us',
                     preferredCountries: ['ro', 'us', 'gb', 'ca'],
                     separateDialCode: true,
                     nationalMode: false,

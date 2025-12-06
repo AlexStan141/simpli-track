@@ -43,7 +43,13 @@ class UserSettings extends Component
             'email' => ['required', 'email'],
             'role_id' => ['required', 'integer', 'min:1', 'max:' . Role::count()],
             'company_id' => ['required', 'integer', 'min:1', 'max:' . Company::count()],
-            'phone' => ['required'],
+            'phone' => [
+                'required',
+                'string',
+                'min:7',
+                'max:20',
+                'regex:/^\+?[0-9\s\-\(\)]+$/'
+            ],
             'country' => ['required']
         ]);
 
