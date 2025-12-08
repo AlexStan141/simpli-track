@@ -33,8 +33,7 @@ class RegionFilterList extends Component
 
     public function mount()
     {
-        $company = Company::all()->first();
-        $companyRegions = $company->regions->where('selected', true);
+        $companyRegions = Region::where('selected', true);
         $regionNames = $companyRegions->pluck('name')->toArray();
         $this->allRegions = $regionNames;
         $this->selectedRegions = $this->allRegions;

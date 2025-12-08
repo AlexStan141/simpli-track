@@ -18,8 +18,8 @@
     <p class="leading-[1.25rem] h-[15px] font-semibold font-inter ml-[11px]">Edit Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
-    @if(session()->has('success'))
-        <p class="bg-green-300 py-2 pl-2">{{ session('success')}}</p>
+    @if (session()->has('success'))
+        <p class="bg-green-300 py-2 pl-2">{{ session('success') }}</p>
     @endif
     <div class="flex justify-between mt-[79px]">
         <a href="{{ route('invoice.index') }}" class="leading-[14px] h-[12px] ml-[24px]">Back</a>
@@ -46,13 +46,15 @@
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-                <div class="flex gap-2">
-                    <x-custom-input id="amount" label="Amount" width="150px" type="number" wire:model="amount" />
+                <div class="flex flex-col gap-2">
+                    <div class="flex gap-2 items-end">
+                        <x-custom-input id="amount" label="Amount" width="150px" type="text"
+                            wire:change="format_amount" wire:model="amount" />
+                        <p>{{ ' ' . $selected_currency_name }}</p>
+                    </div>
                     @error('amount')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
-                    <x-select-input :values="$currencies" width="200px" id="user_id" label=""
-                        wire:model="selected_currency" defaultValue="{{ $selected_currency }}"></x-select-input>
                     @error('selected_currency')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -101,8 +103,7 @@
                 <div class="flex items-center gap-[43px]">
                     Due date
                     <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                        wire:model="selected_due_day"
-                        defaultValue="{{ $selected_due_day }}" />
+                        wire:model="selected_due_day" defaultValue="{{ $selected_due_day }}" />
                     of each month
                     @error('selected_due_day')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -135,12 +136,16 @@
                     @endif
                 </div>
             </div>
-            <input type="hidden" name="frequency" value="{{ $selected_frequency }}">
+            <input type="hidden" name="frequency" wire:model="selected_frequency" value="{{ $selected_frequency }}">
+            <input type="hidden" name="selected_currency" wire:model="selected_currency"
+                value="{{ $selected_currency }}">
             <div class="flex gap-2">
                 <button type="submit"
                     class="bg-loginblue text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Save
                     Template</button>
-                <button wire:click.prevent="deleteInvoiceTemplate({{ $initialInvoice }}, '{{ $from }}')" class="bg-red-500 text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Delete invoice template</button>
+                <button wire:click.prevent="deleteInvoiceTemplate({{ $initialInvoice }}, '{{ $from }}')"
+                    class="bg-red-500 text-white py-3 px-[48.5px] self-center rounded-[80px] mb-[35px]">Delete invoice
+                    template</button>
             </div>
         </form>
     </div>

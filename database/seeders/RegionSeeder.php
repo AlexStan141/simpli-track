@@ -15,15 +15,12 @@ class RegionSeeder extends Seeder
     {
         Region::factory()->create([
             'name' => 'AMER',
-            'company_id' => 1
         ]);
         Region::factory()->create([
             'name' => 'EMEA',
-            'company_id' => 1
         ]);
         Region::factory()->create([
             'name' => 'APAC',
-            'company_id' => 1
         ]);
     }
 }

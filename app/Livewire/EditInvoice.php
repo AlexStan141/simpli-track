@@ -27,6 +27,7 @@ class EditInvoice extends Component
     public $amount;
     public $currencies;
     public $selected_currency;
+    public $selected_currency_name;
     public $users;
     public $selected_user;
     public $regions;
@@ -49,17 +50,29 @@ class EditInvoice extends Component
         $this->updateCountryList();
     }
 
+    public function updatedSelectedCountry($value)
+    {
+        $this->updateCityList();
+        $this->updateCurrency();
+    }
+
     public function updateCountryList()
     {
         $this->countries = Country::where('region_id', $this->selected_region)->pluck('name', 'id');
-        $this->selected_country = $this->countries->keys()->first();
+        $this->selected_country = $this->initialInvoice->country_id;
         $this->updateCityList();
+        $this->updateCurrency();
+    }
+
+    public function updateCurrency(){
+        $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
+        $this->selected_currency_name = Currency::where('country_id', $this->selected_country)->first()->name;
     }
 
     public function updateCityList()
     {
         $this->cities = City::where('country_id', $this->selected_country)->pluck('name', 'id');
-        $this->selected_city = $this->cities->keys()->first();
+        $this->selected_city = $this->initialInvoice->city_id;
     }
 
     public function updateFrequency($option)
@@ -130,18 +143,15 @@ class EditInvoice extends Component
         $this->amount = $this->initialInvoice->amount;
         $this->currencies = Currency::pluck('name', 'id');
         $this->selected_currency = $this->initialInvoice->currency_id;
+        $this->selected_currency_name = Currency::where('id', $this->initialInvoice->currency_id)
+                                        ->first()->name;
 
         $this->users = User::whereNot('role_id', $adminRoleId)->get()->mapWithKeys(fn($user) => [$user->id => $user->full_name]);
         $this->selected_user = $this->initialInvoice->user_id;
 
         $this->regions = Region::pluck('name', 'id');
         $this->selected_region = $this->initialInvoice->region_id;
-
-        $this->countries = Country::pluck('name', 'id');
-        $this->selected_country = $this->initialInvoice->country_id;
-
-        $this->cities = City::pluck('name', 'id');
-        $this->selected_city = $this->initialInvoice->city_id;
+        $this->updateCountryList();
 
         $this->landlords = Landlord::pluck('name', 'id');
         $this->selected_landlord = $this->initialInvoice->landlord_id;

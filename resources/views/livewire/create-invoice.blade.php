@@ -85,9 +85,7 @@
                     <div class="flex gap-2 items-end">
                         <x-custom-input id="amount" label="Amount" width="150px" type="text"
                             wire:change="format_amount" wire:model="amount" />
-                        <x-select-input :values="$currencies" width="200px" id="user_id" label=""
-                            wire:model="selected_currency"
-                            defaultValue="{{ Auth::user()->company->currency->name }}"></x-select-input>
+                        <p>{{" " . $selected_currency_name }}</p>
                     </div>
                     @error('amount')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -141,7 +139,8 @@
                     @endif
                 </div>
             </div>
-            <input type="hidden" name="frequency" value="{{ $selected_frequency }}">
+            <input type="hidden" name="frequency" wire:model="selected_frequency" value="{{ $selected_frequency }}">
+            <input type="hidden" name="selected_currency" wire:model="selected_currency" value="{{ $selected_currency }}">
             @error('frequency')
                 <p>{{ $message }}</p>
             @enderror

@@ -26,6 +26,7 @@ class CreateInvoice extends Component
     public $amount;
     public $currencies;
     public $selected_currency;
+    public $selected_currency_name;
     public $categories;
     public $selected_category;
     public $users;
@@ -46,9 +47,6 @@ class CreateInvoice extends Component
     public $selected_invoice_for_attention;
     public $frequency_options = ['monthly', 'quarterly'];
     public $selected_frequency = 'monthly';
-    public function setCurrency($payload){
-        $this->selected_currency = $payload['currency'];
-    }
 
     public function updatedSelectedRegion($value)
     {
@@ -58,12 +56,14 @@ class CreateInvoice extends Component
     public function updatedSelectedCountry($value)
     {
         $this->updateCityList();
+        $this->updateCurrency();
     }
     public function updateCountryList()
     {
         $this->countries = Country::where('region_id', $this->selected_region)->pluck('name', 'id');
         $this->selected_country = $this->countries->keys()->first();
         $this->updateCityList();
+        $this->updateCurrency();
     }
     public function updateCityList()
     {
@@ -83,6 +83,11 @@ class CreateInvoice extends Component
     public function format_amount(){
         $this->amount = str_replace(",", "", $this->amount);
         $this->amount = $this->amount ? number_format($this->amount) : "";
+    }
+
+    public function updateCurrency(){
+        $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
+        $this->selected_currency_name = Currency::where('country_id', $this->selected_country)->first()->name;
     }
 
     public function mount()
@@ -114,7 +119,8 @@ class CreateInvoice extends Component
         $this->selected_invoice_for_attention = $company->invoice_for_attention_id;
 
         $this->currencies = Currency::pluck('name', 'id');
-        $this->selected_currency = Auth::user()->company->currency_id;
+        $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
+        $this->selected_currency_name = Currency::where('country_id', $this->selected_country)->first()->name;
     }
 
     public function createInvoiceTemplate(){

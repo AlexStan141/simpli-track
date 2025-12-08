@@ -21,7 +21,6 @@ class CitySeeder extends Seeder
             $country = $countries->pop();
             City::factory(3)->create([
                 'country_id' => $country->id,
-                'company_id' => Company::all()->first()->id
             ]);
         }
     }

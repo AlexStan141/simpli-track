@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Country;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Currency;
@@ -13,6 +14,13 @@ class CurrencySeeder extends Seeder
      */
     public function run(): void
     {
-        Currency::factory(10)->create();
+        $countries = Country::all();
+
+        for($i = 0; $i < 9; $i++){
+            $country = $countries->pop();
+            Currency::factory()->create([
+                'country_id' => $country->id
+            ]);
+        }
     }
 }

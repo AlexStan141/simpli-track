@@ -21,8 +21,7 @@ class CountrySeeder extends Seeder
         for($i = 0; $i < 3; $i++){
             $region = $regions->pop();
             Country::factory(3)->create([
-                'region_id' => $region->id,
-                'company_id' => Company::all()->first()->id
+                'region_id' => $region->id
             ]);
         }
     }

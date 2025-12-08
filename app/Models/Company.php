@@ -18,16 +18,16 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
-    public function regions(): HasMany{
-        return $this->hasMany(Region::class);
+    public function regions(){
+        return $this->belongsToMany(Region::class);
     }
 
-    public function countries(): HasMany{
-        return $this->hasMany(Country::class);
+    public function countries(){
+        return $this->belongsToMany(Country::class);
     }
 
-    public function cities(): HasMany{
-        return $this->hasMany(City::class);
+    public function cities(){
+        return $this->belongsToMany(City::class);
     }
 
     public function landlords(): HasMany{
