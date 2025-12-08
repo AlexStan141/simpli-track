@@ -127,7 +127,8 @@ class BillList extends Component
             $bills = $bills
                 ->orderBy($sortField, $sortType);
         }
-        $bills = $bills->paginate(5);
+
+        $bills = $bills->where('for_user_id', Auth::user()->id)->paginate(5);
         return view('livewire.bill-list', [
             'bills' => $bills
         ]);

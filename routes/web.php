@@ -38,20 +38,6 @@ Route::get('/dashboard', function () {
     $city_names = City::pluck('name', 'id')->toArray();
     $company_id = Auth::user()->company_id;
     $category_names = Category::where('company_id', $company_id)->pluck('name', 'id')->toArray();
-    return view('dashboard', [
-        'region_names' => $region_names,
-        'status_names' => ['All', ...$status_names],
-        'city_names' => ['All', ...$city_names],
-        'category_names' => ['All', ...$category_names]
-
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/test', function () {
-    return view('test');
-});
-
-Route::get('/bills', function () {
     if(Auth::user()->role->name === 'Admin'){
         $invoice_templates = InvoiceTemplate::all();
     } else {
@@ -60,39 +46,34 @@ Route::get('/bills', function () {
     $today = date_format(new DateTime(), 'j');
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
-    $new_bills = false;
-    if ($today == 3) {
+    if ($today == 8) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
-                $new_bills = true;
                 $day = $invoice_template->due_day_id;
                 Bill::create([
                     'invoice_template_id' => $invoice_template->id,
                     'status_id' => Status::where('name', 'Pending')->first()->id,
-                    'due_date' => date_create($this_year . '-' . $this_month . '-' . $day)
+                    'due_date' => date_create($this_year . '-' . $this_month . '-' . $day),
+                    'for_user_id' => Auth::user()->id
+
+                    //Daca intru cu un cont de admin, ma deloghez si intru cu un alt cont nu se mai genereaza nimic
+                    //deoarece toate facturile sunt deja generate, de aceea am adaugat for_user_id
+
                 ]);
             }
         }
-        if (!$new_bills) {
-            return view('bill.index', [
-                'message' => 'Bills already generated for this month. Come back on 1st day of the next month.',
-                'generated' => false
-            ]);
-        } else {
-            return view('bill.index', [
-                'message' => 'Bills for this month generated. Waiting for pay.',
-                'generated' => true
-            ]);
-        }
-    } else {
-        return view('bill.index', [
-            'message' => 'Bills already generated for this month. Come back on 1st day of the next month.',
-            'generated' => false
-        ]);
     }
-});
+    return view('dashboard', [
+        'region_names' => $region_names,
+        'status_names' => ['All', ...$status_names],
+        'city_names' => ['All', ...$city_names],
+        'category_names' => ['All', ...$category_names]
+    ]);
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-//Route::put('/notes/{note_id}', )
+Route::get('/test', function () {
+    return view('test');
+});
 
 Route::get('/invoices', [InvoiceTemplateController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('invoice.index');

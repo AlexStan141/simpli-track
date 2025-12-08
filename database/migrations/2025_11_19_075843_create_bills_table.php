@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_template_id')->constrained()->onDelete('cascade');
             $table->foreignId('status_id')->constrained()->onDelete('cascade');
+            $table->foreignId('for_user_id')->constrained('users')->onDelete('cascade');
             $table->date('due_date');
             $table->timestamps();
         });
