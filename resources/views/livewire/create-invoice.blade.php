@@ -36,6 +36,38 @@
             class="pt-7 flex flex-col gap-10">
             <div class="flex justify-between items-start">
                 <div>
+                    <x-select-input :values="$regions" id="region_id" label="Region" width="200px"
+                        wire:model="selected_region" wire:change="updateCountryList"
+                        defaultValue="{{ $regions->first() }}" />
+                    @error('selected_region')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <x-select-input :values="$countries" id="country_id" label="Country" width="200px"
+                        wire:model="selected_country" wire:change="updateCityList"
+                        defaultValue="{{ $countries->first() }}" />
+                    @error('selected_country')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <x-select-input :values="$cities" id="city_id" label="City" width="200px"
+                        wire:model="selected_city" defaultValue="{{ $cities->first() }}" />
+                    @error('selected_city')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <x-select-input :values="$landlords" id="landlord_id" label="Landlord" width="200px"
+                        wire:model="selected_landlord" defaultValue="{{ $landlords->first() }}" />
+                    @error('selected_landlord')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+            <div class="flex justify-between items-start">
+                <div>
                     <x-select-input :values="$categories" width="200px" id="category_id" label="Category"
                         wire:model="selected_category" defaultValue="{{ $categories->first() }}"></x-select-input>
                     @error('selected_category')
@@ -68,38 +100,6 @@
                     <x-select-input :values="$users" width="200px" id="user_id" label="Assignee"
                         wire:model="selected_user" defaultValue="{{ $users->first() }}"></x-select-input>
                     @error('selected_user')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-            <div class="flex justify-between items-start">
-                <div>
-                    <x-select-input :values="$regions" id="region_id" label="Region" width="200px"
-                        wire:model="selected_region" wire:change="updateCountryList"
-                        defaultValue="{{ $regions->first() }}" />
-                    @error('selected_region')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div>
-                    <x-select-input :values="$countries" id="country_id" label="Country" width="200px"
-                        wire:model="selected_country" wire:change="updateCityList"
-                        defaultValue="{{ $countries->first() }}" />
-                    @error('selected_country')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div>
-                    <x-select-input :values="$cities" id="city_id" label="City" width="200px"
-                        wire:model="selected_city" defaultValue="{{ $cities->first() }}" />
-                    @error('selected_city')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div>
-                    <x-select-input :values="$landlords" id="landlord_id" label="Landlord" width="200px"
-                        wire:model="selected_landlord" defaultValue="{{ $landlords->first() }}" />
-                    @error('selected_landlord')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
