@@ -126,7 +126,7 @@ class EditInvoice extends Component
             "country_id" => $this->selected_country,
             "city_id" => $this->selected_city,
             "landlord_id" => $this->selected_landlord,
-            'currency_id' => $this->selected_currency,
+            'currency_id' => $this->selected_currency->id,
         ]);
         $initialInvoiceAsObject->save();
         return redirect()->to(route('invoice.edit', [
