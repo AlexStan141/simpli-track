@@ -27,43 +27,49 @@
         </div>
         <div class="bg-setting w-[1px] h-[443px] ml-[110px] mb-[151px]"></div>
         <div class="ml-[43px]">
-            <div>
-                <x-input-label for="country" :value="__('Country')"
-                    class="leading-[14px] h-[12px] !text-editprofilelabel" />
-                <div class="flex gap-2 items-end">
-                    <x-text-input id="country" class="setting-text-input w-[450px] mt-2" type="text" name="country"
-                        wire:model="countryToAdd" required />
-                    <x-select-input :values="$currencies" width="200px" id="selected_currency_id" label=""
-                        wire:model="selected_currency_id" defaultValue="{{ $selected_currency_id }}"></x-select-input>
-                </div>
-                <div class="flex gap-7 items-center">
-                    <x-select-input class="w-[200px] rounded-[32px]" id="region" label="" :values="$regions->pluck('name', 'id')"
-                        wire:model="selected_region_id" wire:change="update_region" defaultValue="{{ $selected_region_id }}"></x-select-input>
-                    <button wire:click="addCountry"
-                        class="py-3 px-[93px] bg-loginblue text-white mt-[18px] rounded-[80px]">Save</button>
-                </div>
-            </div>
-            <div class="mt-[69px]">
-                @if ($regions->count() > 0)
-                    <x-select-input class="w-[200px] rounded-[32px]" id="region_id" label="" :values="$regions->pluck('name', 'id')"
-                        wire:model="selected_region_id" wire:change="update_region"
-                        defaultValue="{{ $selected_region_id }}"></x-select-input>
-                    <div class="grid grid-cols-2 gap-x-[38px] gap-y-[18px] mt-[25px]">
-                        @foreach ($countries as $country)
-                            @livewire(
-                                'editable-input',
-                                [
-                                    'old_value' => $country->name,
-                                    'role' => 'country_settings',
-                                ],
-                                key($country->id)
-                            )
-                        @endforeach
+            @if ($regions->count() > 0)
+                <div>
+                    <x-input-label for="country" :value="__('Country')"
+                        class="leading-[14px] h-[12px] !text-editprofilelabel" />
+                    <div class="flex gap-2 items-end">
+                        <x-text-input id="country" class="setting-text-input w-[450px] mt-2" type="text"
+                            name="country" wire:model="countryToAdd" required />
+                        <x-select-input :values="$currencies" width="200px" id="selected_currency_id" label=""
+                            wire:model="selected_currency_id"
+                            defaultValue="{{ $selected_currency_id }}"></x-select-input>
                     </div>
-                @else
-                    <div class="text-red-500">No regions with countries found!</div>
-                @endif
-            </div>
+                    <div class="flex gap-7 items-center">
+                        <x-select-input class="w-[200px] rounded-[32px]" id="region" label="" :values="$regions->pluck('name', 'id')"
+                            wire:model="selected_region_id" wire:change="update_region"
+                            defaultValue="{{ $selected_region_id }}"></x-select-input>
+                        <button wire:click="addCountry"
+                            class="py-3 px-[93px] bg-loginblue text-white mt-[18px] rounded-[80px]">Save</button>
+                    </div>
+                </div>
+                <div class="mt-[69px]">
+                    @if ($regions->count() > 0)
+                        <x-select-input class="w-[200px] rounded-[32px]" id="region_id" label="" :values="$regions->pluck('name', 'id')"
+                            wire:model="selected_region_id" wire:change="update_region"
+                            defaultValue="{{ $selected_region_id }}"></x-select-input>
+                        <div class="grid grid-cols-2 gap-x-[38px] gap-y-[18px] mt-[25px]">
+                            @foreach ($countries as $country)
+                                @livewire(
+                                    'editable-input',
+                                    [
+                                        'old_value' => $country->name,
+                                        'role' => 'country_settings',
+                                    ],
+                                    key($country->id)
+                                )
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-red-500">No regions with countries found!</div>
+                    @endif
+                </div>
+            @else
+                <div class="text-red-500">Regions needed for country operations!</div>
+            @endif
         </div>
     </div>
     <hr>
@@ -79,11 +85,12 @@
                             name="city" wire:model="cityToAdd" required />
                     </div>
                     <div class="flex gap-7 items-center">
-                        <x-select-input class="w-[200px] rounded-[32px]" id="region" label="" :values="$regions->pluck('name','id')"
+                        <x-select-input class="w-[200px] rounded-[32px]" id="region" label="" :values="$regions->pluck('name', 'id')"
                             wire:model="selected_region_id" defaultValue="{{ $selected_region_id }}"
                             wire:change="update_region"></x-select-input>
-                        <x-select-input class="w-[200px] rounded-[32px]" id="country" label="" :values="$countries->pluck('name','id')"
-                            wire:model="selected_country_id" wire:change="update_country" defaultValue="{{ $selected_country_id }}"></x-select-input>
+                        <x-select-input class="w-[200px] rounded-[32px]" id="country" label="" :values="$countries->pluck('name', 'id')"
+                            wire:model="selected_country_id" wire:change="update_country"
+                            defaultValue="{{ $selected_country_id }}"></x-select-input>
                     </div>
                     <button wire:click="addCity"
                         class="py-3 px-[93px] bg-loginblue text-white mt-[18px] rounded-[80px]">Save</button>
@@ -97,11 +104,11 @@
             <div>
                 @if ($countries->count() > 0)
                     <div class="flex gap-2">
-                        <x-select-input class="w-[200px] rounded-[32px]" id="region_id" label="" :values="$regions->pluck('name','id')"
+                        <x-select-input class="w-[200px] rounded-[32px]" id="region_id" label="" :values="$regions->pluck('name', 'id')"
                             wire:model="selected_region_id" wire:change="update_region"
                             defaultValue="{{ $selected_region_id }}"></x-select-input>
                         <x-select-input class="w-[200px] rounded-[32px]" id="country_id" label=""
-                            :values="$countries->pluck('name','id')" wire:model="selected_country_id" wire:change="update_country"
+                            :values="$countries->pluck('name', 'id')" wire:model="selected_country_id" wire:change="update_country"
                             defaultValue="{{ $selected_country_id }}"></x-select-input>
                     </div>
                     <div class="grid grid-cols-2 gap-x-[38px] gap-y-[18px] mt-[25px]">

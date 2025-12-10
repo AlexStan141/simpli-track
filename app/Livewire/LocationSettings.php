@@ -65,17 +65,24 @@ class LocationSettings extends Component
     public function update_page()
     {
         $this->regions = Region::all();
-        $this->selected_region_id = Region::first()->id;
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
-        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id;
-        $this->cities = City::where('country_id', $this->selected_country_id)->get();
+        $this->selected_region_id = Region::first() ? Region::first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+            Country::where('region_id', $this->selected_region_id)->get() : collect();
+        $this->selected_country_id = $this->selected_region_id ?
+            (Country::where('region_id', $this->selected_region_id)->first() ?
+                Country::where('region_id', $this->selected_region_id)->first()->id : null)
+            : null;
+        $this->cities = $this->selected_country_id ?
+            City::where('country_id', $this->selected_country_id)->get() : collect();
     }
 
     public function update_region()
     {
         $this->countries = Country::where('region_id', $this->selected_region_id)->get();
-        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id;
-        $this->cities = City::where('country_id', $this->selected_country_id)->get();
+        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first() ?
+            Country::where('region_id', $this->selected_region_id)->first()->id : null;
+        $this->cities = $this->selected_country_id ?
+            City::where('country_id', $this->selected_country_id)->get() : collect();
     }
 
     public function update_country()
@@ -86,10 +93,15 @@ class LocationSettings extends Component
     public function mount()
     {
         $this->regions = Region::all();
-        $this->selected_region_id = Region::first()->id;
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
-        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id;
-        $this->cities = City::where('country_id', $this->selected_country_id)->get();
+        $this->selected_region_id = Region::first() ? Region::first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+            Country::where('region_id', $this->selected_region_id)->get() : collect();
+        $this->selected_country_id = $this->selected_region_id ?
+            (Country::where('region_id', $this->selected_region_id)->first() ?
+                Country::where('region_id', $this->selected_region_id)->first()->id : null)
+            : null;
+        $this->cities = $this->selected_country_id ?
+            City::where('country_id', $this->selected_country_id)->get() : collect();
         $this->currencies = Currency::pluck('name', 'id');
         $this->selected_currency_id = Currency::all()->first()->id;
     }
