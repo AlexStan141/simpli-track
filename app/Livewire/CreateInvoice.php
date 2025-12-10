@@ -85,7 +85,8 @@ class CreateInvoice extends Component
     }
 
     public function updateCurrency(){
-        $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
+        $currency_id = Country::where('id', $this->selected_country)->first()->currency_id;
+        $this->selected_currency = Currency::where('id', $currency_id)->first();
     }
 
     public function mount()

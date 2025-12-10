@@ -65,8 +65,9 @@ class EditInvoice extends Component
     }
 
     public function updateCurrency(){
-        $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
-        $this->selected_currency_name = Currency::where('country_id', $this->selected_country)->first()->name;
+        $currency_id = Country::where('id', $this->selected_country)->first()->currency_id;
+        $this->selected_currency = Currency::where('id', $currency_id)->first();
+        $this->selected_currency_name = Currency::where('id', $currency_id)->first()->name;
     }
 
     public function updateCityList()
