@@ -15,15 +15,16 @@ class CountryList extends Component
     public $countries;
 
     public function trigger_region_update(){
-        $this->countries = Country::where('region_id', $this->selected_region_id)
-                            ->whereNotNull('company_id')->get();
+        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
     }
 
     public function refresh()
     {
-        $this->regions = Region::pluck('name', 'id');
-        $this->selected_region_id = Region::all()->first()->id;
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
+        $this->regions = Region::has('countries')->pluck('name', 'id');
+        $this->selected_region_id = Region::has('countries')->first() ?
+                                    Region::has('countries')->first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+                            Country::where('region_id', $this->selected_region_id)->get() : collect();
     }
 
     public function render()
@@ -32,8 +33,10 @@ class CountryList extends Component
     }
 
     public function mount(){
-        $this->regions = Region::pluck('name', 'id');
-        $this->selected_region_id = Region::all()->first()->id;
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
+        $this->regions = Region::has('countries')->pluck('name', 'id');
+        $this->selected_region_id = Region::has('countries')->first() ?
+                                    Region::has('countries')->first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+                            Country::where('region_id', $this->selected_region_id)->get() : collect();
     }
 }

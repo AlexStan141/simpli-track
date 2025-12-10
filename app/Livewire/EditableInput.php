@@ -75,6 +75,8 @@ class EditableInput extends Component
         }
         else if($this->role == 'country_settings'){
             $country = Country::where('name', $this->old_value)->first();
+            $country_id = $country->id;
+            $region_id = $country->region_id;
             $country->delete();
             $this->dispatch('country_list_updated');
         }

@@ -26,7 +26,6 @@ class CreateInvoice extends Component
     public $amount;
     public $currencies;
     public $selected_currency;
-    public $selected_currency_name;
     public $categories;
     public $selected_category;
     public $users;
@@ -87,7 +86,6 @@ class CreateInvoice extends Component
 
     public function updateCurrency(){
         $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
-        $this->selected_currency_name = Currency::where('country_id', $this->selected_country)->first()->name;
     }
 
     public function mount()
@@ -103,11 +101,6 @@ class CreateInvoice extends Component
         $this->users = User::whereNot('role_id', $adminRoleId)->get()->mapWithKeys(fn($user) => [$user->id => $user->full_name]);
         $this->selected_user = $this->users->keys()->first();
 
-        // Regiuni
-        $this->regions = Region::where('selected', true)->pluck('name', 'id');
-        $this->selected_region = $this->regions->keys()->first();
-        $this->updateCountryList();
-
         // Proprietari
         $this->landlords = Landlord::pluck('name', 'id');
         $this->selected_landlord = $this->landlords->keys()->first();
@@ -119,8 +112,15 @@ class CreateInvoice extends Component
         $this->selected_invoice_for_attention = $company->invoice_for_attention_id;
 
         $this->currencies = Currency::pluck('name', 'id');
-        $this->selected_currency = Currency::where('country_id', $this->selected_country)->first()->id;
-        $this->selected_currency_name = Currency::where('country_id', $this->selected_country)->first()->name;
+        $this->selected_currency = Currency::where('id', Auth::user()->company->currency_id)->first();
+
+
+        $this->regions = Region::where('selected', true)->pluck('name', 'id');
+        $this->selected_region = $this->regions->keys()->first();
+        $this->countries = Country::where('region_id', $this->selected_region)->pluck('name', 'id');
+        $this->selected_country = $this->countries->keys()->first();
+        $this->updateCityList();
+
     }
 
     public function createInvoiceTemplate(){
@@ -150,7 +150,7 @@ class CreateInvoice extends Component
             "country_id" => $this->selected_country,
             "city_id" => $this->selected_city,
             "landlord_id" => $this->selected_landlord,
-            'currency_id' => $this->selected_currency,
+            'currency_id' => $this->selected_currency->id,
         ]);
         $this->dispatch('invoiceTemplateCreated');
         return redirect()->to(route('invoice.edit', [

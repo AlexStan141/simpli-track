@@ -8,7 +8,7 @@
         <select id="{{ $id }}" name="{{ $id }}"
             {{ $attributes->merge(['class' => "appearance-none bg-none rounded-[32px] border border-inputbordercolor h-[44px]"]) }}>
             @forelse ($values as $key => $optionLabel)
-                @if ($optionLabel === $defaultValue)
+                @if ($key == $defaultValue)
                     <option value="{{ $key }}" class="text-[15px] leading-[22px] h-[22px]"
                         :selected="true">{{ $optionLabel }}</option>
                 @else

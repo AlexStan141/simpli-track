@@ -18,9 +18,7 @@ class CurrencySeeder extends Seeder
 
         for($i = 0; $i < 9; $i++){
             $country = $countries->pop();
-            Currency::factory()->create([
-                'country_id' => $country->id
-            ]);
+            Currency::factory()->create();
         }
     }
 }

@@ -16,7 +16,7 @@ class Currency extends Model
     }
 
     public function country() {
-        return $this->belongsTo(Country::class);
+        return $this->hasMany(Country::class);
     }
 
     public function invoiceTemplates(): HasMany {

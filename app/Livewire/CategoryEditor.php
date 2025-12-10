@@ -22,7 +22,9 @@ class CategoryEditor extends Component
 
     public function editCategory()
     {
-        $this->editMode = true;
+        $this->dispatch('edit_category', [
+            'category' => $this->oldCategory
+        ]);
     }
 
     public function saveCategory()
@@ -32,7 +34,6 @@ class CategoryEditor extends Component
         $category->save();
 
         $this->oldCategory = $this->newCategory;
-        $this->editMode = false;
     }
 
     public function deleteCategory()

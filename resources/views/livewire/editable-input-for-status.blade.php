@@ -17,7 +17,5 @@
                 <button class="bg-loginblue px-10 py-2 text-white rounded-[20px] mt-2" wire:click="save">Save</button>
             </div>
         @endif
-    @else
-        <div></div>
     @endif
 </div>

@@ -58,7 +58,7 @@ class CompanySettings extends Component
         $company->display_invoice_amount = $this->displayInvoiceAmount;
         $company->save();
 
-        $companyRegions = Region::where('company_id', $company->id)->get();
+        $companyRegions = Region::all();
         foreach ($companyRegions as $companyRegion) {
             $companyRegion->selected = $companyRegion->selected_before_save;
             $companyRegion->save();
@@ -69,8 +69,7 @@ class CompanySettings extends Component
 
     public function toggleRegion($region)
     {
-        $company = Auth::user()->company;
-        $companyRegion = Region::where('name', $region)->where('company_id', $company->id)->first();
+        $companyRegion = Region::where('name', $region)->first();
         if (in_array($region, $this->existingRegions)) {
             $this->existingRegions = array_filter($this->existingRegions, function ($el) use ($region) {
                 return $el !== $region;
@@ -96,12 +95,12 @@ class CompanySettings extends Component
         $this->companyName = $company->name;
         $this->companyAddress = $company->address;
         $this->currencies = Currency::pluck('name', 'id');
-        $this->defaultCurrency = Auth::user()->company->currency->id;
+        $this->defaultCurrency = Auth::user()->company->currency->id ?? null;
         $this->displayInvoiceAmount = $company->display_invoice_amount ?? 'false';
         $this->logo = $company->logo ?? null;
-        $regions = $company->regions->where('selected', true);
+        $regions = Region::where('selected', true);
         $regionNames = $regions->pluck('name')->toArray();
         $this->existingRegions = $regionNames;
-        $this->allRegions = Region::all()->where('company_id', $company->id)->pluck('name')->toArray();
+        $this->allRegions = Region::all()->pluck('name')->toArray();
     }
 }
