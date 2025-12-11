@@ -12,12 +12,19 @@ class InvoiceTemplateList extends Component
 {
     use WithPagination;
 
-    protected $listeners = ['displayInvoiceAmount' => 'displayInvoiceAmount', 'hideInvoiceAmount' => 'hideInvoiceAmount'];
+    protected $listeners = [
+        'displayInvoiceAmount' => 'displayInvoiceAmount',
+        'hideInvoiceAmount' => 'hideInvoiceAmount',
+        'invoice-template-status-filter-value-updated' => 'update_list'
+    ];
     public $sortField = 'invoice_templates.created_at';
-    public $sortType = "asc";
-
+    public $sortType = "desc";
     public $showInvoiceAmount;
-
+    public $filterStatus = "All";
+    public function update_list($payload)
+    {
+        $this->filterStatus = $payload['value'];
+    }
     public function gotoPage($page)
     {
         $this->setPage($page);
@@ -31,6 +38,11 @@ class InvoiceTemplateList extends Component
     public function hideInvoiceAmount()
     {
         $this->showInvoiceAmount = false;
+    }
+
+    public function activate($invoice_template_id){
+        $invoice_template = InvoiceTemplate::where('id', $invoice_template_id);
+        $invoice_template->restore();
     }
 
     public function sort($field)
@@ -54,27 +66,28 @@ class InvoiceTemplateList extends Component
     public function render()
     {
         $adminRoleId = Role::where('name', 'Admin')->first()->id;
-        if (Auth::user()->role->id === $adminRoleId) {
-            $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
-                ->with(['category', 'city', 'user', 'due_day'])
-                ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
-                ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-                ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-                ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-                ->orderBy($this->sortField, $this->sortType)
-                ->paginate(5);
-        } else {
-            $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
-                ->with(['category', 'city', 'user', 'due_day'])
-                ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
-                ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-                ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-                ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-                ->where('users.id', '=', Auth::id())
-                ->orderBy($this->sortField, $this->sortType)
-                ->paginate(5);
+
+        $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
+            ->with(['category', 'city', 'user', 'due_day'])
+            ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
+            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
+            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
+            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id');
+
+        if (Auth::user()->role->id !== $adminRoleId) {
+            $invoice_templates = $invoice_templates->where('users.id', '=', Auth::id());
         }
 
+        if ($this->filterStatus == "Cancelled") {
+            $invoice_templates = $invoice_templates->whereNotNull('deleted_at');
+        } else if ($this->filterStatus == "Active") {
+            $invoice_templates = $invoice_templates->whereNull('deleted_at');
+        }
+
+        $invoice_templates = $invoice_templates
+            ->orderBy($this->sortField, $this->sortType)
+            ->withTrashed()
+            ->paginate(5);
 
         return view('livewire.invoice-template-list', ['user_invoices' => $invoice_templates]);
     }

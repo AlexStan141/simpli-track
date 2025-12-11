@@ -2,9 +2,12 @@
     <p class="text-xl leading-none h-[15px] font-semibold">Invoice Templates</p>
     <hr class="mt-[16px] w-[100%]">
     </hr>
-    <a href="{{ route('invoice.create') }}">
-        <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
-    </a>
+    <div class="flex justify-end items-center gap-4">
+        @livewire('invoice-template-status-filter')
+        <a href="{{ route('invoice.create') }}">
+            <img src="{{ asset('images/add_invoice.png') }}" alt="add_invoice" class="float-right mt-[10px] mr-[13px]" />
+        </a>
+    </div>
     <div class="after:content-[''] after:block after:clear-both"></div>
     @if (session()->has('success'))
         <p class="bg-green-300 py-2 pl-2 mb-4">'{{ session('success') }}'</p>
@@ -14,7 +17,7 @@
     @else
         <table class="w-full invoice-templates mb-[44px]">
             <thead>
-                <tr class="bg-formgray w-full h-[56px] border">
+                <tr @class(['bg-formgray w-full h-[56px] border'])>
                     <th class="w-[62px]"></th>
                     <th class="w-[178px]">
                         <div class="flex justify-between">
@@ -70,12 +73,20 @@
             </thead>
             <tbody>
                 @foreach ($user_invoices as $user_invoice)
-                    <tr class= "h-[56px] border">
+                    <tr @class([
+                        'h-[56px] border',
+                        'bg-gray-300' => $user_invoice->deleted_at,
+                    ])>
                         <td class="w-[62px]">
                             <div class="flex justify-center items-center">
-                                <a href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice, 'from' => 'List']) }}">
-                                     <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
-                                </a>
+                                @if ($user_invoice->deleted_at)
+                                    <button class="text-loginblue" wire:click="activate({{$user_invoice->id}})">Activate</button>
+                                @else
+                                    <a
+                                        href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice, 'from' => 'List']) }}">
+                                        <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
+                                    </a>
+                                @endif
                             </div>
                         </td>
                         <td class="w-[178px]">{{ $user_invoice->category->name }}</td>

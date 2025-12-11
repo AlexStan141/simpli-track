@@ -90,10 +90,10 @@ class EditInvoice extends Component
         $initialInvoiceAsObject = InvoiceTemplate::findOrFail($initialInvoice['id']);
         $initialInvoiceAsObject->delete();
         if($from === 'Dashboard'){
-            return redirect()->to(route('dashboard'))->with('success', 'Invoice template deleted successfully.');
+            return redirect()->to(route('dashboard'))->with('success', 'Invoice template cancelled successfully.');
         }
         else{
-            return redirect()->to(route('invoice.index'))->with('success', 'Invoice template deleted successfully.');
+            return redirect()->to(route('invoice.index'))->with('success', 'Invoice template cancelled successfully.');
         }
     }
 
