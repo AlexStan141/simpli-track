@@ -100,41 +100,43 @@
                 </div>
             </div>
             <div class="flex justify-between">
-                <div class="flex items-center gap-[43px]">
-                    Due date
-                    <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                        wire:model="selected_due_day" defaultValue="{{ $selected_due_day }}" />
-                    of each month
+                <div class="flex flex-col items-start">
+                    <div class="flex items-center gap-[43px]">
+                        <p class="mt-4">Due date</p>
+                        <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
+                            wire:model="selected_due_day" defaultValue="{{ $selected_due_day }}" />
+                        <p class="mt-4">of each month</p>
+                    </div>
                     @error('selected_due_day')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-                <div class="flex items-center gap-[43px]">
-                    Flag invoices for attention
-                    <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label="" width="200px"
-                        wire:model="selected_invoice_for_attention"
-                        defaultValue="{{ $selected_invoice_for_attention }}" />
-                    before due date
+                <div class="flex flex-col items-start">
+                    <div class="flex items-center gap-[43px]">
+                        <p class="mt-4">Flag invoices for attention</p>
+                        <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label="" width="200px"
+                            wire:model="selected_invoice_for_attention"
+                            defaultValue="{{ $selected_invoice_for_attention }}" />
+                        <p class="mt-4">before due date</p>
+                    </div>
                     @error('selected_invoice')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
-            <div class="flex flex-col gap-4">
+            <div class="flex gap-4 items-center">
                 Frequency
-                <div class="flex gap-[6px]">
-                    @if ($selected_frequency === 'Monthly')
-                        <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px] cursor-pointer"
-                            wire:click="updateFrequency(0)">monthly</div>
-                        <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px] cursor-pointer"
-                            wire:click="updateFrequency(1)">quarterly</div>
-                    @else
-                        <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px] cursor-pointer"
-                            wire:click="updateFrequency(0)">monthly</div>
-                        <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px] cursor-pointer"
-                            wire:click="updateFrequency(1)">quarterly</div>
-                    @endif
-                </div>
+                @if ($selected_frequency === 'Monthly')
+                    <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px] cursor-pointer"
+                        wire:click="updateFrequency(0)">monthly</div>
+                    <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px] cursor-pointer"
+                        wire:click="updateFrequency(1)">quarterly</div>
+                @else
+                    <div class="border-loginblue border px-[17px] py-[13px] rounded-[20px] cursor-pointer"
+                        wire:click="updateFrequency(0)">monthly</div>
+                    <div class="border-loginblue border bg-loginblue text-white px-[17px] py-[13px] rounded-[20px] cursor-pointer"
+                        wire:click="updateFrequency(1)">quarterly</div>
+                @endif
             </div>
             <input type="hidden" name="frequency" wire:model="selected_frequency" value="{{ $selected_frequency }}">
             <input type="hidden" name="selected_currency" wire:model="selected_currency"

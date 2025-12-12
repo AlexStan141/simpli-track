@@ -104,21 +104,25 @@
                     </div>
                 </div>
                 <div class="flex justify-between items-start">
-                    <div class="flex items-center gap-[43px]">
-                        <p class="mt-4">Due date</p>
-                        <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
-                            wire:model="selected_due_day" defaultValue="{{ Auth::user()->company->due_day_id }}" />
-                        <p class="mt-4">of each month</p>
+                    <div class="flex flex-col items-start">
+                        <div class="flex items-center gap-[43px]">
+                            <p class="mt-4">Due date</p>
+                            <x-select-input :values="$due_days" id="due_day_id" label="" width="200px"
+                                wire:model="selected_due_day" defaultValue="{{ Auth::user()->company->due_day_id }}" />
+                            <p class="mt-4">of each month</p>
+                        </div>
                         @error('selected_due_day')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="flex items-center gap-[43px]">
-                        <p class="mt-4">Flag invoices for attention</p>
-                        <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label="" width="200px"
-                            wire:model="selected_invoice_for_attention"
-                            defaultValue="{{ Auth::user()->company->invoices_for_attention_id }}" />
-                        <p class="mt-4">before due date</p>
+                    <div class="flex flex-col items-start">
+                        <div class="flex items-center gap-[43px]">
+                            <p class="mt-4">Flag invoices for attention</p>
+                            <x-select-input :values="$invoices_for_attention" id="invoice_for_attention_id" label=""
+                                width="200px" wire:model="selected_invoice_for_attention"
+                                defaultValue="{{ Auth::user()->company->invoices_for_attention_id }}" />
+                            <p class="mt-4">before due date</p>
+                        </div>
                         @error('selected_invoice')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
