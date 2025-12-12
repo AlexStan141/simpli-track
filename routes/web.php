@@ -45,7 +45,7 @@ Route::get('/dashboard', function () {
     $today = date_format(new DateTime(), 'j');
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
-    if ($today == 10) {
+    if ($today == 12) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $day = $invoice_template->due_day_id;

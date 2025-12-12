@@ -40,7 +40,8 @@ class InvoiceTemplateList extends Component
         $this->showInvoiceAmount = false;
     }
 
-    public function activate($invoice_template_id){
+    public function activate($invoice_template_id)
+    {
         $invoice_template = InvoiceTemplate::where('id', $invoice_template_id);
         $invoice_template->restore();
     }
@@ -68,7 +69,14 @@ class InvoiceTemplateList extends Component
         $adminRoleId = Role::where('name', 'Admin')->first()->id;
 
         $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
-            ->with(['category', 'city', 'user', 'due_day'])
+            ->with([
+                'category' => function ($q) {
+                    $q->withTrashed();
+                },
+                'city',
+                'user',
+                'due_day'
+            ])
             ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
             ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
             ->join('users', 'invoice_templates.user_id', '=', 'users.id')
@@ -79,9 +87,9 @@ class InvoiceTemplateList extends Component
         }
 
         if ($this->filterStatus == "Cancelled") {
-            $invoice_templates = $invoice_templates->whereNotNull('deleted_at');
+            $invoice_templates = $invoice_templates->whereNotNull('invoice_templates.deleted_at');
         } else if ($this->filterStatus == "Active") {
-            $invoice_templates = $invoice_templates->whereNull('deleted_at');
+            $invoice_templates = $invoice_templates->whereNull('invoice_templates.deleted_at');
         }
 
         $invoice_templates = $invoice_templates

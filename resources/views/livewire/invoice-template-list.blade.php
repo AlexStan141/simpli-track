@@ -84,7 +84,7 @@
                                 @else
                                     <a
                                         href="{{ route('invoice.edit', ['initialInvoice' => $user_invoice, 'from' => 'List']) }}">
-                                        <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
+                                        <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice" width="48" height="36">
                                     </a>
                                 @endif
                             </div>

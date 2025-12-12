@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Bill;
 use App\Models\Region;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -73,50 +74,53 @@ class BillList extends Component
 
     public function displayBills($filters, $sortField, $sortType)
     {
-        $bills = Bill::select('bills.*', 'cities.name', 'due_days.day', 'users.first_name')
+        $bills = Bill::withTrashed()
             ->with([
-                'invoice_template',
+                'invoice_template' => function ($q) {
+                    $q->withTrashed();
+                },
                 'invoice_template.due_day',
                 'invoice_template.invoice_for_attention',
                 'invoice_template.city',
                 'invoice_template.category',
                 'invoice_template.user',
                 'invoice_template.region',
+                'invoice_template.user',
                 'status',
                 'status.company'
-            ])
-            ->join('invoice_templates', 'invoice_templates.id', '=', 'bills.invoice_template_id')
-            ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-            ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id')
-            ->join('invoice_for_attentions', 'invoice_templates.invoice_for_attention_id', '=', 'invoice_for_attentions.id')
-            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
-            ->join('statuses', 'status_id', '=', 'statuses.id');
+            ]);
 
         if (Auth::user()->role->name !== "Admin") {
-            $bills->where('user_id', Auth::id());
+            $bills = $bills->whereHas('invoice_template', function ($q) use ($filters) {
+                $q->withTrashed()->whereHas('user', function ($query) use ($filters) {
+                    $query->where('id', Auth::id());
+                });
+            });
         }
 
-        $bills->whereHas('invoice_template.region', function ($query) use ($filters) {
-            $query->whereIn('name', $filters['selectedRegions']);
-        })
-            ->whereHas('status.company', function ($query) {
-                $query->whereNotNull('id');
+        $bills = $bills->whereHas('invoice_template', function ($q) use ($filters) {
+            $q->withTrashed()->whereHas('region', function ($query) use ($filters) {
+                $query->whereIn('name', $filters['selectedRegions']);
             });
-
+        });
 
         if ($filters['selectedStatus'] !== 'All') {
-            $bills->whereHas('status', function ($query) use ($filters) {
-                $query->where('name', '=', $filters['selectedStatus']);
+            $bills = $bills->withTrashed()->whereHas('status', function ($query) use ($filters) {
+                $query->where('name', $filters['selectedStatus']);
             });
         }
         if ($filters['selectedCity'] !== 'All') {
-            $bills->whereHas('invoice_template.city', function ($query) use ($filters) {
-                $query->where('name', '=', $filters['selectedCity']);
+            $bills = $bills->whereHas('invoice_template', function ($q) use ($filters) {
+                $q->withTrashed()->whereHas('city', function ($query) use ($filters) {
+                    $query->where('name', $filters['selectedCity']);
+                });
             });
         }
         if ($filters['selectedCategory'] !== 'All') {
-            $bills->whereHas('invoice_template.category', function ($query) use ($filters) {
-                $query->where('name', '=', $filters['selectedCategory']);
+            $bills = $bills->whereHas('invoice_template', function ($q) use ($filters) {
+                $q->withTrashed()->whereHas('category', function ($query) use ($filters) {
+                    $query->where('name', $filters['selectedCategory']);
+                });
             });
         }
 

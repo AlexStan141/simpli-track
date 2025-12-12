@@ -66,4 +66,19 @@ class InvoiceTemplate extends Model
     {
         return $this->hasMany(Bill::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function($invoice){
+            if(!$invoice->isForceDeleting()){
+                // $invoice->bills()->delete(); hard delete
+                $invoice->bills()->get()->each->delete();
+            }
+        });
+
+        static::restoring(function ($invoice) {
+            //$invoice->bills()->restore();
+            $invoice->bills()->withTrashed()->get()->each->restore();
+        });
+    }
 }

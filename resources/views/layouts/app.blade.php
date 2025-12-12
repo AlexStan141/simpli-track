@@ -27,6 +27,12 @@
 </head>
 
 <body class="font-sans antialiased">
+    @livewire('confirm-delete-modal', [
+        'entity' => 'example',
+        'id' => 1,
+        'displayed' => false,
+        'action' => 'cancel',
+    ])
     <div class="min-h-screen bg-bodycolor flex flex-col">
         @include('layouts.navigation')
         <!-- Page Content -->

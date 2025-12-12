@@ -87,14 +87,19 @@ class EditInvoice extends Component
 
     public function deleteInvoiceTemplate($initialInvoice, $from)
     {
-        $initialInvoiceAsObject = InvoiceTemplate::findOrFail($initialInvoice['id']);
-        $initialInvoiceAsObject->delete();
-        if($from === 'Dashboard'){
-            return redirect()->to(route('dashboard'))->with('success', 'Invoice template cancelled successfully.');
-        }
-        else{
-            return redirect()->to(route('invoice.index'))->with('success', 'Invoice template cancelled successfully.');
-        }
+        $this->dispatch('confirm-delete-modal-display', [
+            'entity' => 'invoice template',
+            'entity_id' => $initialInvoice["id"],
+            'action' => 'cancel'
+        ]);
+        // $initialInvoiceAsObject = InvoiceTemplate::findOrFail($initialInvoice['id']);
+        // $initialInvoiceAsObject->delete();
+        // if($from === 'Dashboard'){
+        //     return redirect()->to(route('dashboard'))->with('success', 'Invoice template cancelled successfully.');
+        // }
+        // else{
+        //     return redirect()->to(route('invoice.index'))->with('success', 'Invoice template cancelled successfully.');
+        // }
     }
 
     public function editInvoiceTemplate($initialInvoice)

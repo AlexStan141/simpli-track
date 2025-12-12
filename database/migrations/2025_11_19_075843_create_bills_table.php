@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_template_id')->constrained()->onDelete('cascade');
+            $table->foreignId('invoice_template_id')
+                ->constrained()
+                ->onDelete('restrict');
             $table->foreignId('status_id')->constrained()->onDelete('cascade');
             $table->foreignId('for_user_id')->constrained('users')->onDelete('cascade');
             $table->date('due_date');

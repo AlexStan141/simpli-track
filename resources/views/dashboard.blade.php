@@ -9,9 +9,9 @@
                     @livewire('region-filter-list')
                 </div>
                 <div class="flex mr-8">
-                    @livewire('filter', ['type' => 'Status', 'values' => $status_names, 'selected_value' => $status_names[1]])
-                    @livewire('filter', ['type' => 'Location', 'values' => $city_names, 'selected_value' => $city_names[1]])
-                    @livewire('filter', ['type' => 'Category', 'values' => $category_names, 'selected_value' => $category_names[1]])
+                    @livewire('filter', ['type' => 'Status', 'values' => $status_names, 'selected_value' => $status_names[0]])
+                    @livewire('filter', ['type' => 'Location', 'values' => $city_names, 'selected_value' => $city_names[0]])
+                    @livewire('filter', ['type' => 'Category', 'values' => $category_names, 'selected_value' => $category_names[0]])
                 </div>
             </div>
             @livewire('bill-list')

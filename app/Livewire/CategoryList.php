@@ -8,21 +8,26 @@ use Livewire\Component;
 class CategoryList extends Component
 {
     protected $listeners = ['category_list_updated' => 'render',
-                            'edit_category' => 'start_edit'];
+                            'close_other_categories' => 'close_other_categories'];
     public $categories;
-    public $category_to_edit;
     public function render()
     {
-        $this->categories = Category::all();
         return view('livewire.category-list');
     }
 
     public function mount()
     {
-        $this->categories = Category::all();
+        $this->categories = Category::withTrashed()->get();
     }
 
-    public function start_edit($payload){
-        $this->category_to_edit = $payload['category'];
+    public function close_other_categories($payload){
+        foreach($this->categories as $category){
+            if($category->name !== $payload['value']){
+                $this->dispatch('close_editable_input', [
+                    'old_value' => $category->name,
+                    'role' => 'category_settings'
+                ]);
+            }
+        }
     }
 }
