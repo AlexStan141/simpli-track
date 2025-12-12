@@ -3,6 +3,9 @@
     @if(session()->has('success'))
         <p class="mt-4 ml-4 p-2 bg-green-300">{{ session('success') }}</p>
     @endif
+    @if(session()->has('error'))
+        <p class="mt-4 ml-4 p-2 bg-red-300">{{ session('error') }}</p>
+    @endif
     <form method="POST" enctype="multipart/form-data" wire:submit.prevent="save" class="flex flex-col">
         @csrf
         <div class="flex gap-[165px]">

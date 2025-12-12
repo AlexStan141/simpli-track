@@ -33,6 +33,11 @@ class CompanySettings extends Component
 
     public function save()
     {
+        if(count($this->existingRegions) == 0)
+        {
+            return redirect()->back()->with('error', 'You must select at least one region');
+        }
+
         $this->validate([
             'companyName' => 'required|string',
             'companyAddress' => 'required|string',
