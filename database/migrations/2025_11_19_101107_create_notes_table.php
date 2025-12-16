@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->string("message");
-            $table->foreignId('bill_id')->constrained()->onDelete('cascade');
+            $table->foreignId('bill_id')->constrained()->onDelete('restrict');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

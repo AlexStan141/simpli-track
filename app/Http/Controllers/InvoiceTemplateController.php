@@ -13,7 +13,7 @@ class InvoiceTemplateController extends Controller
      */
     public function index()
     {
-        $user_invoices = InvoiceTemplate::where('user_id', Auth::user()->id)->latest()->paginate(5);
+        $user_invoices = InvoiceTemplate::latest()->paginate(5);
         return view("invoice_template.index", [
             'user_invoices' => $user_invoices
         ]);

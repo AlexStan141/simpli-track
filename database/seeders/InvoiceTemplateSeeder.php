@@ -30,7 +30,7 @@ class InvoiceTemplateSeeder extends Seeder
         $invoicesForAttention = InvoiceForAttention::all();
 
         foreach ($users as $user) {
-            for ($i = 1; $i <= 20; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 $category = $categories->random();
                 $region = $regions->random();
                 $countries = Country::where('region_id', $region->id)->get();

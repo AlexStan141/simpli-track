@@ -15,8 +15,9 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('region_id')->constrained()->onDelete('cascade');
-            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
+            $table->foreignId('region_id')->constrained()->onDelete('restrict');
+            $table->foreignId('currency_id')->constrained()->onDelete('restrict');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

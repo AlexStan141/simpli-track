@@ -26,15 +26,16 @@ return new class extends Migration
             $table->enum('frequency', InvoiceTemplate::$frequencies);
             $table->unsignedInteger('amount')->nullable();
             $table->string('lease_no')->nullable();
-            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
-            $table->foreignId('due_day_id')->constrained()->onDelete('cascade');
-            $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('region_id')->constrained()->onDelete('cascade');
-            $table->foreignId('country_id')->constrained()->onDelete('cascade');
-            $table->foreignId('city_id')->constrained()->onDelete('cascade');
-            $table->foreignId('landlord_id')->constrained()->onDelete('cascade');
+            $table->foreignId('currency_id')->constrained()->onDelete('restrict');
+            $table->foreignId('due_day_id')->constrained()->onDelete('restrict');
+            $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('restrict');
+            $table->foreignId('category_id')->constrained()->onDelete('restrict');
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
+            $table->foreignId('region_id')->constrained()->onDelete('restrict');
+            $table->foreignId('country_id')->constrained()->onDelete('restrict');
+            $table->foreignId('city_id')->constrained()->onDelete('restrict');
+            $table->foreignId('landlord_id')->constrained()->onDelete('restrict');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

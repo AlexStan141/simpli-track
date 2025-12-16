@@ -16,6 +16,19 @@ class DueDay extends Model
         return $this->hasMany(InvoiceTemplate::class);
     }
 
+    protected static function booted()
+    {
+        static::deleting(function($due_day){
+            if(!$due_day->isForceDeleting()){
+                $due_day->invoice_templates()->get()->each->delete();
+            }
+        });
+
+        static::restoring(function ($due_day) {
+            $due_day->invoice_templates()->withTrashed()->get()->each->restore();
+        });
+    }
+
     protected $table = 'due_days';
 
 }

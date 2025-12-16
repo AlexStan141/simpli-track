@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('due_days', function (Blueprint $table) {
             $table->id();
             $table->string('day');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

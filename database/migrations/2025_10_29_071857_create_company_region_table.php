@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->boolean('selected');
             $table->boolean('selectedBeforeSave');
+            $table->softDeletes();
             $table->timestamps(); // opțional, dar util
         });
     }

@@ -31,7 +31,6 @@ class Category extends Model
         });
 
         static::restoring(function ($category) {
-            //$invoice->bills()->restore();
             $category->invoice_templates()->withTrashed()->get()->each->restore();
         });
     }

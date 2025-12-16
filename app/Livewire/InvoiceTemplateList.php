@@ -66,25 +66,17 @@ class InvoiceTemplateList extends Component
 
     public function render()
     {
-        $adminRoleId = Role::where('name', 'Admin')->first()->id;
-
         $invoice_templates = InvoiceTemplate::select('invoice_templates.*', 'categories.name', 'cities.name', 'due_days.day')
             ->with([
                 'category' => function ($q) {
                     $q->withTrashed();
                 },
                 'city',
-                'user',
                 'due_day'
             ])
             ->join('categories', 'invoice_templates.category_id', '=', 'categories.id')
             ->join('cities', 'invoice_templates.city_id', '=', 'cities.id')
-            ->join('users', 'invoice_templates.user_id', '=', 'users.id')
             ->join('due_days', 'invoice_templates.due_day_id', '=', 'due_days.id');
-
-        if (Auth::user()->role->id !== $adminRoleId) {
-            $invoice_templates = $invoice_templates->where('users.id', '=', Auth::id());
-        }
 
         if ($this->filterStatus == "Cancelled") {
             $invoice_templates = $invoice_templates->whereNotNull('invoice_templates.deleted_at');

@@ -17,6 +17,11 @@ class InvoiceTemplate extends Model
 
     protected $guarded = [];
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class); //for assignee
+    }
+
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
@@ -25,11 +30,6 @@ class InvoiceTemplate extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function region(): BelongsTo
@@ -65,20 +65,5 @@ class InvoiceTemplate extends Model
     public function bills()
     {
         return $this->hasMany(Bill::class);
-    }
-
-    protected static function booted()
-    {
-        static::deleting(function($invoice){
-            if(!$invoice->isForceDeleting()){
-                // $invoice->bills()->delete(); hard delete
-                $invoice->bills()->get()->each->delete();
-            }
-        });
-
-        static::restoring(function ($invoice) {
-            //$invoice->bills()->restore();
-            $invoice->bills()->withTrashed()->get()->each->restore();
-        });
     }
 }

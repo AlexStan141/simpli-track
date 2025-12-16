@@ -11,7 +11,6 @@ class BillHelpers
     public static function bill_generated($invoice_template, $month, $year)
     {
         $bill = Bill::where('invoice_template_id', $invoice_template->id)
-                    ->where('for_user_id', Auth::user()->id)
                     ->first();
         if ($bill) {
             $bill_month = date_format(date_create($bill->due_date), 'n');

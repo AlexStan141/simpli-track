@@ -15,6 +15,16 @@ class DateHelpers
         return DateHelpers::format(date_create($date_as_string));
     }
 
+    public static function month_and_year($due_date)
+    {
+        $month = date_format(new DateTime(), 'n');
+        $year = date_format(new DateTime(), 'Y');
+        return [
+            'month' => $month,
+            'year' => $year
+        ];
+    }
+
     public static function format(DateTime $date): string
     {
         $months = [

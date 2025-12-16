@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address');
-            $table->unsignedBigInteger('currency_id')->nullable();
-            $table->foreign('currency_id')
-                ->references('id')->on('currencies')
-                ->onDelete('set null');
-            $table->foreignId('due_day_id')->constrained()->onDelete('cascade');
-            $table->foreignId('invoice_for_attention_id')->nullable()->onDelete('cascade');
+            $table->foreignId('currency_id')->constrained()->onDelete('restrict');
+            $table->foreignId('due_day_id')->constrained()->onDelete('restrict');
+            $table->foreignId('invoice_for_attention_id')->constrained()->onDelete('restrict');
             $table->boolean('display_invoice_amount');
             $table->string('logo')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

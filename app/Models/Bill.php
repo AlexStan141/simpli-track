@@ -25,4 +25,21 @@ class Bill extends Model
     {
         return $this->hasOne(Note::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function($bill){
+            if(!$bill->isForceDeleting()){
+                if($bill->note){
+                    $bill->note->delete();
+                }
+            }
+        });
+
+        static::restoring(function ($bill) {
+            if($bill->note){
+                $bill->note->restore();
+            }
+        });
+    }
 }

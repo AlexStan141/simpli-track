@@ -37,15 +37,11 @@ Route::get('/dashboard', function () {
     $city_names = City::pluck('name', 'id')->toArray();
     $company_id = Auth::user()->company_id;
     $category_names = Category::where('company_id', $company_id)->pluck('name', 'id')->toArray();
-    if(Auth::user()->role->name === 'Admin'){
-        $invoice_templates = InvoiceTemplate::all();
-    } else {
-        $invoice_templates = InvoiceTemplate::where('user_id', Auth::user()->id)->get();
-    }
+    $invoice_templates = InvoiceTemplate::all();
     $today = date_format(new DateTime(), 'j');
     $this_month = date_format(new DateTime(), 'n');
     $this_year = date_format(new DateTime(), 'Y');
-    if ($today == 12) {
+    if ($today == 16) {
         foreach ($invoice_templates as $invoice_template) {
             if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                 $day = $invoice_template->due_day_id;
@@ -53,7 +49,6 @@ Route::get('/dashboard', function () {
                     'invoice_template_id' => $invoice_template->id,
                     'status_id' => Status::where('name', 'Pending')->first()->id,
                     'due_date' => date_create($this_year . '-' . $this_month . '-' . $day),
-                    'for_user_id' => Auth::user()->id
 
                     //Daca intru cu un cont de admin, ma deloghez si intru cu un alt cont nu se mai genereaza nimic
                     //deoarece toate facturile sunt deja generate, de aceea am adaugat for_user_id

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('invoice_for_attentions', function (Blueprint $table) {
             $table->id();
             $table->string('period');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

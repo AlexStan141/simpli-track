@@ -83,20 +83,11 @@ class BillList extends Component
                 'invoice_template.invoice_for_attention',
                 'invoice_template.city',
                 'invoice_template.category',
-                'invoice_template.user',
                 'invoice_template.region',
                 'invoice_template.user',
                 'status',
                 'status.company'
             ]);
-
-        if (Auth::user()->role->name !== "Admin") {
-            $bills = $bills->whereHas('invoice_template', function ($q) use ($filters) {
-                $q->withTrashed()->whereHas('user', function ($query) use ($filters) {
-                    $query->where('id', Auth::id());
-                });
-            });
-        }
 
         $bills = $bills->whereHas('invoice_template', function ($q) use ($filters) {
             $q->withTrashed()->whereHas('region', function ($query) use ($filters) {
@@ -132,7 +123,7 @@ class BillList extends Component
                 ->orderBy($sortField, $sortType);
         }
 
-        $bills = $bills->where('for_user_id', Auth::user()->id)->paginate(5);
+        $bills = $bills->paginate(5);
         return view('livewire.bill-list', [
             'bills' => $bills
         ]);
