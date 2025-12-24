@@ -7,6 +7,7 @@ use Livewire\Component;
 
 class EditableInputForStatus extends Component
 {
+    protected $listeners = ['close_editable_input_for_status' => 'close_editable_input_for_status'];
     public $old_value;
     public $new_value;
     public $old_color_value;
@@ -19,16 +20,18 @@ class EditableInputForStatus extends Component
         $this->new_value = $old_value;
         $this->old_color_value = $old_color_value;
         $this->new_color_value = $old_color_value;
-        $this->deleted = false;
     }
     public function edit()
     {
         $this->edit_mode = true;
+        $this->dispatch('close_other_statuses', [
+            'value' => $this->old_value
+        ]);
     }
     public function save()
     {
         $status = Status::where('name', $this->old_value)
-                ->where('color', $this->old_color_value)->first();
+            ->where('color', $this->old_color_value)->first();
         $status->name = $this->new_value;
         $status->color = $this->new_color_value;
         $status->save();
@@ -41,9 +44,22 @@ class EditableInputForStatus extends Component
     {
         $this->deleted = true;
         $status = Status::where('name', $this->old_value)
-                ->where('color', $this->old_color_value)->first();
+            ->where('color', $this->old_color_value)->first();
         $status->delete();
         $this->dispatch('status_list_updated');
+    }
+
+    public function close_editable_input_for_status($payload)
+    {
+        if ($payload['old_value'] == $this->old_value) {
+            $this->edit_mode = false;
+        }
+    }
+
+    public function restore(){
+        $status = Status::withTrashed()->where('name', $this->old_value)->first();
+        $status->restore();
+        $this->deleted = false;
     }
 
     public function render()

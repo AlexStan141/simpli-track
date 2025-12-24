@@ -15,6 +15,7 @@ use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UploadController;
+use App\Jobs\CreateBills;
 use App\Livewire\CompanySettings;
 use App\Models\Bill;
 use App\Models\InvoiceTemplate;
@@ -37,26 +38,7 @@ Route::get('/dashboard', function () {
     $city_names = City::pluck('name', 'id')->toArray();
     $company_id = Auth::user()->company_id;
     $category_names = Category::where('company_id', $company_id)->pluck('name', 'id')->toArray();
-    $invoice_templates = InvoiceTemplate::all();
-    $today = date_format(new DateTime(), 'j');
-    $this_month = date_format(new DateTime(), 'n');
-    $this_year = date_format(new DateTime(), 'Y');
-    if ($today == 16) {
-        foreach ($invoice_templates as $invoice_template) {
-            if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
-                $day = $invoice_template->due_day_id;
-                Bill::create([
-                    'invoice_template_id' => $invoice_template->id,
-                    'status_id' => Status::where('name', 'Pending')->first()->id,
-                    'due_date' => date_create($this_year . '-' . $this_month . '-' . $day),
-
-                    //Daca intru cu un cont de admin, ma deloghez si intru cu un alt cont nu se mai genereaza nimic
-                    //deoarece toate facturile sunt deja generate, de aceea am adaugat for_user_id
-
-                ]);
-            }
-        }
-    }
+    CreateBills::dispatch();
     return view('dashboard', [
         'region_names' => $region_names,
         'status_names' => ['All', ...$status_names],

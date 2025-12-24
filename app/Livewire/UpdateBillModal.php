@@ -24,7 +24,7 @@ class UpdateBillModal extends Component
         $this->bill_id = $payload['bill_id'];
         $this->displayed = true;
         $this->statuses = Status::all()->pluck('name', 'id');
-        $this->default_status = Bill::where('id', $this->bill_id)->first()->status->name;
+        $this->default_status = Bill::where('id', $this->bill_id)->first()->status->id;
         $this->current_status = $this->default_status;
     }
 

@@ -10,7 +10,7 @@
             </div>
         @else
             <div class="flex flex-col">
-                <input type="text" value="{{ $old_value }}" wire:model="new_value" name="country"
+                <input type="text" value="{{ $old_value }}" wire:model="new_value" name="simpli-track-input"
                     class="simpli-track-input">
                 <button class="bg-loginblue px-10 py-2 text-white rounded-[20px] mt-2" wire:click="save">Save</button>
             </div>

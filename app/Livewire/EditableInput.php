@@ -33,6 +33,24 @@ class EditableInput extends Component
                 'value' => $this->old_value
             ]);
         }
+        else if($this->role == 'region_settings')
+        {
+            $this->dispatch('close_other_regions', [
+                'value' => $this->old_value
+            ]);
+        }
+        else if($this->role == 'country_settings')
+        {
+            $this->dispatch('close_other_countries', [
+                'value' => $this->old_value
+            ]);
+        }
+        else if($this->role == 'city_settings')
+        {
+            $this->dispatch('close_other_cities', [
+                'value' => $this->old_value
+            ]);
+        }
     }
 
     public function save()

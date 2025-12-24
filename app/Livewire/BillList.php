@@ -74,8 +74,7 @@ class BillList extends Component
 
     public function displayBills($filters, $sortField, $sortType)
     {
-        $bills = Bill::withTrashed()
-            ->with([
+        $bills = Bill::with([
                 'invoice_template' => function ($q) {
                     $q->withTrashed();
                 },
@@ -96,7 +95,7 @@ class BillList extends Component
         });
 
         if ($filters['selectedStatus'] !== 'All') {
-            $bills = $bills->withTrashed()->whereHas('status', function ($query) use ($filters) {
+            $bills = $bills->whereHas('status', function ($query) use ($filters) {
                 $query->where('name', $filters['selectedStatus']);
             });
         }

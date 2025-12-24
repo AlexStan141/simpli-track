@@ -66,22 +66,25 @@
                     <tr class= "h-[56px] border">
                         <td class="w-[62px]">
                             <div class="flex justify-center items-center">
-                                <a href="{{ route('bill.edit', ['bill_id' => $bill->id]) }}" wire:click.prevent="displayModal({{ $bill->id }})">
+                                <a href="{{ route('bill.edit', ['bill_id' => $bill->id]) }}"
+                                    wire:click.prevent="displayModal({{ $bill->id }})">
                                     <img src="{{ asset('/images/removeInvoice.png') }}" alt="remove invoice">
                                 </a>
                             </div>
                         </td>
-                        <td class="w-[196px]">{{ $bill->invoice_template ? $bill->invoice_template->city->name : "No location" }}</td>
+                        <td class="w-[196px]">
+                            {{ $bill->invoice_template ? $bill->invoice_template->city->name : 'No location' }}</td>
                         <td class="w-[200px]">{{ $bill->status->name }}</td>
                         <td class="w-[225px]">
-                            {{ $bill->invoice_template ? DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) : "No due day" }}
+                            {{ $bill->invoice_template ? DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) : 'No due day' }}
                         </td>
-                        <td class="w-[171px] flex gap-2" >
-                            <img src="{{  $bill->note ? asset('images/selected_social.png') : asset('images/social.png') }}" alt="call" wire:click="displayNoteModal({{ $bill->id }})">
+                        <td class="w-[171px] flex gap-2">
+                            <img src="{{ $bill->note ? asset('images/selected_social.png') : asset('images/social.png') }}"
+                                alt="call" wire:click="displayNoteModal({{ $bill->id }})">
                             <span>call</span>
                         </td>
                         <td class="w-[205px]">
-                            {{ $bill->invoice_template ? $bill->invoice_template->user->first_name . ' ' . $bill->invoice_template->user->last_name : "No user" }}
+                            {{ $bill->invoice_template ? $bill->invoice_template->user->first_name . ' ' . $bill->invoice_template->user->last_name : 'No user' }}
                         </td>
                         <td class="w-[200px]">{{ $bill->updated_at }}</td>
                     </tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceRequest;
+use App\Jobs\CreateBills;
 use App\Models\InvoiceTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
