@@ -13,6 +13,7 @@ class CityList extends Component
         'region_list_updated' => 'refreshRegion',
         'country_list_updated' => 'refreshCountry',
         'city_list_updated' => 'refreshCity',
+        'close_other_cities' => 'close_other_cities'
     ];
     public $regions;
     public $selected_region_id;
@@ -23,7 +24,7 @@ class CityList extends Component
     public function refreshRegion()
     {
         $this->regions = Region::has('countries')->pluck('name', 'id');
-        $this->selected_region_id = Region::has('countries')->first()->id;
+        $this->selected_region_id = Region::has('countries')->first()->id; //Select first region with countries
         $this->countries = Country::where('region_id', $this->selected_region_id)->pluck('name', 'id');
         $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id;
         $this->cities = City::where('country_id', $this->selected_country_id)->pluck('name', 'id');
@@ -35,7 +36,7 @@ class CityList extends Component
         if ($nr_countries) {
             $this->countries = Country::where('region_id', $this->selected_region_id)->pluck('name', 'id');
             $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id ?? null;
-            $this->cities = City::where('country_id', $this->selected_country_id)->pluck('name', 'id');
+            $this->cities = City::where('country_id', $this->selected_country_id)->get();
         } else {
             $nr_regions = Region::has('countries')->count();
             if ($nr_regions) {
@@ -43,7 +44,7 @@ class CityList extends Component
                 $this->selected_region_id = Region::has('countries')->first()->id;
                 $this->countries = Country::where('region_id', $this->selected_region_id)->pluck('name', 'id');
                 $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id ?? null;
-                $this->cities = City::where('country_id', $this->selected_country_id)->pluck('name', 'id');
+                $this->cities = City::where('country_id', $this->selected_country_id)->get();
             } else {
                 $this->countries = collect();
                 $this->selected_country_id = null;
@@ -54,7 +55,7 @@ class CityList extends Component
 
     public function refreshCity()
     {
-        $this->cities = City::where('country_id', $this->selected_country_id)->get();
+        $this->cities = City::withTrashed()->where('country_id', $this->selected_country_id)->get();
     }
 
 
@@ -64,17 +65,21 @@ class CityList extends Component
     }
     public function mount()
     {
-        $this->selected_country_id = Country::all()->first()->id ?? null;
-        $this->cities = $this->selected_country_id ?
-            City::where('country_id', $this->selected_country_id)->get() :
-            collect();
+        $this->selected_region_id = Region::has('countries')->first()->id;
         $this->regions = Region::has('countries')->pluck('name', 'id');
-        $this->selected_region_id = $this->selected_country_id ?
-            Country::where('id', $this->selected_country_id)->first()->region->id :
-            null;
-        $this->countries =  $this->selected_region_id ?
-            Country::where('region_id', $this->selected_region_id)
-            ->pluck('name', 'id') :
-            collect();
+        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first()->id;
+        $this->countries = Country::where('region_id', $this->selected_region_id)->pluck('name', 'id');
+        $this->cities = City::withTrashed()->where('country_id', $this->selected_country_id)->get();
+    }
+
+    public function close_other_cities($payload){
+        foreach($this->cities as $city){
+            if($city->name !== $payload['value']){
+                $this->dispatch('close_editable_input', [
+                    'old_value' => $city->name,
+                    'role' => 'city_settings'
+                ]);
+            }
+        }
     }
 }

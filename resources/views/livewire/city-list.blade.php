@@ -16,6 +16,8 @@
                         [
                             'old_value' => $city->name,
                             'role' => 'city_settings',
+                            'editMode' => false,
+                            'deleted' => $city->deleted_at ? true : false
                         ],
                         key($city->id)
                     )

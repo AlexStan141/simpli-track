@@ -11,7 +11,6 @@ class RegionList extends Component
     public $regions;
     public function render()
     {
-        $this->regions = Region::all();
         return view('livewire.region-list');
     }
 

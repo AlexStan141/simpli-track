@@ -31,13 +31,11 @@ class City extends Model
         static::deleting(function($city){
             if(!$city->isForceDeleting()){
                 $city->invoice_templates()->get()->each->delete();
-                $city->company->delete();
             }
         });
 
         static::restoring(function ($city) {
             $city->invoice_templates()->withTrashed()->get()->each->restore();
-            $city->company->restore();
         });
     }
 }

@@ -1,4 +1,4 @@
-<div class="mt-[69px]">
+<div class="flex flex-col items-start">
     @if ($regions->count() > 0)
         <x-select-input class="w-[200px] rounded-[32px]" id="region_id" label="" :values="$regions"
             wire:model="selected_region_id" wire:change="trigger_region_update"
@@ -10,6 +10,8 @@
                     [
                         'old_value' => $country->name,
                         'role' => 'country_settings',
+                        'editMode' => false,
+                        'deleted' => $country->deleted_at ? true : false
                     ],
                     key($country->id)
                 )

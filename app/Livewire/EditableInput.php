@@ -93,8 +93,6 @@ class EditableInput extends Component
             $this->dispatch('city_list_updated');
         } else if ($this->role == 'country_settings') {
             $country = Country::where('name', $this->old_value)->first();
-            $country_id = $country->id;
-            $region_id = $country->region_id;
             $country->delete();
             $this->dispatch('country_list_updated');
         } else if ($this->role == 'region_settings') {
@@ -113,12 +111,32 @@ class EditableInput extends Component
                 'action' => 'delete'
             ]);
         }
+        $this->deleted = true;
     }
 
     public function restore(){
         if($this->role == 'category_settings'){
             $category = Category::withTrashed()->where('name', $this->old_value)->first();
             $category->restore();
+        }
+        else if($this->role == 'status_settings'){
+            $status = Status::withTrashed()->where('name', $this->old_value)->first();
+            $status->restore();
+        }
+        else if($this->role == 'region_settings'){
+            $region = Region::withTrashed()->where('name', $this->old_value)->first();
+            $region->restore();
+            $this->dispatch('region_list_updated');
+        }
+        else if($this->role == 'country_settings'){
+            $country = Country::withTrashed()->where('name', $this->old_value)->first();
+            $country->restore();
+            $this->dispatch('country_list_updated');
+        }
+        else if($this->role == 'city_settings'){
+            $city = City::withTrashed()->where('name', $this->old_value)->first();
+            $city->restore();
+            $this->dispatch('city_list_updated');
         }
         $this->deleted = false;
     }
