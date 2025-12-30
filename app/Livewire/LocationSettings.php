@@ -11,9 +11,10 @@ use Livewire\Component;
 class LocationSettings extends Component
 {
     protected $listeners = [
-        'region_list_updated' => 'update_page',
-        'country_list_updated' => 'update_region',
-        'city_list_updated' => 'update_country'
+        'country_list_updated' => 'update_countries',
+        'city_list_updated' => 'update_cities',
+        'region_list_updated' => 'update_regions',
+        'selected_region_updated' => 'update_selected_region',
     ];
     public $regions;
     public $selected_region_id;
@@ -22,47 +23,18 @@ class LocationSettings extends Component
     public $cities;
     public $currencies;
     public $selected_currency_id;
-    public $regionToAdd;
-    public $countryToAdd;
-    public $cityToAdd;
     public function render()
     {
         return view('livewire.location-settings');
     }
 
-    public function addRegion()
+    public function update_selected_region($data)
     {
-        Region::create([
-            'name' => $this->regionToAdd,
-            'selected' => true,
-            'selected_before_save' => true
-        ]);
-        $this->regionToAdd = '';
-        $this->update_page();
+        $this->selected_region_id = $data['region_id'];
+        $this->update_countries();
     }
 
-    public function addCountry()
-    {
-        Country::create([
-            'name' => $this->countryToAdd,
-            'region_id' => $this->selected_region_id,
-            'currency_id' => $this->selected_currency_id
-        ]);
-        $this->countryToAdd = '';
-        $this->update_region();
-    }
-
-    public function addCity()
-    {
-        City::create([
-            'name' => $this->cityToAdd,
-            'country_id' => $this->selected_country_id,
-        ]);
-        $this->cityToAdd = '';
-        $this->update_country();
-    }
-
-    public function update_page()
+    public function update_regions()
     {
         $this->regions = Region::all();
         $this->selected_region_id = Region::first() ? Region::first()->id : null;
@@ -74,20 +46,26 @@ class LocationSettings extends Component
             : null;
         $this->cities = $this->selected_country_id ?
             City::where('country_id', $this->selected_country_id)->get() : collect();
+        $this->currencies = Currency::pluck('name', 'id');
+        $this->selected_currency_id = Currency::all()->first()->id;
     }
 
-    public function update_region()
+    public function update_countries()
     {
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
-        $this->selected_country_id = Country::where('region_id', $this->selected_region_id)->first() ?
-            Country::where('region_id', $this->selected_region_id)->first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+            Country::where('region_id', $this->selected_region_id)->get() : collect();
+        $this->selected_country_id = $this->selected_region_id ?
+            (Country::where('region_id', $this->selected_region_id)->first() ?
+                Country::where('region_id', $this->selected_region_id)->first()->id : null)
+            : null;
         $this->cities = $this->selected_country_id ?
             City::where('country_id', $this->selected_country_id)->get() : collect();
     }
 
-    public function update_country()
+    public function update_cities()
     {
-        $this->cities = City::where('country_id', $this->selected_country_id)->get();
+        $this->cities = $this->selected_country_id ?
+            City::where('country_id', $this->selected_country_id)->get() : collect();
     }
 
     public function mount()

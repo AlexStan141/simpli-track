@@ -4,7 +4,7 @@
             class="leading-[14px] h-[12px] font-inter text-editprofilelabel">{{ $label }}</label>
     @endif
 
-    <div class="relative mt-[16px] flex justify-center w-full">
+    <div {{$attributes->class(['relative flex justify-center w-full', $withoutMargin ? '' : 'mt-4'])}}>
         <select id="{{ $id }}" name="{{ $id }}"
             {{ $attributes->merge(['class' => "appearance-none bg-none rounded-[32px] border border-inputbordercolor h-[44px]"]) }}>
             @forelse ($values as $key => $optionLabel)

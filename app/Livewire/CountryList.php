@@ -8,23 +8,24 @@ use Livewire\Component;
 
 class CountryList extends Component
 {
-    protected $listeners = ['region_list_updated' => 'refresh',
-                            'country_list_updated' => 'refresh'];
+    protected $listeners = [
+        'country_list_updated' => 'update_countries',
+        'region_list_updated' => 'update_regions'
+    ];
     public $regions;
     public $selected_region_id;
     public $countries;
 
-    public function trigger_region_update(){
-        $this->countries = Country::where('region_id', $this->selected_region_id)->get();
+    public function update_regions(){
+        $this->regions = Region::all();
+        $this->selected_region_id = Region::first() ? Region::first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
     }
 
-    public function refresh()
-    {
-        $this->regions = Region::has('countries')->pluck('name', 'id');
-        $this->selected_region_id = Region::has('countries')->first() ?
-                                    Region::has('countries')->first()->id : null;
+    public function update_countries(){
         $this->countries =  $this->selected_region_id ?
-                            Country::where('region_id', $this->selected_region_id)->get() : collect();
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
     }
 
     public function render()
@@ -32,11 +33,11 @@ class CountryList extends Component
         return view('livewire.country-list');
     }
 
-    public function mount(){
-        $this->regions = Region::has('countries')->pluck('name', 'id');
-        $this->selected_region_id = Region::has('countries')->first() ?
-                                    Region::has('countries')->first()->id : null;
+    public function mount()
+    {
+        $this->regions = Region::all();
+        $this->selected_region_id = Region::first() ? Region::first()->id : null;
         $this->countries =  $this->selected_region_id ?
-                            Country::where('region_id', $this->selected_region_id)->get() : collect();
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
     }
 }

@@ -1,11 +1,12 @@
 <div>
+    <div class="h-[25px]"></div>
     @if ($countries->count() > 0)
         <div class="flex gap-2">
             <x-select-input class="w-[200px] rounded-[32px]" id="region_id" label="" :values="$regions"
-                wire:model="selected_region_id" wire:change="refreshCountry"
+                wire:model="selected_region_id" wire:change="update_countries"
                 defaultValue="{{ $selected_region_id }}"></x-select-input>
-            <x-select-input class="w-[200px] rounded-[32px]" id="country_id" label="" :values="$countries"
-                wire:model="selected_country_id" wire:change="refreshCity" defaultValue="{{ $selected_country_id }}"
+            <x-select-input class="w-[200px] rounded-[32px]" id="country_id" label="" :values="$countries->pluck('name', 'id')"
+                wire:model="selected_country_id" wire:change="update_cities" defaultValue="{{ $selected_country_id }}"
             ></x-select-input>
         </div>
         <div class="grid grid-cols-2 gap-x-[38px] gap-y-[18px] mt-[25px]">

@@ -7,8 +7,14 @@ use Livewire\Component;
 
 class RegionList extends Component
 {
-    protected $listeners = ['region_list_updated' => 'render'];
+    protected $listeners = ['region_list_updated' => 'refresh_regions'];
     public $regions;
+
+    public function refresh_regions()
+    {
+        $this->regions = Region::withTrashed()->get();
+    }
+
     public function render()
     {
         return view('livewire.region-list');
@@ -16,6 +22,6 @@ class RegionList extends Component
 
     public function mount()
     {
-        $this->regions = Region::all();
+        $this->regions = Region::withTrashed()->get();
     }
 }

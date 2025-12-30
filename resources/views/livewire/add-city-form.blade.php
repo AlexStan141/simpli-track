@@ -7,10 +7,10 @@
                 wire:model="cityToAdd" required />
         </div>
         <div class="flex gap-7 items-center">
-            <x-select-input class="w-[200px] rounded-[32px]" id="region" label="" :values="$regions"
+            <x-select-input class="w-[200px] rounded-[32px]" id="region" label="" :values="$regions->pluck('name', 'id')"
                 wire:model="selected_region_id" defaultValue="{{ $selected_region_id }}"
-                wire:change="update_country_list"></x-select-input>
-            <x-select-input class="w-[200px] rounded-[32px]" id="country" label="" :values="$countries"
+                wire:change="update_countries"></x-select-input>
+            <x-select-input class="w-[200px] rounded-[32px]" id="country" label="" :values="$countries->pluck('name', 'id')"
                 wire:model="selected_country_id" defaultValue="{{ $selected_country_id }}"></x-select-input>
         </div>
         <button wire:click="addCity"

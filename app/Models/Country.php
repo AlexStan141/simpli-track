@@ -40,14 +40,12 @@ class Country extends Model
         static::deleting(function($country){
             if(!$country->isForceDeleting()){
                 $country->invoice_templates()->get()->each->delete();
-                $country->company->delete();
                 $country->cities()->get()->each->delete();
             }
         });
 
         static::restoring(function ($country) {
             $country->invoice_templates()->withTrashed()->get()->each->restore();
-            $country->company->restore();
             $country->cities()->withTrashed()->get()->each->restore();
         });
     }

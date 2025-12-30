@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class AddCountryForm extends Component
 {
-    protected $listeners = ['region_list_updated' => 'render'];
+    protected $listeners = ['region_list_updated' => 'update_regions'];
     public $regions;
     public $selected_region_id;
     public $currencies;
@@ -24,7 +24,7 @@ class AddCountryForm extends Component
             'currency_id' => $this->selected_currency_id
         ]);
         $this->countryToAdd = '';
-        $this->dispatch('region_list_updated');
+        $this->dispatch('country_list_updated');
     }
     public function render()
     {
@@ -32,10 +32,19 @@ class AddCountryForm extends Component
     }
     public function mount()
     {
-        $this->regions = Region::pluck('name', 'id');
-        $this->selected_region_id = Region::all()->first()->id;
-
+        $this->regions = Region::all();
+        $this->selected_region_id = Region::first() ? Region::first()->id : null;
         $this->currencies = Currency::pluck('name', 'id');
         $this->selected_currency_id = Currency::all()->first()->id;
+        $this->countryToAdd = '';
+    }
+
+    public function update_regions()
+    {
+        $this->regions = Region::all();
+        $this->selected_region_id = Region::first() ? Region::first()->id : null;
+        $this->currencies = Currency::pluck('name', 'id');
+        $this->selected_currency_id = Currency::all()->first()->id;
+        $this->countryToAdd = '';
     }
 }
