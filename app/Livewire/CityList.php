@@ -10,9 +10,9 @@ use Livewire\Component;
 class CityList extends Component
 {
     protected $listeners = [
-        'city_list_updated' => 'update_cities',
-        'country_list_updated' => 'update_countries',
-        'region_list_updated' => 'update_regions',
+        'city_list_updated' => 'refresh',
+        'country_list_updated' => 'refresh',
+        'region_list_updated' => 'refresh',
     ];
     public $regions;
     public $selected_region_id;
@@ -26,20 +26,25 @@ class CityList extends Component
     }
     public function mount()
     {
-        $this->regions = Region::has('countries')->pluck('name', 'id');
-        $this->selected_region_id = Region::has('countries')->first() ?
-                                    Region::has('countries')->first()->id : null;
+        $this->regions = Region::all();
+
+        $this->selected_region_id = $this->regions->first() ?
+            $this->regions->first()->id : null;
+
         $this->countries =  $this->selected_region_id ?
-                            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
+
         $this->selected_country_id = $this->countries->first() ?
-                                    $this->countries->first()->id : null;
+            $this->countries->first()->id : null;
+
         $this->cities =  $this->selected_country_id ?
-                            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
     }
 
-    public function close_other_cities($payload){
-        foreach($this->cities as $city){
-            if($city->name !== $payload['value']){
+    public function close_other_cities($payload)
+    {
+        foreach ($this->cities as $city) {
+            if ($city->name !== $payload['value']) {
                 $this->dispatch('close_editable_input', [
                     'old_value' => $city->name,
                     'role' => 'city_settings'
@@ -48,32 +53,38 @@ class CityList extends Component
         }
     }
 
-    public function update_regions()
-    {
-        $this->regions = Region::has('countries')->pluck('name', 'id');
-        $this->selected_region_id = Region::has('countries')->first() ?
-                                    Region::has('countries')->first()->id : null;
-        $this->countries =  $this->selected_region_id ?
-                            Country::where('region_id', $this->selected_region_id)->get() : collect();
-        $this->selected_country_id = $this->countries->first() ?
-                                    $this->countries->first()->id : null;
-        $this->cities =  $this->selected_country_id ?
-                            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
-    }
-
-    public function update_countries()
+    public function change_region()
     {
         $this->countries =  $this->selected_region_id ?
-                            Country::where('region_id', $this->selected_region_id)->get() : collect();
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
+
         $this->selected_country_id = $this->countries->first() ?
-                                    $this->countries->first()->id : null;
+            $this->countries->first()->id : null;
+
         $this->cities =  $this->selected_country_id ?
-                            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
     }
 
-    public function update_cities()
+    public function change_country()
     {
         $this->cities =  $this->selected_country_id ?
-                            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
+    }
+
+    public function refresh()
+    {
+        $this->regions = Region::all();
+
+        $this->selected_region_id = $this->regions->first() ?
+            $this->regions->first()->id : null;
+
+        $this->countries =  $this->selected_region_id ?
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
+
+        $this->selected_country_id = $this->countries->first() ?
+            $this->countries->first()->id : null;
+
+        $this->cities =  $this->selected_country_id ?
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
     }
 }

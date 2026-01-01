@@ -10,16 +10,12 @@ class BillHelpers
 {
     public static function bill_generated($invoice_template, $month, $year)
     {
-        $bill = Bill::where('invoice_template_id', $invoice_template->id)
-                    ->first();
-        if ($bill) {
-            $bill_month = date_format(date_create($bill->due_date), 'n');
-            $bill_year = date_format(date_create($bill->due_date), 'Y');
-            if ($month == $bill_month && $year == $bill_year) {
-                return true;
-            } else {
-                return false;
-            }
+        $bill_count = Bill::where('invoice_template_id', $invoice_template->id)
+            ->whereYear('due_date', $year)
+            ->whereMonth('due_date', $month)
+            ->count();
+        if ($bill_count > 0) {
+            return true;
         } else {
             return false;
         }

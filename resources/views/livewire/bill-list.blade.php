@@ -76,7 +76,7 @@
                             {{ $bill->invoice_template ? $bill->invoice_template->city->name : 'No location' }}</td>
                         <td class="w-[200px]">{{ $bill->status->name }}</td>
                         <td class="w-[225px]">
-                            {{ $bill->invoice_template ? DateHelpers::get_due_day_field_value($bill->invoice_template->due_day->day, (int) $bill->invoice_template->invoice_for_attention->period) : 'No due day' }}
+                            {{ $bill->invoice_template ? DateHelpers::get_due_day_field($bill->due_date, (int) $bill->invoice_template->invoice_for_attention->period) : 'No due day' }}
                         </td>
                         <td class="w-[171px] flex gap-2">
                             <img src="{{ $bill->note ? asset('images/selected_social.png') : asset('images/social.png') }}"

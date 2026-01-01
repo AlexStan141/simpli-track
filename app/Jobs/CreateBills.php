@@ -35,12 +35,11 @@ class CreateBills implements ShouldQueue
      */
     public function handle(): void
     {
-        logger("Creating bills job started");
         $today = date_format(new DateTime(), 'j');
-        $this_month = date_format(new DateTime(), 'n');
-        $this_year = date_format(new DateTime(), 'Y');
+        $this_month = (int) date_format(new DateTime(), 'n');
+        $this_year = (int) date_format(new DateTime(), 'Y');
         $invoice_templates = InvoiceTemplate::all();
-        if ($today == 24) {
+        if ($today == 1) {
             foreach ($invoice_templates as $invoice_template) {
                 if (!BillHelpers::bill_generated($invoice_template, $this_month, $this_year)) {
                     $day = $invoice_template->due_day_id;
