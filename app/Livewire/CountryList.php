@@ -8,7 +8,10 @@ use Livewire\Component;
 
 class CountryList extends Component
 {
-    protected $listeners = ['update_selected_region_in_country_list' => 'update_selected_region_in_country_list'];
+    protected $listeners = [
+        'update_selected_region_in_country_list' => 'update_selected_region_in_country_list',
+        'region_restore_event' => 'update_regions'
+    ];
     public $regions;
     public $selected_region_id;
     public $countries;
@@ -27,8 +30,13 @@ class CountryList extends Component
 
     public function update_parent_selected_region($region_id)
     {
+
+        //Tara se actualizeaza in aceasta componenta si update-ul se face si in celelalte componente
+        //(AddCountryForm, AddCityForm, CityList)
+        //prin componenta parinte LocationSettings
+
         $this->countries = $region_id ?
-            Country::where('region_id', $region_id)->get() : collect();
+            Country::withTrashed()->where('region_id', $region_id)->get() : collect();
         $this->dispatch('update_parent_selected_region', [
             'selected_region_id' => $region_id,
             'source' => 'country_list'
@@ -37,8 +45,16 @@ class CountryList extends Component
 
     public function mount()
     {
-        $this->regions = Region::withTrashed()->get();
-        $this->selected_region_id = Region::withTrashed()->first() ? Region::withTrashed()->first()->id : null;
+        $this->regions = Region::all();
+        $this->selected_region_id = $this->regions->first() ? $this->regions->first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+            Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
+    }
+
+    public function update_regions()
+    {
+        $this->regions = Region::all();
+        $this->selected_region_id = $this->regions->first() ? $this->regions->first()->id : null;
         $this->countries =  $this->selected_region_id ?
             Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
     }

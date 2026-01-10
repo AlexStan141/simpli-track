@@ -27,6 +27,6 @@
             @endif
         </div>
     @else
-        <div class="text-red-500">Countries needed for city operations!</div>
+        <div></div>
     @endif
 </div>

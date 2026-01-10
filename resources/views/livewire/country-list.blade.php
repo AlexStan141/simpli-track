@@ -18,6 +18,6 @@
             @endforeach
         </div>
     @else
-        <div class="text-red-500">No regions with countries found!</div>
+        <div class="text-red-500">Regions needed for country operations!</div>
     @endif
 </div>

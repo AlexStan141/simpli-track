@@ -1,4 +1,4 @@
-<div class="pt-10 flex flex-col items-center">
+<div class="pt-10 flex flex-col items-start">
     <div class="flex gap-4">
         <div>
             @livewire('add-region-form')

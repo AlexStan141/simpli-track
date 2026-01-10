@@ -140,6 +140,7 @@ class EditableInput extends Component
         } else if ($this->role == 'region_settings') {
             $region = Region::withTrashed()->where('name', $this->old_value)->first();
             $region->restore();
+            $this->dispatch('region_restore_event');
             $this->deleted = false;
             $country_names = Country::where('region_id', $region->id)->pluck('name');
             foreach($country_names as $country_name){
@@ -161,10 +162,18 @@ class EditableInput extends Component
         } else if ($this->role == 'country_settings') {
             $country = Country::withTrashed()->where('name', $this->old_value)->first();
             $country->restore();
-            $this->dispatch('country_list_updated');
-            $this->dispatch('update_after_country_restore', [
+            $this->dispatch('country_restore_event', [
                 'country_id' => $country->id
             ]);
+
+            $city_names = City::where('country_id', $country->id)->pluck('name');
+            foreach($city_names as $city_name){
+                $this->dispatch('restore-city', [
+                    'role' => 'city_settings',
+                    'name' => $city_name
+                ]);
+            }
+
         } else if ($this->role == 'city_settings') {
             $city = City::withTrashed()->where('name', $this->old_value)->first();
             $city->restore();

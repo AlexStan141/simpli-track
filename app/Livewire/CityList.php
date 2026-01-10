@@ -6,16 +6,15 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Region;
 use Livewire\Component;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\On;
 
 class CityList extends Component
 {
     protected $listeners = [
-        'city_list_updated' => 'refresh',
-        'country_list_updated' => 'refresh',
-        'region_list_updated' => 'refresh',
         'update_selected_region_in_city_list' => 'update_selected_region_in_city_list',
-        'update_selected_country_in_city_list' => 'update_selected_country_in_city_list'
+        'update_selected_country_in_city_list' => 'update_selected_country_in_city_list',
+        'region_restore_event' => 'update_regions',
+        'country_restore_event' => 'update_countries'
     ];
     public $regions;
     public $selected_region_id;
@@ -29,19 +28,19 @@ class CityList extends Component
     }
     public function mount()
     {
-        $this->regions = Region::withTrashed()->get();
+        $this->regions = Region::all();
 
         $this->selected_region_id = $this->regions->first() ?
             $this->regions->first()->id : null;
 
         $this->countries =  $this->selected_region_id ?
-            Country::withTrashed()->where('region_id', $this->selected_region_id)->orderBy('id')->get() : collect();
+            Country::where('region_id', $this->selected_region_id)->get() : collect();
 
         $this->selected_country_id = $this->countries->first() ?
             $this->countries->first()->id : null;
 
         $this->cities =  $this->selected_country_id ?
-            City::withTrashed()->where('country_id', $this->selected_country_id)->orderBy('id')->get() : collect();
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
     }
 
     public function close_other_cities($payload)
@@ -68,7 +67,7 @@ class CityList extends Component
 
         $this->countries = Country::where('region_id', $region_id)->get();
         $this->selected_country_id = $this->countries->first()->id;
-        $this->cities = City::where('country_id', $this->selected_country_id)->get();
+        $this->cities = City::withTrashed()->where('country_id', $this->selected_country_id)->get();
         $this->dispatch('update_parent_selected_country', [
             'selected_country_id' => $this->selected_country_id,
             'source' => 'city_list'
@@ -77,11 +76,34 @@ class CityList extends Component
 
     public function update_parent_selected_country($country_id)
     {
-        $this->cities = City::where('country_id', $country_id)->get();
+        $this->cities = City::withTrashed()->where('country_id', $country_id)->get();
         $this->dispatch('update_parent_selected_country', [
             'selected_country_id' => $country_id,
-            'source' => 'add_city_form'
+            'source' => 'city_list'
         ]);
+    }
+
+    public function update_regions()
+    {
+        $this->regions = Region::all();
+        $this->selected_region_id = $this->regions->first() ? $this->regions->first()->id : null;
+        $this->countries =  $this->selected_region_id ?
+            Country::where('region_id', $this->selected_region_id)->get() : collect();
+        $this->selected_country_id = $this->countries->first() ? $this->countries->first()->id : null;
+        $this->cities =  $this->selected_country_id ?
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
+    }
+
+    public function update_countries($payload)
+    {
+        $this->regions = Region::all();
+        $country = Country::find($payload['country_id']);
+        $this->selected_region_id = $country->region_id;
+        $this->countries = $this->selected_region_id ?
+            Country::where('region_id', $this->selected_region_id)->get() : collect();
+        $this->selected_country_id = $this->countries->first() ? $this->countries->first()->id : null;
+        $this->cities = $this->selected_country_id ?
+            City::withTrashed()->where('country_id', $this->selected_country_id)->get() : collect();
     }
 
     public function update_selected_region_in_city_list($payload)
