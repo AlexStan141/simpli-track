@@ -10,7 +10,9 @@ use Livewire\Component;
 
 class AddCountryForm extends Component
 {
-    protected $listeners = ['region_list_updated' => 'update_regions'];
+    protected $listeners = [
+        'update_selected_region_in_add_country_form' => 'update_selected_region_in_add_country_form'
+    ];
     public $regions;
     public $selected_region_id;
     public $currencies;
@@ -37,6 +39,22 @@ class AddCountryForm extends Component
         $this->currencies = Currency::pluck('name', 'id');
         $this->selected_currency_id = Currency::all()->first()->id;
         $this->countryToAdd = '';
+    }
+
+    public function update_selected_region_in_add_country_form($payload)
+    {
+        $this->selected_region_id = $payload['selected_region_id'];
+    }
+
+    public function update_parent_selected_region($region_id)
+    {
+
+        //Parent is LocationSettings Livewire Component (the whole page)
+
+        $this->dispatch('update_parent_selected_region', [
+            'selected_region_id' => $region_id,
+            'source' => 'add_country_form'
+        ]);
     }
 
     public function update_regions()

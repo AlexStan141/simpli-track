@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Company;
 use App\Models\Region;
 use Livewire\Component;
 

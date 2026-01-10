@@ -4,7 +4,6 @@ namespace App\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class SelectInput extends Component
@@ -14,7 +13,7 @@ class SelectInput extends Component
      */
     public function __construct(
         public $values,
-        public string $defaultValue,
+        public ?string $defaultValue = null,
         public string $id,
         public string $label,
         public string $roundness = '32px',

@@ -11,10 +11,8 @@ use Livewire\Component;
 class LocationSettings extends Component
 {
     protected $listeners = [
-        'country_list_updated' => 'update_countries',
-        'city_list_updated' => 'update_cities',
-        'region_list_updated' => 'update_regions',
-        'selected_region_updated' => 'update_selected_region',
+        'update_parent_selected_region' => 'update_selected_region',
+        'update_parent_selected_country' => 'update_selected_country'
     ];
     public $regions;
     public $selected_region_id;
@@ -28,59 +26,41 @@ class LocationSettings extends Component
         return view('livewire.location-settings');
     }
 
-    public function update_selected_region($data)
+    public function update_selected_region($payload)
     {
-        $this->selected_region_id = $data['region_id'];
-        $this->update_countries();
+        if ($payload['source'] !== 'country_list') {
+            $this->dispatch('update_selected_region_in_country_list', [
+                'selected_region_id' => $payload['selected_region_id']
+            ]);
+        }
+        if ($payload['source'] !== 'add_country_form') {
+            $this->dispatch('update_selected_region_in_add_country_form', [
+                'selected_region_id' => $payload['selected_region_id']
+            ]);
+        }
+        if ($payload['source'] !== 'add_city_form') {
+            $this->dispatch('update_selected_region_in_add_city_form', [
+                'selected_region_id' => $payload['selected_region_id']
+            ]);
+        }
+        if ($payload['source'] !== 'city_list') {
+            $this->dispatch('update_selected_region_in_city_list', [
+                'selected_region_id' => $payload['selected_region_id']
+            ]);
+        }
     }
 
-    public function update_regions()
+    public function update_selected_country($payload)
     {
-        $this->regions = Region::all();
-        $this->selected_region_id = Region::first() ? Region::first()->id : null;
-        $this->countries =  $this->selected_region_id ?
-            Country::where('region_id', $this->selected_region_id)->get() : collect();
-        $this->selected_country_id = $this->selected_region_id ?
-            (Country::where('region_id', $this->selected_region_id)->first() ?
-                Country::where('region_id', $this->selected_region_id)->first()->id : null)
-            : null;
-        $this->cities = $this->selected_country_id ?
-            City::where('country_id', $this->selected_country_id)->get() : collect();
-        $this->currencies = Currency::pluck('name', 'id');
-        $this->selected_currency_id = Currency::all()->first()->id;
-    }
-
-    public function update_countries()
-    {
-        $this->countries =  $this->selected_region_id ?
-            Country::where('region_id', $this->selected_region_id)->get() : collect();
-        $this->selected_country_id = $this->selected_region_id ?
-            (Country::where('region_id', $this->selected_region_id)->first() ?
-                Country::where('region_id', $this->selected_region_id)->first()->id : null)
-            : null;
-        $this->cities = $this->selected_country_id ?
-            City::where('country_id', $this->selected_country_id)->get() : collect();
-    }
-
-    public function update_cities()
-    {
-        $this->cities = $this->selected_country_id ?
-            City::where('country_id', $this->selected_country_id)->get() : collect();
-    }
-
-    public function mount()
-    {
-        $this->regions = Region::all();
-        $this->selected_region_id = Region::first() ? Region::first()->id : null;
-        $this->countries =  $this->selected_region_id ?
-            Country::where('region_id', $this->selected_region_id)->get() : collect();
-        $this->selected_country_id = $this->selected_region_id ?
-            (Country::where('region_id', $this->selected_region_id)->first() ?
-                Country::where('region_id', $this->selected_region_id)->first()->id : null)
-            : null;
-        $this->cities = $this->selected_country_id ?
-            City::where('country_id', $this->selected_country_id)->get() : collect();
-        $this->currencies = Currency::pluck('name', 'id');
-        $this->selected_currency_id = Currency::all()->first()->id;
+        if ($payload['source'] !== 'add_city_form') {
+            $this->dispatch('update_selected_country_in_add_city_form', [
+                'selected_country_id' => $payload['selected_country_id']
+            ]);
+        }
+        if ($payload['source'] !== 'city_list') {
+            $this->dispatch('update_selected_country_in_city_list', [
+                'selected_country_id' => $payload['selected_country_id']
+            ]);
+        }
     }
 }

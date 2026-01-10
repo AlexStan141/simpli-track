@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\City;
-use App\Models\Company;
 use App\Models\Country;
 use App\Models\Region;
 use Livewire\Component;
@@ -11,8 +10,8 @@ use Livewire\Component;
 class AddCityForm extends Component
 {
     protected $listeners = [
-        'country_list_updated' => 'update_countries',
-        'region_list_updated' => 'update_regions',
+        'update_selected_region_in_add_city_form' => 'update_selected_region_in_add_city_form',
+        'update_selected_country_in_add_city_form' => 'update_selected_country_in_add_city_form'
     ];
     public $cityToAdd;
     public $regions;
@@ -35,27 +34,53 @@ class AddCityForm extends Component
 
     public function mount()
     {
-        $this->regions = Region::all();
-        $this->selected_region_id = Region::first() ? Region::first()->id : null;
+        $this->regions = Region::has('countries')->get();
+        $this->selected_region_id = $this->regions->first() ?
+            $this->regions->first()->id : null;
         $this->countries =  $this->selected_region_id ?
             Country::where('region_id', $this->selected_region_id)->get() : collect();
         $this->selected_country_id = $this->countries->first() ?
             $this->countries->first()->id : null;
     }
 
-    public function update_regions(){
-        $this->regions = Region::all();
-        $this->selected_region_id = Region::first() ? Region::first()->id : null;
-        $this->countries =  $this->selected_region_id ?
-            Country::where('region_id', $this->selected_region_id)->get() : collect();
+    public function update_selected_region_in_add_city_form($payload)
+    {
+        $this->selected_region_id = $payload['selected_region_id'];
+        $this->countries =  $payload['selected_region_id'] ?
+            Country::where('region_id', $payload['selected_region_id'])->get() : collect();
         $this->selected_country_id = $this->countries->first() ?
             $this->countries->first()->id : null;
     }
 
-    public function update_countries(){
-        $this->countries =  $this->selected_region_id ?
-            Country::where('region_id', $this->selected_region_id)->get() : collect();
-        $this->selected_country_id = $this->countries->first() ?
-            $this->countries->first()->id : null;
+    public function update_selected_country_in_add_city_form($payload)
+    {
+        $this->selected_country_id = $payload['selected_country_id'];
+    }
+
+    public function update_parent_selected_region($region_id)
+    {
+        //Parent is LocationSettings Livewire Component (the whole page)
+
+        $this->dispatch('update_parent_selected_region', [
+            'selected_region_id' => $region_id,
+            'source' => 'add_city_form'
+        ]);
+        $this->countries = Country::where('region_id', $region_id)->get();
+        $this->selected_country_id =
+            $this->countries->count() > 0 ? $this->countries->first()->id : null;
+        if (!empty($this->selected_country_id)) {
+            $this->dispatch('update_parent_selected_country', [
+                'selected_country_id' => $this->selected_country_id,
+                'source' => 'add_city_form'
+            ]);
+        }
+    }
+
+    public function update_parent_selected_country($country_id)
+    {
+        $this->dispatch('update_parent_selected_country', [
+            'selected_country_id' => $country_id,
+            'source' => 'add_city_form'
+        ]);
     }
 }

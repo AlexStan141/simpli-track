@@ -42,11 +42,13 @@ class EditableInputForStatus extends Component
     }
     public function deleteInput()
     {
-        $this->deleted = true;
         $status = Status::where('name', $this->old_value)
             ->where('color', $this->old_color_value)->first();
-        $status->delete();
-        $this->dispatch('status_list_updated');
+        $this->dispatch('confirm-delete-modal-display', [
+            'entity' => 'status',
+            'entity_id' => $status->id,
+            'action' => 'delete'
+        ]);
     }
 
     public function close_editable_input_for_status($payload)
@@ -56,7 +58,8 @@ class EditableInputForStatus extends Component
         }
     }
 
-    public function restore(){
+    public function restore()
+    {
         $status = Status::withTrashed()->where('name', $this->old_value)->first();
         $status->restore();
         $this->deleted = false;
