@@ -35,6 +35,12 @@ class CompanySettings extends Component
     {
         if(count($this->existingRegions) == 0)
         {
+            $regions = Region::all();
+            foreach($regions as $region){
+                $region->selected_before_save = $region->selected;
+                $region->save();
+            }
+            $this->existingRegions = Region::where('selected', true)->pluck('name', 'id')->toArray();
             return redirect()->back()->with('error', 'You must select at least one region');
         }
 
