@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\InvoiceTemplate;
 use App\Models\Region;
 use App\Models\Status as StatusEntity; // App/Livewire/Status also exists, conflict without alias
@@ -86,6 +87,15 @@ class ConfirmDeleteModal extends Component
             $record = City::find($this->entity_id);
             $record->delete();
             return redirect()->to(route('settings.locations'));
+        }
+        else if ($this->entity == "currency")
+        {
+            //Delete a currency from settings
+            //confirm-delete-modal-display is called in deleteInput function of EditableInput
+
+            $record = Currency::find($this->entity_id);
+            $record->delete();
+            return redirect()->to(route('settings.currencies'));
         }
         $this->displayed = false;
     }

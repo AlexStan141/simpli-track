@@ -37,7 +37,7 @@ class AddCountryForm extends Component
     {
         $this->regions = Region::all();
         $this->selected_region_id = $this->regions->first() ? Region::first()->id : null;
-        $this->currencies = Currency::pluck('name', 'id');
+        $this->currencies = Currency::orderBy('name')->pluck('name', 'id');
         $this->selected_currency_id = Currency::all()->first()->id;
         $this->countryToAdd = '';
     }
@@ -62,7 +62,7 @@ class AddCountryForm extends Component
     {
         $this->regions = Region::all();
         $this->selected_region_id = $this->regions->first() ? $this->regions->first()->id : null;
-        $this->currencies = Currency::pluck('name', 'id');
+        $this->currencies = Currency::orderBy('name')->pluck('name', 'id');
         $this->selected_currency_id = Currency::all()->first()->id;
         $this->countryToAdd = '';
     }

@@ -79,9 +79,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/settings/users', function () {
         return view('settings', ['page' => 'Users & Roles']);
     })->name('settings.users');
-    Route::get('/settings/priority', function () {
-        return view('settings', ['page' => 'Priority']);
-    })->name('settings.priority');
+    // Route::get('/settings/priority', function () {
+    //     return view('settings', ['page' => 'Priority']);
+    // })->name('settings.priority');
+    Route::get('/settings/currencies', function () {
+        return view('settings', ['page' => 'Currencies']);
+    })->name('settings.currencies');
     Route::get('/settings/categories', function () {
         return view('settings', ['page' => 'Categories']);
     })->name('settings.categories');

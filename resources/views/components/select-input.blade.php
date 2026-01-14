@@ -9,8 +9,8 @@
             class="leading-[14px] h-[12px] font-inter text-editprofilelabel">{{ $label }}</label>
     @endif
 
-    <div {{ $attributes->class(['relative flex justify-center w-full', $withoutMargin ? '' : 'mt-4']) }}>
-        <select id="{{ $id }}" name="{{ $id }}" class="appearance-none bg-none rounded-[32px] border border-inputbordercolor h-[44px]" {{ $attributes }}>
+    <div {{ $attributes->class(['relative', $withoutMargin ? '' : 'mt-4']) }}>
+        <select id="{{ $id }}" name="{{ $id }}" class="w-full appearance-none bg-none rounded-[32px] border border-inputbordercolor h-[44px]" {{ $attributes }}>
             @forelse ($values as $key => $optionLabel)
                 <option value="{{ $key }}" @selected($selectedValue == $key)
                     class="text-[15px] leading-[22px] h-[22px]">

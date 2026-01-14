@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Region;
 use App\Models\Status;
 use Livewire\Component;
@@ -26,11 +27,17 @@ class EditableInput extends Component
     public $edit_mode = false;
     public $deleted;
     public $parent_id = null;
+    public $editable;
 
     public function mount($old_value)
     {
         $this->old_value = $old_value;
         $this->new_value = $old_value;
+        if($this->role == 'currency_settings'){
+            $this->editable = false;
+        } else {
+            $this->editable = true;
+        }
     }
 
     public function edit()
@@ -126,6 +133,13 @@ class EditableInput extends Component
                 'entity_id' => $category->id,
                 'action' => 'delete'
             ]);
+        } else if($this->role == 'currency_settings') {
+            $currency = Currency::where('name', $this->old_value)->first();
+            $this->dispatch('confirm-delete-modal-display', [
+                'entity' => 'currency',
+                'entity_id' => $currency->id,
+                'action' => 'delete'
+            ]);
         }
     }
 
@@ -178,6 +192,12 @@ class EditableInput extends Component
             $city = City::withTrashed()->where('name', $this->old_value)->first();
             $city->restore();
             $this->dispatch('city_list_updated');
+        } else if ($this->role == 'currency_settings') {
+            $currency = Currency::withTrashed()->where('name', $this->old_value)->first();
+            $currency->restore();
+            $this->dispatch('currency_restore_event', [
+                'name' => $this->old_value
+            ]);
         }
         $this->deleted = false;
     }

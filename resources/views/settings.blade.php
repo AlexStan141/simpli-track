@@ -8,6 +8,7 @@
                 <x-setting-link link="/settings/company" :active="$page === 'Company'">Company</x-setting-link>
                 <x-setting-link link="/settings/users" :active="$page === 'Users & Roles'">Users & Roles</x-setting-link>
                 {{-- <x-setting-link link="/settings/priority" :active="$page === 'Priority'">Priority</x-setting-link> --}}
+                <x-setting-link link="/settings/currencies" :active="$page === 'Currencies'">Currencies</x-setting-link>
                 <x-setting-link link="/settings/categories" :active="$page === 'Categories'">Categories</x-setting-link>
                 <x-setting-link link="/settings/statuses" :active="$page === 'Statuses'">Statuses</x-setting-link>
                 <x-setting-link link="/settings/locations" :active="$page === 'Regions & Locations'">Regions & Locations</x-setting-link>
@@ -19,6 +20,8 @@
                     <livewire:user-settings />
                 {{-- @elseif($page == 'Priority')
                     <livewire:priority-settings /> --}}
+                @elseif($page === "Currencies")
+                    <livewire:currency-settings />
                 @elseif($page == 'Categories')
                     <livewire:categories-settings />
                 @elseif($page == 'Statuses')

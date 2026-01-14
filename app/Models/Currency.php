@@ -12,6 +12,8 @@ class Currency extends Model
     /** @use HasFactory<\Database\Factories\CurrencyFactory> */
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
+
     public function company() {
         return $this->hasOne(Company::class);
     }
@@ -29,15 +31,13 @@ class Currency extends Model
         static::deleting(function($currency){
             if(!$currency->isForceDeleting()){
                 $currency->countries()->get()->each->delete();
-                $currency->invoice_templates()->get()->each->delete();
-                $currency->company->delete();
+                $currency->invoiceTemplates()->get()->each->delete();
             }
         });
 
         static::restoring(function ($currency) {
             $currency->countries()->withTrashed()->get()->each->restore();
-            $currency->invoice_templates()->withTrashed()->get()->each->restore();
-            $currency->company->restore();
+            $currency->invoiceTemplates()->withTrashed()->get()->each->restore();
         });
     }
 }
