@@ -7,7 +7,6 @@ use Livewire\Component;
 
 class CurrencySettings extends Component
 {
-    protected $listeners = ['currency_restore_event' => 'currency_restore'];
     public $all_currencies;
     public $currencies;
     public $rest_of_currencies;
@@ -31,15 +30,8 @@ class CurrencySettings extends Component
         'SEK', 'SGD', 'THB',
         'TRY', 'USD', 'ZAR'
         ];
-        $currency_names = Currency::all()->pluck('name')->toArray();
+        $currency_names = Currency::withTrashed()->pluck('name')->toArray();
         $this->currencies = Currency::withTrashed()->get();
         $this->rest_of_currencies = array_diff($this->all_currencies, $currency_names);
-    }
-
-    public function currency_restore($payload)
-    {
-        $this->dispatch('delete_from_add_currency_form', [
-            'name' => $payload['name']
-        ]);
     }
 }

@@ -1,5 +1,5 @@
 <div>
-    @if ($regions->count() > 0)
+    @if ($regions->count() > 0 && $currencies->count() > 0)
         <x-input-label for="country" :value="__('Country')" class="leading-[14px] h-[12px] !text-editprofilelabel" />
         <div class="flex gap-2">
             <x-text-input id="country" class="setting-text-input w-[450px]" type="text" name="country"
@@ -15,5 +15,7 @@
             <button wire:click="addCountry"
                 class="py-3 px-[93px] bg-loginblue text-white mt-[18px] rounded-[80px]">Save</button>
         </div>
+    @else
+        <div class="text-red-500">You need both regions and currencies to add a country!</div>
     @endif
 </div>

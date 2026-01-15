@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Region;
 use Livewire\Component;
 
@@ -15,6 +16,7 @@ class CountryList extends Component
     public $regions;
     public $selected_region_id;
     public $countries;
+    public $currencies;
 
     public function render()
     {
@@ -49,6 +51,7 @@ class CountryList extends Component
         $this->selected_region_id = $this->regions->first() ? $this->regions->first()->id : null;
         $this->countries =  $this->selected_region_id ?
             Country::withTrashed()->where('region_id', $this->selected_region_id)->get() : collect();
+        $this->currencies = Currency::orderBy('name')->pluck('name', 'id');
     }
 
     public function update_regions()

@@ -3,7 +3,9 @@
     @livewire('add-currency-form', [
         'currencies' => $rest_of_currencies
     ])
-    @livewire('currency-list', [
-        'currencies' => $currencies
+    @livewire('editable-input-list', [
+        'role' => 'currency_settings',
+        'nr_columns' => 3
     ])
 </div>
+

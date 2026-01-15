@@ -18,7 +18,7 @@
             </div>
         @endif
     @else
-        <div class="flex gap-4 items-center">
+        <div class="flex items-center w-[300px]">
             <p class="font-nunito text-[22px] h-[30px] grow">{{ $old_value }}</p>
             <button class="text-loginblue" wire:click="restore">Restore</button>
         </div>

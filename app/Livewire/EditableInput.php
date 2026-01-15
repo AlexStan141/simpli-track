@@ -12,15 +12,6 @@ use Livewire\Component;
 
 class EditableInput extends Component
 {
-    protected $listeners = [
-        'close_editable_input' => 'close_editable_input',
-        // 'update_after_country_delete' => 'update_after_country_delete',
-        // 'update_after_region_delete' => 'update_after_region_delete',
-        // 'update_after_country_restore' => 'update_after_country_restore',
-        // 'update_after_region_restore' => 'update_after_region_restore',
-        'restore-country' => 'restore_if_value',
-        'restore-city' => 'restore_if_value'
-    ];
     public $old_value;
     public $role;
     public $new_value;
@@ -28,7 +19,7 @@ class EditableInput extends Component
     public $deleted;
     public $parent_id = null;
     public $editable;
-
+    public $deletable;
     public function mount($old_value)
     {
         $this->old_value = $old_value;

@@ -95,6 +95,9 @@ class ConfirmDeleteModal extends Component
 
             $record = Currency::find($this->entity_id);
             $record->delete();
+            $this->dispatch('editable_input_delete_event', [
+                'value' => $record->name
+            ]);
             return redirect()->to(route('settings.currencies'));
         }
         $this->displayed = false;
