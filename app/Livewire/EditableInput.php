@@ -24,7 +24,7 @@ class EditableInput extends Component
     {
         $this->old_value = $old_value;
         $this->new_value = $old_value;
-        if($this->role == 'currency_settings'){
+        if ($this->role == 'currency_settings') {
             $this->editable = false;
         } else {
             $this->editable = true;
@@ -124,7 +124,7 @@ class EditableInput extends Component
                 'entity_id' => $category->id,
                 'action' => 'delete'
             ]);
-        } else if($this->role == 'currency_settings') {
+        } else if ($this->role == 'currency_settings') {
             $currency = Currency::where('name', $this->old_value)->first();
             $this->dispatch('confirm-delete-modal-display', [
                 'entity' => 'currency',
@@ -148,7 +148,7 @@ class EditableInput extends Component
             $this->dispatch('region_restore_event');
             $this->deleted = false;
             $country_names = Country::where('region_id', $region->id)->pluck('name');
-            foreach($country_names as $country_name){
+            foreach ($country_names as $country_name) {
                 $this->dispatch('restore-country', [
                     'role' => 'country_settings',
                     'name' => $country_name
@@ -157,28 +157,30 @@ class EditableInput extends Component
 
             $country_ids = Country::where('region_id', $region->id)->pluck('id');
             $city_names = City::whereIn('country_id', $country_ids)->pluck('name');
-            foreach($city_names as $city_name){
+            foreach ($city_names as $city_name) {
                 $this->dispatch('restore-city', [
                     'role' => 'city_settings',
                     'name' => $city_name
                 ]);
             }
-
         } else if ($this->role == 'country_settings') {
             $country = Country::withTrashed()->where('name', $this->old_value)->first();
-            $country->restore();
-            $this->dispatch('country_restore_event', [
-                'country_id' => $country->id
-            ]);
-
-            $city_names = City::where('country_id', $country->id)->pluck('name');
-            foreach($city_names as $city_name){
-                $this->dispatch('restore-city', [
-                    'role' => 'city_settings',
-                    'name' => $city_name
+            if (!$country->currency->deleted_at) {
+                $country->restore();
+                $this->dispatch('country_restore_event', [
+                    'country_id' => $country->id
                 ]);
-            }
 
+                $city_names = City::where('country_id', $country->id)->pluck('name');
+                foreach ($city_names as $city_name) {
+                    $this->dispatch('restore-city', [
+                        'role' => 'city_settings',
+                        'name' => $city_name
+                    ]);
+                }
+            } else {
+                dd("Restore " . $country->currency->name . " currency!");
+            }
         } else if ($this->role == 'city_settings') {
             $city = City::withTrashed()->where('name', $this->old_value)->first();
             $city->restore();
@@ -232,14 +234,16 @@ class EditableInput extends Component
         }
     }
 
-    public function delete_if_value($role, $value){
-        if($this->role == $role && $this->old_value == $value){
+    public function delete_if_value($role, $value)
+    {
+        if ($this->role == $role && $this->old_value == $value) {
             $this->deleted = true;
         }
     }
 
-    public function restore_if_value($payload){
-        if($this->role == $payload['role'] && $this->old_value == $payload['name']){
+    public function restore_if_value($payload)
+    {
+        if ($this->role == $payload['role'] && $this->old_value == $payload['name']) {
             $this->deleted = false;
         }
     }

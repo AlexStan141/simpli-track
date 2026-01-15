@@ -16,7 +16,7 @@ class Country extends Model
     protected $guarded = [];
 
     public function region(): BelongsTo{
-        return $this->belongsTo(Region::class);
+        return $this->belongsTo(Region::class)->withTrashed();
     }
 
     public function cities(): HasMany{
@@ -28,7 +28,7 @@ class Country extends Model
     }
 
     public function currency(){
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 
     public function invoice_templates(): HasMany{
