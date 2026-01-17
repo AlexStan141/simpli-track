@@ -12,6 +12,7 @@ use Livewire\Component;
 
 class EditableInput extends Component
 {
+    protected $listeners = ['close_editable_input' => 'close_editable_input'];
     public $old_value;
     public $role;
     public $new_value;
@@ -34,23 +35,25 @@ class EditableInput extends Component
     public function edit()
     {
         $this->edit_mode = true;
-        if ($this->role == 'category_settings') {
-            $this->dispatch('close_other_categories', [
-                'value' => $this->old_value
-            ]);
-        } else if ($this->role == 'region_settings') {
-            $this->dispatch('close_other_regions', [
-                'value' => $this->old_value
-            ]);
-        } else if ($this->role == 'country_settings') {
-            $this->dispatch('close_other_countries', [
-                'value' => $this->old_value
-            ]);
-        } else if ($this->role == 'city_settings') {
-            $this->dispatch('close_other_cities', [
-                'value' => $this->old_value
-            ]);
-        }
+        // if ($this->role == 'category_settings') {
+        //     $this->dispatch('close_other_categories', [
+        //         'value' => $this->old_value
+        //     ]);
+        // } else if ($this->role == 'region_settings') {
+        //     $this->dispatch('close_other_regions', [
+        //         'value' => $this->old_value
+        //     ]);
+        // } else if ($this->role == 'country_settings') {
+        //     $this->dispatch('close_other_countries', [
+        //         'value' => $this->old_value
+        //     ]);
+        // } else if ($this->role == 'city_settings') {
+        //     $this->dispatch('close_other_cities', [
+        //         'value' => $this->old_value
+        //     ]);
+        $this->dispatch('close_other_values', [
+            'value' => $this->old_value
+        ]);
     }
 
     public function save()
