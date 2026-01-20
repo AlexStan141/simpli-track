@@ -20,5 +20,11 @@
             <input type="color" name="color" wire:model="color_to_add" class="w-[30px] h-[30px]">
             <button wire:click="add_value" class="py-3 px-[93px] bg-loginblue text-white rounded-[80px]">Save</button>
         </div>
+    @elseif($entity === 'region')
+        <x-input-label for="region" :value="__('Region')" class="leading-[14px] h-[12px] !text-editprofilelabel" />
+        <x-text-input id="region" class="setting-text-input w-[450px] mt-2" type="text" name="region"
+            wire:model="value_to_add" required />
+        <button wire:click="add_value"
+            class="py-3 px-[93px] bg-loginblue text-white mt-[18px] rounded-[80px]">Save</button>
     @endif
 </div>

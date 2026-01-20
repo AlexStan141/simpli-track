@@ -1,8 +1,9 @@
 <div class="pt-10 flex flex-col items-start">
     <div class="flex gap-4">
         <div>
-            @livewire('add-region-form')
-            @livewire('region-list')
+            @livewire('settings', [
+                'entity' => 'region',
+            ])
         </div>
         <div>
             @livewire('add-country-form')

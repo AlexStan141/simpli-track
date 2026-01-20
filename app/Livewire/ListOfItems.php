@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Currency;
+use App\Models\Region;
 use App\Models\Status;
 use Livewire\Component;
 
@@ -39,6 +40,13 @@ class ListOfItems extends Component
                 'company_id' => Company::first()->id
             ]);
             $this->values = Status::withTrashed()->get();
+        } else if ($this->entity === 'region'){
+            Region::create([
+                'name' => $payload['value'],
+                'selected' => true,
+                'selected_before_save' => true
+            ]);
+            $this->values = Region::withTrashed()->get();
         }
     }
 
@@ -65,6 +73,13 @@ class ListOfItems extends Component
             }
             $this->values = Status::withTrashed()->get();
         }
+        else if($this->entity === 'region' && $payload['entity'] === 'region'){
+            $region = Region::where('name', $payload['value'])->first();
+            if($region){
+                $region->delete();
+            }
+            $this->values = Region::withTrashed()->get();
+        }
     }
 
     public function restore_value($payload)
@@ -90,6 +105,13 @@ class ListOfItems extends Component
             }
             $this->values = Status::withTrashed()->get();
         }
+        else if($this->entity === 'region' && $payload['entity'] === 'region'){
+            $region = Region::withTrashed()->where('name', $payload['value'])->first();
+            if($region){
+                $region->restore();
+            }
+            $this->values = Region::withTrashed()->get();
+        }
     }
 
     public function close_other_values($payload)
@@ -107,6 +129,12 @@ class ListOfItems extends Component
                         'old_value' => $current_value->name,
                     ]);
                 }
+                else if ($this->entity === 'region') {
+                    $this->dispatch('close_editable_input', [
+                        'old_value' => $current_value->name,
+                        'role' => 'region_settings'
+                    ]);
+                }
             }
         }
     }
@@ -119,6 +147,8 @@ class ListOfItems extends Component
             $this->values = Currency::withTrashed()->get();
         } else if ($this->entity === 'status'){
             $this->values = Status::withTrashed()->get();
+        } else if ($this->entity === 'region'){
+            $this->values = Region::withTrashed()->get();
         }
     }
 
