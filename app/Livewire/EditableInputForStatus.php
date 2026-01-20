@@ -24,7 +24,7 @@ class EditableInputForStatus extends Component
     public function edit()
     {
         $this->edit_mode = true;
-        $this->dispatch('close_other_statuses', [
+        $this->dispatch('close_other_values', [
             'value' => $this->old_value
         ]);
     }

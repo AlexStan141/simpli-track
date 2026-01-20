@@ -93,12 +93,11 @@ class ConfirmDeleteModal extends Component
             //Delete a currency from settings
             //confirm-delete-modal-display is called in deleteInput function of EditableInput
 
-            $record = Currency::find($this->entity_id);
-            $record->delete();
-            $this->dispatch('editable_input_delete_event', [
-                'value' => $record->name
+            $currency_name = Currency::find($this->entity_id)->name;
+            $this->dispatch('list_item_delete_event', [
+                'value' => $currency_name,
+                'entity' => 'currency'
             ]);
-            return redirect()->to(route('settings.currencies'));
         }
         $this->displayed = false;
     }

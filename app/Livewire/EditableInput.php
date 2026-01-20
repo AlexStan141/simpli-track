@@ -140,8 +140,10 @@ class EditableInput extends Component
     public function restore()
     {
         if ($this->role == 'category_settings') {
-            $category = Category::withTrashed()->where('name', $this->old_value)->first();
-            $category->restore();
+            $this->dispatch('list_item_restore_event', [
+                'value' => $this->old_value,
+                'entity' => 'category'
+            ]);
         } else if ($this->role == 'status_settings') {
             $status = Status::withTrashed()->where('name', $this->old_value)->first();
             $status->restore();
@@ -189,13 +191,12 @@ class EditableInput extends Component
             $city->restore();
             $this->dispatch('city_list_updated');
         } else if ($this->role == 'currency_settings') {
-            $currency = Currency::withTrashed()->where('name', $this->old_value)->first();
-            $currency->restore();
-            $this->dispatch('currency_restore_event', [
-                'name' => $this->old_value
+            $this->dispatch('list_item_restore_event', [
+                'value' => $this->old_value,
+                'entity' => 'currency'
             ]);
         }
-        $this->deleted = false;
+        // $this->deleted = false;
     }
 
     public function close_editable_input($payload)
@@ -234,20 +235,6 @@ class EditableInput extends Component
             if ($country && $country->region_id == $payload['region_id']) {
                 $this->deleted = true;
             }
-        }
-    }
-
-    public function delete_if_value($role, $value)
-    {
-        if ($this->role == $role && $this->old_value == $value) {
-            $this->deleted = true;
-        }
-    }
-
-    public function restore_if_value($payload)
-    {
-        if ($this->role == $payload['role'] && $this->old_value == $payload['name']) {
-            $this->deleted = false;
         }
     }
 
