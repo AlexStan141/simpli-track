@@ -1,7 +1,7 @@
 <div>
     @if (!$deleted)
         @if (!$edit_mode)
-            <div class="flex items-center w-[200px]">
+            <div class="flex items-center w-[30%]">
                 <p class="font-nunito text-[22px] h-[30px] grow">{{ $old_value }}</p>
                 @if ($old_value !== 'Pending')
                     <img src="{{ asset('/images/edit_icon.png') }}" alt="edit" width="18.6" height="18.6"
@@ -22,7 +22,7 @@
             </div>
         @endif
     @else
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-4 items-center w-[30%]">
             <p class="font-nunito text-[22px] h-[30px] grow">{{ $old_value }}</p>
             <button class="text-loginblue" wire:click="restore">Restore</button>
         </div>

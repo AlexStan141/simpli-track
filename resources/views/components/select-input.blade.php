@@ -1,8 +1,3 @@
-@php
-    $model = $attributes->whereStartsWith('wire:model')->first();
-    $selectedValue = $model ? $this->{$model} : null;
-@endphp
-
 <div class="flex flex-col items-start justify-center">
     @if ($label)
         <label for="{{ $id }}"
@@ -12,7 +7,7 @@
     <div {{ $attributes->class(['relative', $withoutMargin ? '' : 'mt-4']) }}>
         <select id="{{ $id }}" name="{{ $id }}" class="w-full appearance-none bg-none rounded-[32px] border border-inputbordercolor h-[44px]" {{ $attributes }}>
             @forelse ($values as $key => $optionLabel)
-                <option value="{{ $key }}" @selected($selectedValue == $key)
+                <option value="{{ $key }}"
                     class="text-[15px] leading-[22px] h-[22px]">
                     {{ $optionLabel }}
                 </option>

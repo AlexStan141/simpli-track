@@ -1,7 +1,17 @@
+@php
+    if($this->role === 'region_settings' || $this->role === 'country_settings' || $this->role === 'city_settings'){
+        $class = "flex items-center w-full";
+    }
+    else{
+        $class= "flex items-center w-[30%]";
+    }
+@endphp
+
+
 <div>
     @if (!$deleted)
         @if (!$edit_mode)
-            <div class="flex items-center w-[300px]">
+            <div class="{{ $class }}">
                 <p class="font-nunito text-[22px] h-[30px] grow">{{ $old_value }}</p>
                 @if ($editable)
                     <img src="{{ asset('/images/edit_icon.png') }}" alt="edit" width="18.6" height="18.6"
@@ -18,7 +28,7 @@
             </div>
         @endif
     @else
-        <div class="flex items-center w-[300px]">
+        <div class="{{ $class }}">
             <p class="font-nunito text-[22px] h-[30px] grow">{{ $old_value }}</p>
             <button class="text-loginblue" wire:click="restore">Restore</button>
         </div>

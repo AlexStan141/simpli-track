@@ -6,12 +6,14 @@
             ])
         </div>
         <div>
-            @livewire('add-country-form')
-            @livewire('country-list')
+            @livewire('settings', [
+                'entity' => 'country',
+            ])
         </div>
     </div>
     <div class="flex gap-4 mt-20">
-        @livewire('add-city-form')
-        @livewire('city-list')
+        @livewire('settings', [
+            'entity' => 'city',
+        ])
     </div>
 </div>

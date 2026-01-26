@@ -60,24 +60,40 @@ class ConfirmDeleteModal extends Component
         }
         else if ($this->entity == "region")
         {
-            //Delete a region from settings
-            //confirm-delete-modal-display is called in deleteInput function of EditableInput
+            // $this->dispatch('delete_region_from_form', [
+            //     'value' => $this->entity_id,
+            //     'entity' => 'country'
+            // ]);
+            // $this->dispatch('list_item_delete_event', [
+            //     'value' => Region::where('id', $this->entity_id)->first()->name,
+            //     'entity' => 'region'
+            // ]);
+
             $record = Region::find($this->entity_id);
             $record->delete();
-            $this->dispatch('update_parent_region_list', [
-                'region_id' => $this->entity_id,
-                'event' => 'delete'
+            $this->dispatch('refresh_after_region_delete', [
+                'value' => $this->entity_id
             ]);
-            return redirect()->to(route('settings.locations'));
+            $this->dispatch('refreshSelect', [
+                'entity' => 'region'
+            ]);
+            //return redirect()->to(route('settings.locations'));
         }
         else if ($this->entity == "country")
         {
             //Delete a country from settings
             //confirm-delete-modal-display is called in deleteInput function of EditableInput
-
             $record = Country::find($this->entity_id);
+            $region_id = $record->region_id;
             $record->delete();
-            return redirect()->to(route('settings.locations'));
+            // $this->dispatch('refresh_after_country_delete', [
+            //     'value' => $this->entity_id
+            // ]);
+            $this->dispatch('refreshSelect', [
+                'entity' => 'country',
+                'value' => $region_id
+            ]);
+            //return redirect()->to(route('settings.locations'));
         }
         else if ($this->entity == "city")
         {
@@ -85,8 +101,15 @@ class ConfirmDeleteModal extends Component
             //confirm-delete-modal-display is called in deleteInput function of EditableInput
 
             $record = City::find($this->entity_id);
+            $country_id = $record->country_id;
+            $region_id = $record->country->region_id;
             $record->delete();
-            return redirect()->to(route('settings.locations'));
+            $this->dispatch('update_list_items_event', [
+                'region_id' => $region_id,
+                'country_id' => $country_id,
+                'entity' => 'city'
+            ]);
+            //return redirect()->to(route('settings.locations'));
         }
         else if ($this->entity == "currency")
         {

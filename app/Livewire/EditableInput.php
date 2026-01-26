@@ -62,27 +62,48 @@ class EditableInput extends Component
             $city = City::where('name', $this->old_value)->first();
             $city->name = $this->new_value;
             $city->save();
-            $this->dispatch('city_list_updated');
+            // $this->dispatch('city_list_updated');
         } else if ($this->role == 'country_settings') {
             $country = Country::where('name', $this->old_value)->first();
             $country->name = $this->new_value;
             $country->save();
-            $this->dispatch('country_list_updated');
+            $this->dispatch('update_list_item_selected_country', [
+                'entity' => 'city',
+                'value' => $country->id
+            ]);
+            $this->dispatch('update_country_in_add_city_form', [
+                'value' => $country->id
+            ]);
+            // $this->dispatch('country_list_updated');
         } else if ($this->role == 'region_settings') {
             $region = Region::where('name', $this->old_value)->first();
             $region->name = $this->new_value;
             $region->save();
-            $this->dispatch('region_list_updated');
+            $this->dispatch('update_list_item_selected_region', [
+                'entity' => 'country',
+                'value' => $region->id
+            ]);
+            $this->dispatch('update_list_item_selected_region', [
+                'entity' => 'city',
+                'value' => $region->id
+            ]);
+            $this->dispatch('update_region_in_add_country_form', [
+                'value' => $region->id
+            ]);
+            $this->dispatch('update_region_in_add_city_form', [
+                'value' => $region->id
+            ]);
+            // $this->dispatch('region_list_updated');
         } else if ($this->role == 'category_settings') {
             $category = Category::where('name', $this->old_value)->first();
             $category->name = $this->new_value;
             $category->save();
-            $this->dispatch('category_list_updated');
+            // $this->dispatch('category_list_updated');
         } else if ($this->role == 'status_settings') {
             $status = Status::where('name', $this->old_value)->first();
             $status->name = $this->new_value;
             $status->save();
-            $this->dispatch('status_list_updated');
+            // $this->dispatch('status_list_updated');
         }
         $this->old_value = $this->new_value;
         $this->edit_mode = false;
@@ -145,58 +166,68 @@ class EditableInput extends Component
                 'entity' => 'category'
             ]);
         } else if ($this->role == 'status_settings') {
-            $status = Status::withTrashed()->where('name', $this->old_value)->first();
-            $status->restore();
+            $this->dispatch('list_item_restore_event', [
+                'value' => $this->old_value,
+                'entity' => 'status'
+            ]);
         } else if ($this->role == 'region_settings') {
             $region = Region::withTrashed()->where('name', $this->old_value)->first();
             $region->restore();
-            $this->dispatch('region_restore_event');
-            $this->deleted = false;
-            $country_names = Country::where('region_id', $region->id)->pluck('name');
+            $this->dispatch('refreshSelect', [
+                'entity' => 'region'
+            ]);
+            $country_names = Country::withTrashed()->where('region_id', $region->id)->pluck('name');
             foreach ($country_names as $country_name) {
-                $this->dispatch('restore-country', [
-                    'role' => 'country_settings',
-                    'name' => $country_name
+                $this->dispatch('list_item_restore_event', [
+                    'value' => $country_name,
+                    'entity' => 'country'
                 ]);
             }
 
-            $country_ids = Country::where('region_id', $region->id)->pluck('id');
-            $city_names = City::whereIn('country_id', $country_ids)->pluck('name');
+            $country_ids = Country::withTrashed()->where('region_id', $region->id)->pluck('id');
+            $city_names = City::withTrashed()->whereIn('country_id', $country_ids)->pluck('name');
             foreach ($city_names as $city_name) {
-                $this->dispatch('restore-city', [
-                    'role' => 'city_settings',
-                    'name' => $city_name
+                $this->dispatch('list_item_restore_event', [
+                    'value' => $city_name,
+                    'entity' => 'city'
                 ]);
             }
+            $this->dispatch('refresh_forms');
+            $this->dispatch('refresh_list_of_cities');
         } else if ($this->role == 'country_settings') {
             $country = Country::withTrashed()->where('name', $this->old_value)->first();
             if (!$country->currency->deleted_at) {
-                $country->restore();
-                $this->dispatch('country_restore_event', [
-                    'country_id' => $country->id
+                $this->dispatch('list_item_restore_event', [
+                    'value' => $this->old_value,
+                    'entity' => 'country'
                 ]);
-
-                $city_names = City::where('country_id', $country->id)->pluck('name');
+                $this->dispatch('refreshSelect', [
+                    'entity' => 'country',
+                    'value' => Country::withTrashed()->where('name', $this->old_value)->first()->region_id
+                ]);
+                $city_names = City::withTrashed()->where('country_id', $country->id)->pluck('name');
                 foreach ($city_names as $city_name) {
-                    $this->dispatch('restore-city', [
-                        'role' => 'city_settings',
-                        'name' => $city_name
+                    $this->dispatch('list_item_restore_event', [
+                        'value' => $city_name,
+                        'entity' => 'city'
                     ]);
                 }
             } else {
                 dd("Restore " . $country->currency->name . " currency!");
             }
+            $this->dispatch('refresh_forms');
+            $this->dispatch('refresh_list_of_cities');
         } else if ($this->role == 'city_settings') {
-            $city = City::withTrashed()->where('name', $this->old_value)->first();
-            $city->restore();
-            $this->dispatch('city_list_updated');
+            $this->dispatch('list_item_restore_event', [
+                'value' => $this->old_value,
+                'entity' => 'city'
+            ]);
         } else if ($this->role == 'currency_settings') {
             $this->dispatch('list_item_restore_event', [
                 'value' => $this->old_value,
                 'entity' => 'currency'
             ]);
         }
-        // $this->deleted = false;
     }
 
     public function close_editable_input($payload)
