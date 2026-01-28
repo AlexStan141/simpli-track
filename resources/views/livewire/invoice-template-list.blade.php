@@ -90,7 +90,7 @@
                             </div>
                         </td>
                         <td class="w-[178px]">{{ $user_invoice->category->name }}</td>
-                        <td class="w-[200px]">{{ $user_invoice->city->name }}</td>
+                        <td class="w-[200px]">{{ $user_invoice->city ? $user_invoice->city->name : 'No location' }}</td>
                         <td class="w-[184px]">{{ $user_invoice->frequency }}</td>
                         <td class="w-[225px]">{{ $user_invoice->due_day->day }} of each month </td>
                         @if ($showInvoiceAmount)

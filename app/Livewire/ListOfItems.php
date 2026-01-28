@@ -14,217 +14,195 @@ use Livewire\Component;
 class ListOfItems extends Component
 {
     protected $listeners = [
-        'close_other_values' => 'close_other_values',
-        'list_item_restore_event' => 'restore_value',
-        'update_list_item_selected_region' => 'update_list_item_selected_region',
-        'update_list_item_selected_country' => 'update_list_item_selected_country',
-        'refresh_list_of_cities' => 'refresh_list_of_cities',
-        'update_list_items_event' => 'update_list_items',
-        'refresh_regions_in_city_list_items' => 'refresh_list_of_cities',
-        'refresh_countries_in_city_list_items' => 'refresh_list_of_cities'
+        'updateListItemAfterDelete' => 'updateListItemAfterDelete',
+        'updateListItemAfterRestore' => 'updateListItemAfterRestore',
+        'updateListItem' => 'updateListItem'
     ];
     public $values;
     public $entity;
-    public $additional_info;
-    public $region_id;
-    public $regions;
-    public $currency_id;
-    public $countries;
-    public $country_id;
 
-    public function update_list_items($payload){
-        if ($this->entity === 'category' && $payload['entity'] === 'category') {
-            $this->values = Category::withTrashed()->get();
-        } else if ($this->entity === 'currency' && $payload['entity'] === 'currency') {
-            $this->values = Currency::withTrashed()->get();
-        } else if ($this->entity === 'status' && $payload['entity'] === 'status') {
-            $this->values = Status::withTrashed()->get();
-        } else if ($this->entity === 'region' && $payload['entity'] === 'region') {
+    public function updateListItem($payload)
+    {
+        if (isset($payload['region_id']) && $payload['entity'] === 'country' && $this->entity === 'country') {
+            $this->values = Country::withTrashed()->where('region_id', $payload['region_id'])->get();
+        } else if (isset($payload['country_id']) && $payload['entity'] === 'city' && $this->entity === 'city') {
+            $this->values = City::withTrashed()->where('country_id', $payload['country_id'])->get();
+        }
+    }
+
+    public function updateListItemAfterDelete($payload)
+    {
+        if ($payload['entity'] === 'region' && $this->entity === 'region') {
+
             $this->values = Region::withTrashed()->get();
+
+            $next_region = Region::first() ? Region::first()->id : null;
+            $country_id = $next_region ?
+                        Country::where('region_id', $next_region)->first()->id : collect();
+
+            $this->dispatch('updateListItemAfterDelete', [
+                'entity' => 'country',
+                'region' => $next_region,
+                'value' => $country_id
+            ]);
+
+            $this->dispatch('refreshValues', [
+                'entity' => 'region',
+                'value' => $next_region
+            ]);
+
+        } else if ($payload['entity'] === 'country' && $this->entity === 'country') {
+
+            $country_id = $payload['value'];
+
+            $this->values = $payload['region'] ?
+                        Country::withTrashed()->where('region_id', $payload['region'])->get() : collect();
+
+            $next_country = $payload['region'] ?
+                        Country::where('region_id', $payload['region'])->first() : null;
+
+            $this->dispatch('updateListItemAfterDelete', [
+                    'entity' => 'city',
+                    'country' => $next_country
+            ]);
+
+            $this->dispatch('refreshValues', [
+                'entity' => 'country',
+                'value' => $payload['region'],
+                'selected_value' => $next_country
+            ]);
+
+        } else if ($payload['entity'] === 'city' && $this->entity === 'city') {
+            $this->values = isset($payload['country']) ?
+                        City::withTrashed()->where('country_id', $payload['country'])->get() : collect();
+        }
+    }
+
+    public function updateListItemAfterRestore($payload)
+    {
+        if ($this->entity === 'region' && $payload['entity'] === 'region') {
+
+            $this->values = Region::withTrashed()->get();
+
+            $first_region = Region::first() ? Region::first()->id : null;
+            $country_id = $first_region ?
+                        Country::where('region_id', $first_region)->first()->id : collect();
+
+            $this->dispatch('updateListItemAfterRestore', [
+                'entity' => 'country',
+                'region' => $first_region,
+                'value' => $country_id
+            ]);
+
+            $this->dispatch('refreshValues', [
+                'entity' => 'region',
+                'value' => $first_region
+            ]);
+
         } else if ($this->entity === 'country' && $payload['entity'] === 'country') {
-            $this->region_id = $payload['region_id'];
-            $this->values = $payload['region_id'] ?
-                            Country::withTrashed()->where('region_id', $payload['region_id'])->get() : collect();
+
+            $country_id = $payload['value'];
+
+            $this->values = $payload['region'] ?
+                        Country::withTrashed()->where('region_id', $payload['region'])->get() : collect();
+
+            $this->dispatch('updateListItemAfterRestore', [
+                    'entity' => 'city',
+                    'country' => $country_id
+            ]);
+
+            $this->dispatch('refreshValues', [
+                'entity' => 'country',
+                'value' => $payload['region'],
+                'selected_value' => $country_id
+            ]);
+
         } else if ($this->entity === 'city' && $payload['entity'] === 'city') {
-            $this->regions = Region::all();
-            $this->region_id = $payload['region_id'];
-            $this->countries = Country::where('region_id', $this->region_id)->get();
-            $this->country_id = $payload['country_id'];
-            $this->values = $payload['country_id'] ?
-                            City::withTrashed()->where('country_id', $payload['country_id'])->get() : collect();
+            $this->values = isset($payload['country']) ?
+                        City::withTrashed()->where('country_id', $payload['country'])->get() : collect();
         }
     }
 
-    public function update_list_item_selected_region($payload){
-        if($this->entity === 'country' && $payload['entity'] === 'country'){
-            $this->region_id = $payload['value'];
-            $this->values = Country::withTrashed()->where('region_id', $this->region_id)->get();
-        }
-        if($this->entity === 'city' && $payload['entity'] === 'city'){
-            $this->region_id = $payload['value'];
-            $this->countries = Country::where('region_id', $this->region_id)->get();
-            $this->country_id = $this->countries->first() ? $this->countries->first()->id : null;
-            $this->values = $this->country_id ?
-                            City::withTrashed()->where('country_id', $this->country_id)->get() :
-                            collect();
-        }
-    }
-
-    public function update_region($value)
+    public function deleteItem($item_id)
     {
-        if ($this->entity === 'city') {
-            $this->region_id = $value;
-            $this->countries = Country::where('region_id', $this->region_id)->get();
-            $this->country_id = $this->countries->first() ? $this->countries->first()->id : null;
-            $this->values = $this->country_id ?
-                            City::withTrashed()->where('country_id', $this->country_id)->get() : collect();
+        if ($this->entity === 'region') {
+            Region::find($item_id)->delete();
+            $this->dispatch('updateListItemAfterDelete', [
+                'entity' => 'region',
+                'value' => $item_id
+            ]);
+        } elseif ($this->entity === 'country') {
+            $region_id = Country::find($item_id)->region_id;
+            Country::find($item_id)->delete();
+            $this->dispatch('updateListItemAfterDelete', [
+                'entity' => 'country',
+                'region' => $region_id,
+                'value' => $item_id,
+            ]);
+        } elseif ($this->entity === 'city') {
+            $country_id = City::find($item_id)->country_id;
+            City::find($item_id)->delete();
+            $this->dispatch('updateListItemAfterDelete', [
+                'entity' => 'city',
+                'country' => $country_id
+            ]);
         }
-        $this->dispatch('update_region_in_add_country_form', [
-            'value' => $value
-        ]);
-        $this->dispatch('update_region_in_add_city_form', [
-            'value' => $value
-        ]);
     }
 
-    public function update_list_item_selected_country($payload)
+    public function restoreItem($item_id)
     {
-        if($this->entity === 'city'){
-            $this->country_id = $payload['value'];
-            $this->values = City::withTrashed()->where('country_id', $this->country_id)->get();
-        }
-    }
-
-    public function update_country($value)
-    {
-        if($this->entity === 'city'){
-            $this->country_id = $value;
-            $this->values = City::withTrashed()->where('country_id', $this->country_id)->get();
-        }
-        $this->dispatch('update_country_in_add_city_form', [
-            'value' => $value
-        ]);
-    }
-
-    public function restore_value($payload)
-    {
-        if ($this->entity === 'category' && $payload['entity'] === 'category') {
-            $category = Category::withTrashed()->where('name', $payload['value'])->first();
-            if ($category) {
-                $category->restore();
-            }
-            $this->values = Category::withTrashed()->get();
-        } else if ($this->entity === 'currency' && $payload['entity'] === 'currency') {
-            $currency = Currency::withTrashed()->where('name', $payload['value'])->first();
-            if ($currency) {
-                $currency->restore();
-            }
-            $this->values = Currency::withTrashed()->get();
-        } else if ($this->entity === 'status' && $payload['entity'] === 'status') {
-            $status = Status::withTrashed()->where('name', $payload['value'])->first();
-            if ($status) {
-                $status->restore();
-            }
-            $this->values = Status::withTrashed()->get();
-        } else if ($this->entity === 'region' && $payload['entity'] === 'region') {
-            $region = Region::withTrashed()->where('name', $payload['value'])->first();
-            if ($region) {
-                $region->restore();
-            }
-            $this->values = Region::withTrashed()->get();
-        } else if ($this->entity === 'country' && $payload['entity'] === 'country') {
-            $country = Country::withTrashed()->where('name', $payload['value'])->first();
-            if ($country) {
-                $country->restore();
-            }
-            $this->values = Country::withTrashed()->where('region_id', $country->region_id)->get();
-        } else if ($this->entity === 'city' && $payload['entity'] === 'city') {
-            $city = City::withTrashed()->where('name', $payload['value'])->first();
-            if ($city) {
-                $city->restore();
-            }
-            $this->values = City::withTrashed()->where('country_id', $this->country_id)->get();
-        }
-    }
-
-    public function close_other_values($payload)
-    {
-        foreach ($this->values as $current_value) {
-            if ($current_value->name !== $payload['value']) {
-                if ($this->entity === 'currency') {
-                    $this->dispatch('close_editable_input', [
-                        'old_value' => $current_value->name,
-                        'role' => 'currency_settings'
-                    ]);
-                } else if ($this->entity === 'category') {
-                    $this->dispatch('close_editable_input', [
-                        'old_value' => $current_value->name,
-                        'role' => 'category_settings'
-                    ]);
-                } else if ($this->entity === 'status') {
-                    $this->dispatch('close_editable_input_for_status', [
-                        'old_value' => $current_value->name,
-                    ]);
-                } else if ($this->entity === 'region') {
-                    $this->dispatch('close_editable_input', [
-                        'old_value' => $current_value->name,
-                        'role' => 'region_settings'
-                    ]);
-                } else if ($this->entity === 'country') {
-                    $this->dispatch('close_editable_input', [
-                        'old_value' => $current_value->name,
-                        'role' => 'country_settings'
-                    ]);
-                } else if ($this->entity === 'city') {
-                    $this->dispatch('close_editable_input', [
-                        'old_value' => $current_value->name,
-                        'role' => 'city_settings'
-                    ]);
-                }
-            }
-        }
-    }
-
-    public function mount()
-    {
-        if ($this->entity === 'category') {
-            $this->values = Category::withTrashed()->get();
-        } else if ($this->entity === 'currency') {
-            $this->values = Currency::withTrashed()->get();
-        } else if ($this->entity === 'status') {
-            $this->values = Status::withTrashed()->get();
-        } else if ($this->entity === 'region') {
-            $this->values = Region::withTrashed()->get();
-        } else if ($this->entity === 'country') {
-            $this->region_id = Region::first() ? Region::first()->id : null;
-            $this->currency_id = Currency::first()->id;
-            $this->values = $this->region_id ?
-                            Country::withTrashed()->where('region_id', $this->region_id)->get() : collect();
-        } else if ($this->entity === 'city') {
-            $this->regions = Region::all();
-            $this->region_id = Region::first() ? Region::first()->id : null;
-            $this->countries =  $this->region_id ?
-                                Country::where('region_id', $this->region_id)->get() : collect();
-            $this->country_id = $this->countries->first() ? $this->countries->first()->id : null;
-            $this->values = $this->country_id ?
-                            City::withTrashed()->where('country_id', $this->country_id)->get() : collect();
-        }
-    }
-
-    public function refresh_list_of_cities(){
-        if ($this->entity === 'city') {
-            $this->regions = Region::all();
-            $this->region_id = Region::first() ? Region::first()->id : null;
-            $this->countries =  $this->region_id ?
-                                Country::where('region_id', $this->region_id)->get() : collect();
-            $this->country_id = $this->countries->first() ? $this->countries->first()->id : null;
-            $this->values = $this->country_id ?
-                            City::withTrashed()->where('country_id', $this->country_id)->get() : collect();
+        if ($this->entity === 'region') {
+            Region::withTrashed()->find($item_id)->restore();
+            $this->dispatch('updateListItemAfterRestore', [
+                'entity' => 'region',
+                'value' => $item_id
+            ]);
+        } elseif ($this->entity === 'country') {
+            $region_id = Country::withTrashed()->find($item_id)->region_id; //2
+            Country::withTrashed()->find($item_id)->restore();
+            $this->dispatch('updateListItemAfterRestore', [
+                'entity' => 'country',
+                'region' => $region_id,
+                'value' => $item_id
+            ]);
+        } elseif ($this->entity === 'city') {
+            $country_id = City::withTrashed()->find($item_id)->country_id;
+            City::withTrashed()->find($item_id)->restore();
+            $this->dispatch('updateListItemAfterRestore', [
+                'entity' => 'city',
+                'country' => $country_id
+            ]);
         }
     }
 
     public function render()
     {
         return view('livewire.list-of-items');
+    }
+
+    public function mount()
+    {
+        if ($this->entity === 'region') {
+            $this->values = Region::withTrashed()->get();
+        } elseif ($this->entity === 'country') {
+            $regions = Region::all();
+            $first_region = $regions->first();
+            $this->values = $first_region ?
+                Country::withTrashed()->where('region_id', $first_region->id)->get() : collect();
+        } elseif ($this->entity === 'city') {
+            $regions = Region::all();
+            $first_region = $regions->first();
+            $countries = $first_region ?
+                Country::where('region_id', $first_region->id)->get() : collect();
+            $first_country = $countries->first();
+            $this->values = $first_country ?
+                City::withTrashed()->where('country_id', $first_country->id)->get() : collect();
+        } elseif ($this->entity === 'currency') {
+            $this->values = Currency::all();
+        } elseif ($this->entity === 'category') {
+            $this->values = Category::all();
+        } elseif ($this->entity === 'status') {
+            $this->values = Status::all();
+        }
     }
 }

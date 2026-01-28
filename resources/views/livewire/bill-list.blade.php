@@ -73,7 +73,7 @@
                             </div>
                         </td>
                         <td class="w-[196px]">
-                            {{ $bill->invoice_template ? $bill->invoice_template->city->name : 'No location' }}</td>
+                            {{ ($bill->invoice_template && $bill->invoice_template->city) ? $bill->invoice_template->city->name : 'No location' }}</td>
                         <td class="w-[200px]">{{ $bill->status->name }}</td>
                         <td class="w-[225px]">
                             {{ $bill->invoice_template ? DateHelpers::get_due_day_field($bill->due_date, (int) $bill->invoice_template->invoice_for_attention->period) : 'No due day' }}
