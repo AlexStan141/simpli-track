@@ -8,16 +8,13 @@
     @endif
 
     @if ($entity == 'city')
-        <div class="flex gap-4 mt-20">
+        <div class="flex gap-4 mt-20 items-center">
             <div>
                 @livewire('add-item-form', [
                     'entity' => $entity,
                 ])
             </div>
-            <div>
-                @livewire('form', [
-                    'entity' => $entity,
-                ])
+            <div class="ml-[51px]">
                 @livewire('list-of-items', [
                     'entity' => $entity,
                 ])
@@ -27,15 +24,19 @@
         @livewire('add_item_form', [
             'entity' => $entity,
         ])
-        @livewire('list-of-items', [
-            'entity' => $entity,
-        ])
+        <div class="ml-[51px]">
+            @livewire('list-of-items', [
+                'entity' => $entity,
+            ])
+        </div>
     @elseif($entity == 'country')
         @livewire('add-item-form', [
             'entity' => $entity,
         ])
-        @livewire('list-of-items', [
-            'entity' => $entity,
-        ])
+        <div class="ml-[51px]">
+            @livewire('list-of-items', [
+                'entity' => $entity,
+            ])
+        </div>
     @endif
 </div>

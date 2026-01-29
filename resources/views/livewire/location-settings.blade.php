@@ -11,7 +11,7 @@
             ])
         </div>
     </div>
-    <div class="flex gap-4 mt-20">
+    <div class="flex gap-4 mt-10 mb-10">
         @livewire('settings', [
             'entity' => 'city',
         ])

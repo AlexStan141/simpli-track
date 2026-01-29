@@ -20,6 +20,9 @@ class ListOfItems extends Component
     ];
     public $values;
     public $entity;
+    public $selected_region;
+    public $selected_currency;
+    public $selected_country;
 
     public function updateListItem($payload)
     {
@@ -37,6 +40,11 @@ class ListOfItems extends Component
             $this->values = Region::withTrashed()->get();
 
             $next_region = Region::first() ? Region::first()->id : null;
+            $this->selected_region = $next_region;
+            $this->dispatch('update_add_item_form_selected_region', [
+                'value' => $this->selected_region
+            ]);
+
             $country_id = $next_region ?
                         Country::where('region_id', $next_region)->first()->id : collect();
 
@@ -59,7 +67,13 @@ class ListOfItems extends Component
                         Country::withTrashed()->where('region_id', $payload['region'])->get() : collect();
 
             $next_country = $payload['region'] ?
-                        Country::where('region_id', $payload['region'])->first() : null;
+                        (Country::where('region_id', $payload['region'])->first() ?
+                            Country::where('region_id', $payload['region'])->first()->id: null) : null;
+
+            $this->selected_country = $next_country;
+            $this->dispatch('update_add_item_form_selected_country', [
+                'value' => $this->selected_country
+            ]);
 
             $this->dispatch('updateListItemAfterDelete', [
                     'entity' => 'city',
@@ -73,6 +87,7 @@ class ListOfItems extends Component
             ]);
 
         } else if ($payload['entity'] === 'city' && $this->entity === 'city') {
+            $this->selected_country = $payload['country'];
             $this->values = isset($payload['country']) ?
                         City::withTrashed()->where('country_id', $payload['country'])->get() : collect();
         }
@@ -85,6 +100,11 @@ class ListOfItems extends Component
             $this->values = Region::withTrashed()->get();
 
             $first_region = Region::first() ? Region::first()->id : null;
+            $this->selected_region = $first_region;
+            $this->dispatch('update_add_item_form_selected_region', [
+                'value' => $this->selected_region
+            ]);
+
             $country_id = $first_region ?
                         Country::where('region_id', $first_region)->first()->id : collect();
 
@@ -102,6 +122,10 @@ class ListOfItems extends Component
         } else if ($this->entity === 'country' && $payload['entity'] === 'country') {
 
             $country_id = $payload['value'];
+            $this->selected_country = $country_id;
+            $this->dispatch('update_add_item_form_selected_country', [
+                'value' => $this->selected_country
+            ]);
 
             $this->values = $payload['region'] ?
                         Country::withTrashed()->where('region_id', $payload['region'])->get() : collect();
@@ -118,6 +142,7 @@ class ListOfItems extends Component
             ]);
 
         } else if ($this->entity === 'city' && $payload['entity'] === 'city') {
+            $this->selected_country = $payload['country'];
             $this->values = isset($payload['country']) ?
                         City::withTrashed()->where('country_id', $payload['country'])->get() : collect();
         }
@@ -189,6 +214,14 @@ class ListOfItems extends Component
             $first_region = $regions->first();
             $this->values = $first_region ?
                 Country::withTrashed()->where('region_id', $first_region->id)->get() : collect();
+            $this->selected_region = $regions->first() ? $regions->first()->id : null;
+            $this->dispatch('update_add_item_form_selected_region', [
+                'value' => $this->selected_region
+            ]);
+            $this->selected_currency = Currency::first()->id;
+            $this->dispatch('update_add_item_form_selected_currency', [
+                'value' => $this->selected_currency
+            ]);
         } elseif ($this->entity === 'city') {
             $regions = Region::all();
             $first_region = $regions->first();
@@ -197,6 +230,14 @@ class ListOfItems extends Component
             $first_country = $countries->first();
             $this->values = $first_country ?
                 City::withTrashed()->where('country_id', $first_country->id)->get() : collect();
+            $this->selected_region = $regions->first() ? $regions->first()->id : null;
+            $this->dispatch('update_add_item_form_selected_region', [
+                'value' => $this->selected_region
+            ]);
+            $this->selected_country = $countries->first() ? $countries->first()->id : null;
+            $this->dispatch('update_add_item_form_selected_country', [
+                'value' => $this->selected_country
+            ]);
         } elseif ($this->entity === 'currency') {
             $this->values = Currency::all();
         } elseif ($this->entity === 'category') {
