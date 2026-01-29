@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Region;
 use Livewire\Component;
 use PHPUnit\Framework\Constraint\Count;
@@ -51,6 +52,11 @@ class SelectInput extends Component
                 'entity' => 'city',
                 'country_id' => $value
             ]);
+            $this->dispatch('refreshValues', [
+                'entity' => 'country',
+                'value' => Country::find($value)->region_id,
+                'selected_value' => $value
+            ]);
         } else if ($this->entity === 'city'){
            $this->selectedValue = $value;
         }
@@ -97,6 +103,8 @@ class SelectInput extends Component
             $smallest_id = array_key_first($this->values);
             $this->selectedValue = $smallest_id;
             return view('livewire.select-input');
+        } else if ($this->entity === 'currency') {
+            $this->values = Currency::pluck('name', 'id')->toArray();
         }
     }
 }

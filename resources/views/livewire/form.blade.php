@@ -4,11 +4,13 @@
             'entity' => 'region',
         ])
     @elseif($entity == 'city')
-        @livewire('select-input', [
-            'entity' => 'region',
-        ])
-        @livewire('select-input', [
-            'entity' => 'country',
-        ])
+        <div class="flex gap-2">
+            @livewire('select-input', [
+                'entity' => 'region',
+            ])
+            @livewire('select-input', [
+                'entity' => 'country',
+            ])
+        </div>
     @endif
 </div>

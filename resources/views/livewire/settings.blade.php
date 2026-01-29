@@ -9,15 +9,29 @@
 
     @if ($entity == 'city')
         <div class="flex gap-4 mt-20">
-            @livewire('form', [
-                'entity' => $entity,
-            ])
-            @livewire('list-of-items', [
-                'entity' => $entity,
-            ])
+            <div>
+                @livewire('add-item-form', [
+                    'entity' => $entity,
+                ])
+            </div>
+            <div>
+                @livewire('form', [
+                    'entity' => $entity,
+                ])
+                @livewire('list-of-items', [
+                    'entity' => $entity,
+                ])
+            </div>
         </div>
-    @else
-        @livewire('form', [
+    @elseif($entity == 'region')
+        @livewire('add_item_form', [
+            'entity' => $entity,
+        ])
+        @livewire('list-of-items', [
+            'entity' => $entity,
+        ])
+    @elseif($entity == 'country')
+        @livewire('add-item-form', [
             'entity' => $entity,
         ])
         @livewire('list-of-items', [
